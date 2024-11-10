@@ -2,6 +2,7 @@
 
 A new Flutter project.
 テスト１：文字追加
+テスト２：文字追加
 
 ## Getting Started
 
