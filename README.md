@@ -1,9 +1,6 @@
 # cacalia
 
 A new Flutter project.
-テスト１
-テスト２
-テスト３
 
 ## Getting Started
 
