@@ -2,10 +2,23 @@ import 'package:flutter/material.dart';
 
 class UserCard extends StatelessWidget {
 
-  final String userName;
-  // final String userRubi;
+  // 変数を宣言
+  final int userId;
 
-  UserCard({required this.userName});   // required 修飾子を付ける(非null制約を解除)
+  // テストデータ(ユーザー)
+  static const userList = [
+    [0, '文元 沙弥', 'Humimoto Saya'],
+    [1, '谷岡 義貴', 'Tanioka Yoshitaka'],
+    [2, '深尾 悠', 'Hukao Yu'],
+    [3, '財前 颯', 'Zaizen Hayate'],
+    [4, '馬場 周友', 'Banba Syuyu'],
+  ];
+
+  // super.keyと引数の指定
+  const UserCard({
+    super.key,
+    required this.userId   // required 修飾子を付ける(非null制約を解除)
+  });
 
   @override
   Widget build(BuildContext context) {
