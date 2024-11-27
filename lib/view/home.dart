@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:cacalia/component/card.dart';
 
 //StatelessWidget:静的なウィジェット
-class HomePage extends StatelessWidget {
+class Home extends StatelessWidget {
+  
+  const Home({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -11,14 +13,14 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         // titleを画像に設定
         title: Image.asset(
-            '../assets/images/cacalia.png',
+            'assets/images/cacalia.png',
           height: 40,
         ),
         centerTitle: true,
-        backgroundColor: Color.fromRGBO(215, 230, 239, 1),
+        backgroundColor: const Color.fromRGBO(215, 230, 239, 1),
       ),
       body: Container(
-        color: Color.fromRGBO(215, 230, 239, 1),
+        color: const Color.fromRGBO(215, 230, 239, 1),
         width: double.infinity, //全範囲選択
         height: double.infinity,
         child: Column(
@@ -27,12 +29,12 @@ class HomePage extends StatelessWidget {
             SizedBox(
               height: 47,
               child: ElevatedButton(
-                child: Image.asset('../assets/images/exchangeBtn.png'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color.fromRGBO(17, 90, 132, 1),
-                  shape: CircleBorder(),
+                  backgroundColor: const Color.fromRGBO(17, 90, 132, 1),
+                  shape: const CircleBorder(),
                 ),
                 onPressed: () {},
+                child: Image.asset('assets/images/exchangeBtn.png'),
               ),
             ),
             // 名刺一覧
@@ -40,7 +42,7 @@ class HomePage extends StatelessWidget {
               width: 337,
               height: 669,
               decoration: BoxDecoration(
-                color: Color.fromRGBO(69, 76, 80, 1),
+                color: const Color.fromRGBO(69, 76, 80, 1),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Column(
@@ -48,13 +50,13 @@ class HomePage extends StatelessWidget {
                   Container(
                     height: 53,
                     decoration: BoxDecoration(
-                      color: Color.fromRGBO(110, 119, 124, 1),
-                      borderRadius: BorderRadius.only(
+                      color: const Color.fromRGBO(110, 119, 124, 1),
+                      borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(10),
                         topRight: Radius.circular(10),
                       ),
                       border: Border.all(
-                        color: Color.fromRGBO(161, 161, 161, 1),
+                        color: const Color.fromRGBO(161, 161, 161, 1),
                       ),
                     ),
                     // 検索ボックス
@@ -67,24 +69,32 @@ class HomePage extends StatelessWidget {
                           child: TextField(
                             decoration: InputDecoration(
                               hintText: '検索',
-                              prefixIcon: Icon(Icons.search),
-                              contentPadding: EdgeInsets.symmetric(
+                              prefixIcon: const Icon(Icons.search),
+                              contentPadding: const EdgeInsets.symmetric(
                                 vertical: 8,
                                 horizontal: 16,
                               ),
                               filled: true,
-                              fillColor: Color.fromRGBO(161, 161, 161, 1),
+                              fillColor: const Color.fromRGBO(161, 161, 161, 1),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(5)
                               ),
                             ),
                           ),
                         ),
-                        Image.asset('../assets/images/sort.png'),
+                        Image.asset('assets/images/sort.png'),
                       ],
                     ),
                   ),
-                  UserCard(userName: '文元 沙弥'),
+                  ListView.builder(
+                     padding: const EdgeInsets.all(36.0),
+                      shrinkWrap: true,
+                      itemBuilder: (BuildContext context, int index) {
+                        return (
+                          UserCard(userId: index)
+                        );
+                      },
+                  ),
                 ],
               ),
             ),

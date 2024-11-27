@@ -29,9 +29,19 @@ class UserCard extends StatelessWidget {
         height: 159,
         width: 270,
         color: Colors.blueGrey,
+        alignment: Alignment.centerLeft,
         child: Column(
           children: [
-            Text(userName)
+            // 読み仮名
+            Text(
+              userList[userId][1] as String, // '文元沙弥' のような名前を取得
+              style: const TextStyle(fontSize: 14),
+            ),
+            // 名前
+            Text(
+              userList[userId][2] as String,
+              style: const TextStyle(fontSize: 24),
+            )
           ],
         ),
       ),
