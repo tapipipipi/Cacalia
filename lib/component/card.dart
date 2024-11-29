@@ -12,6 +12,7 @@ class UserCard extends StatelessWidget {
     [3, '財前 颯', 'Zaizen Hayate'],
     [4, '馬場 周友', 'Banba Syuyu'],
   ];
+  final String bgImg = 'assets/images/noImage.png';
 
   // super.keyと引数の指定
   const UserCard(
@@ -20,29 +21,38 @@ class UserCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 5, // 影の離れ具合
-      shadowColor: Colors.black, // 影の色
-      child: Container(
-        height: 159,
-        width: 270,
-        color: Colors.blueGrey,
-        alignment: Alignment.centerLeft,
-        child: const Column(
-          children: [
-            // 読み仮名
-            // Text(
-            //   userList[userId][1] as String, // '文元沙弥' のような名前を取得
-            //   style: const TextStyle(fontSize: 14),
-            // ),
-            // // 名前
-            // Text(
-            //   userList[userId][2] as String,
-            //   style: const TextStyle(fontSize: 24),
-            // )
-          ],
+    return Stack(
+      children: [
+        Card(
+          elevation: 5, // 影の離れ具合
+          shadowColor: Colors.black, // 影の色
+          child: Container(
+            height: 159,
+            width: 270,
+            // color: Colors.blueGrey,
+            alignment: Alignment.centerLeft,
+            decoration: const BoxDecoration(
+                image: DecorationImage(
+              image: AssetImage('assets/images/noImage.png'),
+              fit: BoxFit.cover,
+            )),
+            child: Column(
+              children: [
+                // 読み仮名
+                Text(
+                  userList[userId][2] as String, // '文元沙弥' のような名前を取得
+                  style: const TextStyle(fontSize: 14),
+                ),
+                // 名前
+                Text(
+                  userList[userId][1] as String,
+                  style: const TextStyle(fontSize: 24),
+                )
+              ],
+            ),
+          ),
         ),
-      ),
+      ],
     );
   }
 }

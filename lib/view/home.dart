@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:cacalia/component/card.dart';
+import 'package:cacalia/component/footer.dart';
 
 //StatelessWidget:静的なウィジェット
 class Home extends StatelessWidget {
-  
-  const Home({super.key});
+  // ignore: unused_field
+  final ScrollController _controller = ScrollController();
+
+  Home({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +16,7 @@ class Home extends StatelessWidget {
       appBar: AppBar(
         // titleを画像に設定
         title: Image.asset(
-            'assets/images/cacalia.png',
+          'assets/images/cacalia.png',
           height: 40,
         ),
         centerTitle: true,
@@ -26,6 +29,27 @@ class Home extends StatelessWidget {
         child: Column(
           children: [
             // 交換ボタン
+            // Stack(
+            //   // clipBehavior: Clip.none,
+            //   children: [
+            //     Positioned(
+            //       // top: 0,
+            //       // left: -10,
+            //       child: SizedBox(
+            //         height: 47,
+            //         child: ElevatedButton(
+            //           style: ElevatedButton.styleFrom(
+            //             backgroundColor: const Color.fromRGBO(17, 90, 132, 1),
+            //             shape: const CircleBorder(),
+            //           ),
+            //           onPressed: () {},
+            //           child: Image.asset('assets/images/exchangeBtn.png'),
+            //         ),
+            //       ),
+            //     ),
+            //   ],
+            // ),
+            // 名刺一覧
             SizedBox(
               height: 47,
               child: ElevatedButton(
@@ -37,7 +61,6 @@ class Home extends StatelessWidget {
                 child: Image.asset('assets/images/exchangeBtn.png'),
               ),
             ),
-            // 名刺一覧
             Container(
               width: 337,
               height: 669,
@@ -47,6 +70,7 @@ class Home extends StatelessWidget {
               ),
               child: Column(
                 children: [
+                  //検索ボックスを含む上部分
                   Container(
                     height: 53,
                     decoration: BoxDecoration(
@@ -77,8 +101,7 @@ class Home extends StatelessWidget {
                               filled: true,
                               fillColor: const Color.fromRGBO(161, 161, 161, 1),
                               border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5)
-                              ),
+                                  borderRadius: BorderRadius.circular(5)),
                             ),
                           ),
                         ),
@@ -86,14 +109,15 @@ class Home extends StatelessWidget {
                       ],
                     ),
                   ),
-                  ListView.builder(
-                     padding: const EdgeInsets.all(36.0),
-                      shrinkWrap: true,
-                      itemBuilder: (BuildContext context, int index) {
-                        return (
-                          UserCard(userId: index)
-                        );
-                      },
+                  //名
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          for (int i = 0; i < 5; i++) UserCard(userId: i),
+                        ],
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -101,6 +125,7 @@ class Home extends StatelessWidget {
           ],
         ),
       ),
+      bottomNavigationBar: const Footer(),
     );
   }
 }
