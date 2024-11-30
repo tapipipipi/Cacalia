@@ -17,10 +17,39 @@ class Home extends StatelessWidget {
         // titleを画像に設定
         title: Image.asset(
           'assets/images/cacalia.png',
-          height: 40,
         ),
+        toolbarHeight: 80,
         centerTitle: true,
         backgroundColor: const Color.fromRGBO(215, 230, 239, 1),
+        actions: [
+          // ignore: sized_box_for_whitespace
+          Container(
+            height: 47,
+            width: 47,
+            margin: EdgeInsets.only(right: 10),
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.shade500,
+                  spreadRadius: 0, //広がりを最小
+                  blurRadius: 1, //ぼかしの強さ
+                  offset: Offset(0, 5), // 影の位置を指定
+                ),
+              ],
+              borderRadius: BorderRadius.circular(50),
+            ),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromRGBO(17, 90, 132, 1),
+                shape: const CircleBorder(),
+                // minimumSize: Size(47, 47), // ボタンサイズを親Containerに合わせる
+                padding: EdgeInsets.zero, // パディングをゼロに
+              ),
+              onPressed: () {},
+              child: Image.asset('assets/images/exchangeBtn.png'),
+            ),
+          ),
+        ],
       ),
       body: Container(
         color: const Color.fromRGBO(215, 230, 239, 1),
@@ -28,39 +57,7 @@ class Home extends StatelessWidget {
         height: double.infinity,
         child: Column(
           children: [
-            // 交換ボタン
-            // Stack(
-            //   // clipBehavior: Clip.none,
-            //   children: [
-            //     Positioned(
-            //       // top: 0,
-            //       // left: -10,
-            //       child: SizedBox(
-            //         height: 47,
-            //         child: ElevatedButton(
-            //           style: ElevatedButton.styleFrom(
-            //             backgroundColor: const Color.fromRGBO(17, 90, 132, 1),
-            //             shape: const CircleBorder(),
-            //           ),
-            //           onPressed: () {},
-            //           child: Image.asset('assets/images/exchangeBtn.png'),
-            //         ),
-            //       ),
-            //     ),
-            //   ],
-            // ),
             // 名刺一覧
-            SizedBox(
-              height: 47,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromRGBO(17, 90, 132, 1),
-                  shape: const CircleBorder(),
-                ),
-                onPressed: () {},
-                child: Image.asset('assets/images/exchangeBtn.png'),
-              ),
-            ),
             Container(
               width: 337,
               height: 669,
