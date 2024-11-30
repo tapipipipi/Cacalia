@@ -106,7 +106,7 @@ class Home extends StatelessWidget {
                       ],
                     ),
                   ),
-                  //名
+                  //名刺一覧
                   Expanded(
                     child: SingleChildScrollView(
                       child: Column(

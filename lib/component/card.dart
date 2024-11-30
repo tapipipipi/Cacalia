@@ -12,6 +12,7 @@ class UserCard extends StatelessWidget {
     [3, '財前 颯', 'Zaizen Hayate'],
     [4, '馬場 周友', 'Banba Syuyu'],
   ];
+
   final String bgImg = 'assets/images/noImage.png';
 
   // super.keyと引数の指定
@@ -22,6 +23,7 @@ class UserCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
+      alignment: Alignment.centerRight,
       children: [
         Card(
           elevation: 5, // 影の離れ具合
@@ -52,6 +54,35 @@ class UserCard extends StatelessWidget {
             ),
           ),
         ),
+        // 影の部分
+        Container(
+          height: 159,
+          width: 60,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.transparent, Colors.grey.shade400],
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+            ),
+          ),
+          child: const Column(
+            children: [
+              Padding(padding: EdgeInsets.only(top: 10)),
+              //Todo:tureなら黄色、falseなら白にする処理
+              Icon(
+                Icons.lightbulb_rounded,
+                color: Color.fromRGBO(247, 204, 65, 1),
+                // color: Colors.white,
+              ),
+              SizedBox(height: 10), // margin代わり
+              Icon(
+                Icons.event,
+                // color: Color.fromRGBO(247, 204, 65, 1),
+                color: Colors.white,
+              ),
+            ],
+          ),
+        )
       ],
     );
   }
