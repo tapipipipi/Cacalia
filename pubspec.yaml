@@ -35,6 +35,7 @@ flutter:
   assets:
     - assets/images/default_avatar.png
     - assets/images/home_icon.png
+    - assets/images/CacaliaLoginHeader.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
