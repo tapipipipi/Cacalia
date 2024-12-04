@@ -57,6 +57,9 @@ class _SignUpNamePageState extends State<SignUpNamePage> {
                       if (value == null || value.isEmpty) {
                         return 'メールアドレスを入力してください';
                       }
+                      if (!RegExp(r'^[a-zA-Z0-9@_.-]+$').hasMatch(value)) { // 入力文字の制限
+                        return 'メールアドレスは英数字と一部の記号のみ使用できます';
+                      }
                       return null;
                     },
                   ),
@@ -125,7 +128,7 @@ class _SignUpNamePageState extends State<SignUpNamePage> {
                 const SizedBox(height: 16),
                 TextButton(
                   onPressed: () {
-                    context.go('/login');
+                    context.go('/');
                   },
                   child: const Text('ログインはこちら'),
                 ),

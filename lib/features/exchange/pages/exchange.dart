@@ -83,7 +83,7 @@ class _ExchangeState extends State<ExchangePage> with SingleTickerProviderStateM
             ),
             // ホームアイコンを追加
             Positioned(
-              top: 40,
+              top: 60,
               left: 16,
               child: GestureDetector(
                 onTap: () {
@@ -91,7 +91,7 @@ class _ExchangeState extends State<ExchangePage> with SingleTickerProviderStateM
                 },
                 child: const Icon(  // Image.assetをIconに変更
                   Icons.home,
-                  size: 32,
+                  size: 64,
                   color: Colors.white,
                 ),
               ),

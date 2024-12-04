@@ -56,6 +56,9 @@ class _LoginPageState extends State<LoginPage> {
                       if (value == null || value.isEmpty) {
                         return 'メールアドレスを入力してください';
                       }
+                      if (!RegExp(r'^[a-zA-Z0-9@_.-]+$').hasMatch(value)) { // 入力文字の制限
+                        return 'メールアドレスは英数字と一部の記号のみ使用できます';
+                      }
                       return null;
                     },
                   ),
@@ -90,7 +93,12 @@ class _LoginPageState extends State<LoginPage> {
                       if (value == null || value.isEmpty) {
                         return 'パスワードを入力してください';
                       }
+                      if (!RegExp(r'^[a-zA-Z0-9]+$').hasMatch(value)) { // 入力文字の制限
+                        return 'パスワードは英数字のみ使用できます';
+                      }
                       return null;
+
+                      
                     },
                   ),
                 ),

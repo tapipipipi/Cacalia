@@ -58,6 +58,9 @@ class _SignUpPassPageState extends State<SignUpPassPage> {
                       if (value == null || value.isEmpty) {
                         return 'パスワードを入力してください';
                       }
+                      if (!RegExp(r'^[a-zA-Z0-9]+$').hasMatch(value)) { // 入力文字の制限
+                        return 'パスワードは英数字のみ使用できます';
+                      }
                       return null;
                     },
                   ),
@@ -90,6 +93,9 @@ class _SignUpPassPageState extends State<SignUpPassPage> {
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'もう一度パスワードを入力してください';
+                      }
+                      if (!RegExp(r'^[a-zA-Z0-9]+$').hasMatch(value)) { // 入力文字の制限
+                        return 'パスワードは英数字のみ使用できます';
                       }
                       if (value != _passwordController.text) { // パスワード一致チェック
                         return 'パスワードが一致していません';
