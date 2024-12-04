@@ -2,6 +2,9 @@ import 'package:go_router/go_router.dart';
 import 'package:cacalia/features/exchange/pages/exchange.dart';
 import 'package:cacalia/features/login/pages/login.dart';
 import 'package:cacalia/features/home/pages/home.dart';
+import 'package:cacalia/features/signUp/pages/signUpName.dart';
+import 'package:cacalia/features/signUp/pages/signUpPass.dart';
+
 
 final router = GoRouter(
   initialLocation: '/',
@@ -17,6 +20,14 @@ final router = GoRouter(
     GoRoute(
       path: '/home',
       builder: (context, state) => const HomePage(),
+    ),
+    GoRoute(
+      path: '/signUpName',
+      builder: (context, state) => const SignUpNamePage(),
+    ),
+    GoRoute(
+      path: '/signUpPass',
+      builder: (context, state) => const SignUpPassPage(),
     ),
   ],
 );

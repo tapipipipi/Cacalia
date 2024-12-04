@@ -10,7 +10,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  final _usernameController = TextEditingController();
+  final _mailaddressController = TextEditingController();
   final _passwordController = TextEditingController();
 
   @override
@@ -42,9 +42,9 @@ class _LoginPageState extends State<LoginPage> {
                     ],
                   ),
                   child: TextFormField(
-                    controller: _usernameController,
+                    controller: _mailaddressController,
                     decoration: const InputDecoration(
-                      labelText: 'ユーザー名',
+                      labelText: 'メールアドレス',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                         borderSide: BorderSide.none,
@@ -54,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'ユーザー名を入力してください';
+                        return 'メールアドレスを入力してください';
                       }
                       return null;
                     },
