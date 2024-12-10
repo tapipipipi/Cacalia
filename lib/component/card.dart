@@ -32,14 +32,16 @@ class UserCard extends StatelessWidget {
             height: 159,
             width: 270,
             // color: Colors.blueGrey,
-            alignment: Alignment.centerLeft,
+            alignment: Alignment(-0.8, 0),
             decoration: const BoxDecoration(
                 image: DecorationImage(
               image: AssetImage('assets/images/noImage.png'),
               fit: BoxFit.cover,
             )),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start, // 左揃え
               children: [
+                const Padding(padding: EdgeInsets.only(top: 15)),
                 // 読み仮名
                 Text(
                   userList[userId][2] as String, // '文元沙弥' のような名前を取得
