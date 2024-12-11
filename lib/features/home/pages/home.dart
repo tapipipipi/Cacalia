@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cacalia/component/card.dart';
 import 'package:cacalia/component/footer.dart';
 import 'package:cacalia/component/profileModal.dart';
+import 'package:go_router/go_router.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -40,13 +41,16 @@ class _HomeState extends State<Home> {
               ],
               borderRadius: BorderRadius.circular(50),
             ),
+            // 交換ボタン
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color.fromRGBO(17, 90, 132, 1),
                 shape: const CircleBorder(),
                 padding: EdgeInsets.zero,
               ),
-              onPressed: () {},
+              onPressed: () {
+                context.go('/exchange');
+              },
               child: Image.asset('assets/images/exchangeBtn.png'),
             ),
           ),
