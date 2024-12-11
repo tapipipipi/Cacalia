@@ -1,5 +1,6 @@
-import 'package:cacalia/view/home.dart';
+import 'package:cacalia/features/home/pages/home.dart';
 import 'package:flutter/material.dart';
+import 'package:cacalia/config/router/route.dart'; // routerをインポート
 
 void main() {
   // WidgetsFlutterBinding.ensureInitialized();
@@ -9,17 +10,15 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false, // appBarのdebug表示消す
-      title: 'Flutter Demo',
+    return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
+      title: 'Cacalia',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+        primarySwatch: Colors.blue,
       ),
-      home: Home(),
+      routerConfig: router, // route.dartで定義したrouterを使用
     );
   }
 }
