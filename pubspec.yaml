@@ -47,6 +47,9 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   # To add assets to your application, add an assets section, like this:
+  # assets:
+  #   - images/a_dot_burr.jpeg
+  #   - images/a_dot_ham.jpeg
   assets:
     - assets/ # fire
   #   - images/a_dot_burr.jpeg
@@ -56,6 +59,12 @@ flutter:
     - assets/images/CacaliaLoginHeader.png
     - assets/images/CacaliaSignin.png
     - assets/images/CreatePass.png
+    - assets/images/
+    # - assets/images/default_avatar.png
+    # - assets/images/home_icon.png
+    # - assets/images/CacaliaLoginHeader.png
+    # - assets/images/CacaliaSignin.png
+    # - assets/images/CreatePass.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

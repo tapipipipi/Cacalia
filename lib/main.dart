@@ -1,3 +1,4 @@
+import 'package:cacalia/features/home/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -8,6 +9,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );                                           //Firebase初期化処理　ここまで
+
+  // WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -22,7 +25,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      routerConfig: router,  // route.dartで定義したrouterを使用
+      routerConfig: router, // route.dartで定義したrouterを使用
     );
   }
 }
