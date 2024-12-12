@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class MyAccountPage extends StatelessWidget {
+  const MyAccountPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,7 +76,7 @@ class CustomListTile extends StatelessWidget {
   final IconData icon;
   final String text;
 
-  CustomListTile({required this.icon, required this.text});
+  const CustomListTile({super.key, required this.icon, required this.text});
 
   @override
   Widget build(BuildContext context) {
