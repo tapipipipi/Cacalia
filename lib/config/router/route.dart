@@ -13,10 +13,11 @@ final router = GoRouter(
       path: '/',
       builder: (context, state) => const LoginPage(), // LoginPageを初期画面に設定
     ),
-    GoRoute(
-      path: '/exchange',
-      builder: (context, state) => const ExchangePage(),
-    ),
+    //TODO コメント外す
+    // GoRoute(
+    //   path: '/exchange',
+    //   builder: (context, state) => const ExchangePage(),
+    // ),
     GoRoute(
       path: '/home',
       builder: (context, state) => const Home(),
