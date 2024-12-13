@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cacalia/component/footer.dart';
 
 class MyAccountPage extends StatelessWidget {
   @override
@@ -48,7 +49,7 @@ class MyAccountPage extends StatelessWidget {
           ],
         ),
       ),
-
+      bottomNavigationBar: Footer(),
     );
   }
 }

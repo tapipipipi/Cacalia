@@ -1,3 +1,5 @@
+import 'package:cacalia/features/setting/pages/setting.dart';
+import 'package:cacalia/features/timeline/pages/timeline.dart';
 import 'package:go_router/go_router.dart';
 import 'package:cacalia/features/exchange/pages/exchange.dart';
 import 'package:cacalia/features/login/pages/login.dart';
@@ -28,6 +30,14 @@ final router = GoRouter(
     GoRoute(
       path: '/signUpPass',
       builder: (context, state) => const SignUpPassPage(),
+    ),
+    GoRoute(
+      path: '/setting',
+      builder: (context, state) => Setting(),
+    ),
+    GoRoute(
+      path: '/timeLine',
+      builder: (context, state) => const Timeline(),
     ),
   ],
 );

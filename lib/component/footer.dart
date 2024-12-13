@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class Footer extends StatelessWidget {
-  const Footer({super.key});
+  Footer({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,28 +21,35 @@ class Footer extends StatelessWidget {
               end: Alignment.bottomCenter,
             ),
           ),
-        ),
-        // BottomNavigationBarを重ねる
-        BottomNavigationBar(
-          backgroundColor: Colors.transparent, // 背景色を透明にする
-          elevation: 0, // 影を消す
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'ホーム',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.ballot_rounded),
-              label: '掲示板',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: 'アカウント',
-            ),
-          ],
-          selectedItemColor: Colors.white, // 選択中のアイコンの色
-          unselectedItemColor: Colors.white, // 非選択アイコンの色
-          iconSize: 35,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              IconButton(
+                onPressed: () {
+                  context.go('/home');
+                },
+                icon: const Icon(Icons.home),
+                iconSize: 40,
+                color: Colors.white,
+              ),
+              IconButton(
+                onPressed: () {
+                  context.go('/timeLine');
+                },
+                icon: const Icon(Icons.ballot_rounded),
+                iconSize: 40,
+                color: Colors.white,
+              ),
+              IconButton(
+                onPressed: () {
+                  context.go('/setting');
+                },
+                icon: const Icon(Icons.person),
+                iconSize: 40,
+                color: Colors.white,
+              ),
+            ],
+          ),
         ),
       ],
     );

@@ -31,8 +31,7 @@ class UserCard extends StatelessWidget {
           child: Container(
             height: 159,
             width: 270,
-            // color: Colors.blueGrey,
-            alignment: Alignment(-0.8, 0),
+            alignment: const Alignment(-0.8, 0),
             decoration: const BoxDecoration(
                 image: DecorationImage(
               image: AssetImage('assets/images/noImage.png'),

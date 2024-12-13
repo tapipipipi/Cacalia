@@ -8,11 +8,11 @@ class Home extends StatefulWidget {
   const Home({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
-  final ScrollController _controller = ScrollController();
   bool isVisible = false; // 初期値
 
   @override
@@ -65,6 +65,7 @@ class _HomeState extends State<Home> {
             Container(
               width: 337,
               height: 669,
+              alignment: Alignment.center,
               decoration: BoxDecoration(
                 color: const Color.fromRGBO(69, 76, 80, 1),
                 borderRadius: BorderRadius.circular(10),
@@ -85,6 +86,7 @@ class _HomeState extends State<Home> {
                             color: const Color.fromRGBO(161, 161, 161, 1),
                           ),
                         ),
+                        // 検索バー
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -138,7 +140,7 @@ class _HomeState extends State<Home> {
                   //名刺一覧
                   Expanded(
                     child: ListView.builder(
-                      padding: const EdgeInsets.all(20),
+                      padding: const EdgeInsets.only(top: 20, right: 30),
                       itemCount: 5, // サンプルとして5枚の名刺を表示
                       itemBuilder: (context, index) {
                         return Transform.translate(
@@ -158,7 +160,7 @@ class _HomeState extends State<Home> {
           ],
         ),
       ),
-      bottomNavigationBar: const Footer(),
+      bottomNavigationBar: Footer(),
     );
   }
 
