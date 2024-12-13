@@ -71,7 +71,7 @@ class _ExchangeState extends State<ExchangePage>
   Map<String, String> receivedData = {};
 
   //デバイスに接続できるボタンの状態
-  // bool _isVisible = false;
+  bool _isfinded = false;
 
   //スキャンされたデバイス
   BluetoothDevice? selectdevaice;
@@ -204,7 +204,7 @@ class _ExchangeState extends State<ExchangePage>
 
     setState(() {
       //判定に必要な変数を初期化
-      // _isVisible = false;
+      _isfinded = false;
       _isScanning = true;
       // _isReceived = false;
       _isConnected = false;
@@ -213,7 +213,7 @@ class _ExchangeState extends State<ExchangePage>
 
     //接続可能な端末をスキャンする
     await FlutterBluePlus.startScan(
-        withNames: [], timeout: const Duration(seconds: 3)); //３秒間
+        withNames: ['Cacalia'], timeout: const Duration(seconds: 3)); //３秒間
     try {
       //結果を受け取る
       FlutterBluePlus.scanResults.listen((results) {
@@ -230,6 +230,8 @@ class _ExchangeState extends State<ExchangePage>
               //端末のUUIDを取得
               deviceUUID =
                   splitdata(r.advertisementData.serviceUuids.toString());
+
+              _isfinded = true;
 
               selectdevaice = r.device;
             });
@@ -264,12 +266,13 @@ class _ExchangeState extends State<ExchangePage>
   void connectDevaice(BluetoothDevice device) async {
     try {
       //見つかったデバイスに接続
-      await device.connect(timeout: Duration(seconds: 5));
+      await device.connect(timeout: const Duration(seconds: 5));
       print('${device.advName}に接続しました');
 
       //接続されたデバイスのサービスを取得
+      await Future.delayed(const Duration(seconds: 1));
       services = await device.discoverServices();
-      readwrightCharacteristic(); //ReadWrighメソッド
+      readCharacteristic(); //ReadWrighメソッド
     } catch (e) {
       print('エラーでちゃった。。。');
     }
@@ -285,7 +288,7 @@ class _ExchangeState extends State<ExchangePage>
   }
 
   //ペリフェラル側から送られてきた値を受信し、送信もするメソッド
-  void readwrightCharacteristic() async {
+  void readCharacteristic() async {
     //サービス一覧を表示
     for (BluetoothService service in services) {
       print('さーびす:$service');
@@ -305,18 +308,22 @@ class _ExchangeState extends State<ExchangePage>
               receivedData = Map<String, String>.from(jsonDecode(received));
               print("Caractaristic:${characteristic.uuid}");
               print("Received: $receivedData");
-              _showProfilePopup();
               // _isReceived = true;
               _isConnected = true;
             });
+            _showProfilePopup();
           });
-          //書き込み
-          await characteristic
-              .write(_jsonToUint8List({'user': 'Tapi', 'message': 'セントラルだよ～'}));
+          writeCaracteristic(characteristic);
           break;
         }
       }
     }
+  }
+
+  void writeCaracteristic(BluetoothCharacteristic characteristic) async {
+    await characteristic
+        .write(_jsonToUint8List({'user': 'Tapi', 'message': 'セントラルだよ～'}));
+    disconnectDevaice(selectdevaice!);
   }
 
   _showProfilePopup() {
@@ -349,12 +356,11 @@ class _ExchangeState extends State<ExchangePage>
                   'コメント：${receivedData['message']}',
                   style: const TextStyle(fontSize: 16),
                 ),
-                ElevatedButton (
-                    onPressed:() async{
-                        await disconnectDevaice(selectdevaice!);
+                ElevatedButton(
+                    onPressed: () async {
+                      await disconnectDevaice(selectdevaice!);
                     },
-                    child: const Text("接続を解除")
-                    )
+                    child: const Text("接続を解除"))
               ],
             ),
           ),
