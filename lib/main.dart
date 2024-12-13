@@ -1,4 +1,3 @@
-import 'package:cacalia/features/home/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:cacalia/config/router/route.dart'; // routerをインポート
 
