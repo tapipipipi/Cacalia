@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:cacalia/component/card.dart';
 import 'package:cacalia/component/footer.dart';
 import 'package:cacalia/component/profileModal.dart';
+import '../../../Auth/Authentication.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key});
+  // ここにイニシャライザを書く
+  const Home( {super.key});
 
   @override
   _HomeState createState() => _HomeState();
@@ -14,8 +16,13 @@ class _HomeState extends State<Home> {
   final ScrollController _controller = ScrollController();
   bool isVisible = false; // 初期値
 
+  //uid取得
+  String myuid = Authentication().getuid();
+  
+
   @override
   Widget build(BuildContext context) {
+    print("myuid:${myuid}");
     return Scaffold(
       appBar: AppBar(
         title: Image.asset(
@@ -108,6 +115,7 @@ class _HomeState extends State<Home> {
                               ),
                             ),
                             IconButton(
+                              // todo フィルター
                               onPressed: () {
                                 setState(toggleShowText);
                               },

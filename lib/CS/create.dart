@@ -50,7 +50,7 @@ final user = <String, dynamic>{
 final profile = <String, dynamic>{
   "pro_id": "sample", // いらんかも
   // "img_pass": "sample",  //いるかも?
-  "name": "test", //1
+  "name": "テスト", //1
   "gender": "0", //2
   "age": 2024, //3
   "comment": "好きな犬は柴犬です", // ＊4
@@ -60,7 +60,8 @@ final profile = <String, dynamic>{
   "skill": "0",
   "hoby": "趣味", // ＊9
   "background": "ハッカソン関西制覇", // ＊10
-  "bairth": "12/25" // 後でやる
+  "bairth": "12/25", // 後でやる
+  "read_name": "yomigana" // ＊12
 };
 
 final friends = <String, dynamic>{

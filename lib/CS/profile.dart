@@ -38,6 +38,8 @@ final eveController = TextEditingController();
 final beController = TextEditingController();
 final hobyController = TextEditingController();
 final bgController = TextEditingController();
+final RnameController = TextEditingController();
+
 
 
 class _editProfilePageState extends State<editProfilePage> {
@@ -83,7 +85,14 @@ class _editProfilePageState extends State<editProfilePage> {
               decoration: InputDecoration(
                 hintText: 'background',
               ),
-            ),            ElevatedButton(
+            ), 
+            TextField(
+              controller: RnameController,
+              decoration: InputDecoration(
+                hintText: 'yomigana',
+              ),
+            ), 
+                       ElevatedButton(
               child: Text('do'),
               onPressed: () async {
                 // 脳筋実装でごめん 
@@ -93,6 +102,7 @@ class _editProfilePageState extends State<editProfilePage> {
                 String belong = beController.text;
                 String hoby = hobyController.text;
                 String background = bgController.text;
+                String readName = bgController.text;
 
                 // key値はcreate.dartのprofileのmapの値参照
                 updateDoc(profile.keys.elementAt(1), name); // name
@@ -101,6 +111,7 @@ class _editProfilePageState extends State<editProfilePage> {
                 updateDoc(profile.keys.elementAt(6), belong); // belong
                 updateDoc(profile.keys.elementAt(9), hoby);   // hoby
                 updateDoc(profile.keys.elementAt(10), background); // background
+                updateDoc(profile.keys.elementAt(12), readName); // background
               },
             ),  
             ElevatedButton(

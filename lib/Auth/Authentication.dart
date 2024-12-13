@@ -1,4 +1,5 @@
 import 'package:cacalia/Auth/user_info_screen.dart';
+import 'package:cacalia/CS/create.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,9 @@ import 'package:flutter/foundation.dart';
 import 'package:cacalia/firebase_options.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
-// 認証系のメソッドをまとめたやつ
+
+
+// 認証系のメソッドをまとめたやつ( 2024/12/13:現在googleの認証は機能してません.理由は知らん)
 class Authentication {
   // Firebase initialization
   static Future<FirebaseApp> initializeFirebase(
@@ -21,6 +24,7 @@ class Authentication {
           options: DefaultFirebaseOptions.currentPlatform,
         );
       await FirebaseAuth.instance.signOut();  // キャッシュユーザー強制ログアウト
+
 
     // ---------------なんか悪さしてる----------------------
     // User? user = FirebaseAuth.instance.currentUser;
@@ -41,8 +45,17 @@ class Authentication {
     return firebaseApp;
     }
 
-  
-
+  // uidを返す関数
+  String getuid (){
+    /// FirebaseAuthインスタンスのcurrentUserプロパティを使う
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      print(FirebaseAuth.instance.currentUser?.uid);
+      return user.uid;
+    }else {
+      return "nouser";
+    }
+  }
   // GoogleSignIn
   // for web (KIWEb)
   static Future<User?> signInWithGoogle({required BuildContext context}) async {

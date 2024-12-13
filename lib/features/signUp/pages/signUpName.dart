@@ -49,15 +49,16 @@ class SignUpNamePage extends StatefulWidget {
   State<SignUpNamePage> createState() => _SignUpNamePageState();
 }
 
-class _SignUpNamePageState extends State<SignUpNamePage> {
+class _SignUpNamePageState extends State<SignUpNamePage>  {
   final _formKey = GlobalKey<FormState>();
   final _usernameController = TextEditingController();
   final _mailaddressController = TextEditingController();
 
+  
+
   // 入力したメールアドレス・パスワード
   String _email = 'sample@ecc.com';
   String _pass = '123qwecc';
-  String _name = 'gest';
 
   @override
   Widget build(BuildContext context) {

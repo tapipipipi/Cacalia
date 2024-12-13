@@ -1,3 +1,4 @@
+import 'package:cacalia/features/home/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../Auth/Authentication.dart';
@@ -133,18 +134,26 @@ class _LoginPageState extends State<LoginPage> {
 
                     // TODO: ログイン処理
                     try {
-                      
                       final nowuser = FirebaseAuth.instance.currentUser;
                       if (nowuser != null) {
                         print('User already signed in: ${nowuser.email}');
                       } else {
                         // Sign-in logic
                         // メール/パスワードでログイン
-                        final User? user = (await FirebaseAuth.instance.signInWithEmailAndPassword(email: _email, password: _pass)).user;
-                        if (user != null){
+                        final User? user = (await FirebaseAuth.instance
+                                .signInWithEmailAndPassword(
+                                    email: _email, password: _pass))
+                            .user;
+                        // final String? uid = user?.uid;
+                        if (user != null) {
                           print("ログインしました ${user.email} , ${user.uid}");
                           // ignore: use_build_context_synchronously
                           context.go('/home');
+                          // Navigator.push( //uidを渡して遷移
+                          //   context,
+                          //   MaterialPageRoute(
+                          //       builder: (context) => Home(user.uid)),
+                          // );
                         }
                       }
                     } catch (e) {
