@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../../../Auth/Authentication.dart';
+import '../../../Auth/google_sign_in_button.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -13,6 +16,10 @@ class _LoginPageState extends State<LoginPage> {
   final _mailaddressController = TextEditingController();
   final _passwordController = TextEditingController();
 
+  // 入力したメールアドレス・パスワード
+  String _email = 'ゲスト';
+  String _pass = '123qwecc';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,8 +30,9 @@ class _LoginPageState extends State<LoginPage> {
             'assets/images/CacaliaLoginHeader.png',
             fit: BoxFit.cover,
           ),
-            Padding(
-            padding: const EdgeInsets.only(top: 0,left: 16.0,right: 16.0,bottom: 16.0),
+          Padding(
+            padding: const EdgeInsets.only(
+                top: 0, left: 16.0, right: 16.0, bottom: 16.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -56,10 +64,16 @@ class _LoginPageState extends State<LoginPage> {
                       if (value == null || value.isEmpty) {
                         return 'メールアドレスを入力してください';
                       }
-                      if (!RegExp(r'^[a-zA-Z0-9@_.-]+$').hasMatch(value)) { // 入力文字の制限
+                      if (!RegExp(r'^[a-zA-Z0-9@_.-]+$').hasMatch(value)) {
+                        // 入力文字の制限
                         return 'メールアドレスは英数字と一部の記号のみ使用できます';
                       }
                       return null;
+                    },
+                    onChanged: (String value) {
+                      setState(() {
+                        _email = value;
+                      });
                     },
                   ),
                 ),
@@ -93,20 +107,48 @@ class _LoginPageState extends State<LoginPage> {
                       if (value == null || value.isEmpty) {
                         return 'パスワードを入力してください';
                       }
-                      if (!RegExp(r'^[a-zA-Z0-9]+$').hasMatch(value)) { // 入力文字の制限
+                      if (!RegExp(r'^[a-zA-Z0-9]+$').hasMatch(value)) {
+                        // 入力文字の制限
                         return 'パスワードは英数字のみ使用できます';
                       }
                       return null;
-
-                      
+                    },
+                    onChanged: (String value) {
+                      setState(() {
+                        _pass = value;
+                      });
                     },
                   ),
                 ),
                 const SizedBox(height: 24),
                 ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      // TODO: ログイン処理を
+                  onPressed: () async {
+                    print(_email);
+                    print(_pass);
+                    // -------------------------------------
+                    // if (_formKey.currentState!.validate()) {
+                    //   // TODO: ログイン処理を
+                    // }
+                    // ------------------------------------
+
+                    // TODO: ログイン処理
+                    try {
+                      
+                      final nowuser = FirebaseAuth.instance.currentUser;
+                      if (nowuser != null) {
+                        print('User already signed in: ${nowuser.email}');
+                      } else {
+                        // Sign-in logic
+                        // メール/パスワードでログイン
+                        final User? user = (await FirebaseAuth.instance.signInWithEmailAndPassword(email: _email, password: _pass)).user;
+                        if (user != null){
+                          print("ログインしました ${user.email} , ${user.uid}");
+                          // ignore: use_build_context_synchronously
+                          context.go('/home');
+                        }
+                      }
+                    } catch (e) {
+                      print(e);
                     }
                   },
                   child: const Text('ログイン'),
@@ -122,12 +164,25 @@ class _LoginPageState extends State<LoginPage> {
                   child: const Text('デバッグ用：ホーム画面へ'),
                 ),
                 const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () async {
-                    // Googleログインの処理を追加
-                    // TODO: Googleログインの実装
+                // ElevatedButton(
+                //   onPressed: () async {
+                //     // Googleログインの処理を追加
+                //     // TODO: Googleログインの実装
+                //   },
+                //   child: const Text('Googleでログイン'),
+                // ),
+                FutureBuilder(
+                  future: Authentication.initializeFirebase(context: context),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator(); // データがまだ取得されていない場合のローディング表示
+                    } else if (snapshot.hasError) {
+                      return Text('Error initializing Firebase');
+                    } else {
+                      // データが取得された場合
+                      return GoogleSignInButton();
+                    }
                   },
-                  child: const Text('Googleでログイン'),
                 ),
                 const SizedBox(height: 16),
                 TextButton(

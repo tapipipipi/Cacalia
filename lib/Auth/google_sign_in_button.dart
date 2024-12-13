@@ -68,7 +68,7 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
                     Padding(
                       padding: const EdgeInsets.only(left: 10),
                       child: Text(
-                        'Sign in with Google',
+                        'Googleでログイン',
                         style: TextStyle(
                           fontSize: 20,
                           color: Colors.black54,

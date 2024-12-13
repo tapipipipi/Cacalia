@@ -20,24 +20,30 @@ class Authentication {
         FirebaseApp firebaseApp = await Firebase.initializeApp(
           options: DefaultFirebaseOptions.currentPlatform,
         );
+      await FirebaseAuth.instance.signOut();  // キャッシュユーザー強制ログアウト
 
-    User? user = FirebaseAuth.instance.currentUser;
+    // ---------------なんか悪さしてる----------------------
+    // User? user = FirebaseAuth.instance.currentUser;
 
-    // 自動ログイン.
-    if (user != null) {//userが存在していれば.
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => UserInfoScreen( //画面遷移 ログイン状態を保持しているならここでメインメニューに切り替えてもよい.
-            user: user,
-          ),
-        ),
-      );
-    }
+    // // 自動ログイン.
+    // if (user != null) {  //userがloginしていれば.
+    //   Navigator.of(context).pushReplacement(
+    //     MaterialPageRoute(
+    //       builder: (context) => UserInfoScreen( //画面遷移 ログイン状態を保持しているならここでメインメニューに切り替えてもよい.
+    //         user: user,
+    //       ),
+    //     ),
+    //   );
+    // }
+
+    // ---------------なんか悪さしてる----------------------
+
     return firebaseApp;
-  }
+    }
+
+  
 
   // GoogleSignIn
-
   // for web (KIWEb)
   static Future<User?> signInWithGoogle({required BuildContext context}) async {
     FirebaseAuth auth = FirebaseAuth.instance;

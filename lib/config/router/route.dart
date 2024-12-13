@@ -29,5 +29,6 @@ final router = GoRouter(
       path: '/signUpPass',
       builder: (context, state) => const SignUpPassPage(),
     ),
+
   ],
 );
