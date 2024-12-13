@@ -150,14 +150,9 @@ class _ExchangeState extends State<ExchangePage>
                       );
                     },
                   ),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white24, // ボタンを半透明に
-                      foregroundColor: Colors.white, // テキストを白に
-                    ),
-                    onPressed: startScan,
-                    child: Text(_isConnected ? '接続済み' : 'Bluetooth接続'),
+                  ShakeGesture(
+                    onShake: startScan,
+                    child: const Text("")
                   ),
                 ],
               ),
