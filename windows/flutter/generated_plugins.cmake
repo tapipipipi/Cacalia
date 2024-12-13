@@ -3,6 +3,7 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  ble_peripheral
   permission_handler_windows
 )
 

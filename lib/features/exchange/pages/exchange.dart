@@ -9,6 +9,10 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 //振る処理のライブラリ
 import 'package:shake_gesture/shake_gesture.dart';
+//BLEペリフェラル側のライブラリ
+import 'package:ble_peripheral/ble_peripheral.dart' as ble_peripheral;
+//UUIDを作成するライブラリ
+import 'package:uuid/uuid.dart';
 
 //このページだけ触るために一時的に宣言
 void main() {
@@ -67,7 +71,7 @@ class _ExchangeState extends State<ExchangePage>
   //画面に表示するテキスト
   // String displayText = "近くにデバイスがありません。";
 
-  //ペリフェラル側から送られてきたデータ
+  //受け取ったデータ
   Map<String, String> receivedData = {};
 
   //デバイスに接続できるボタンの状態
@@ -85,11 +89,21 @@ class _ExchangeState extends State<ExchangePage>
   //接続状態を示す変数
   bool _isConnected = false;
 
+  //ペリフェラルのサポート有無
+  bool _isSupported = false;
+
   //データを受けとったかどうか
-  // bool _isReceived = false;
+  bool _isReceived = false;
 
   //スキャン処理状態を保持する変数
   bool _isScanning = false;
+
+  //Uuidを生成
+  var uuid = Uuid();
+
+  //BLEの通信処理に使う変数
+  String serviceUuid = '8365a53a-b88e-eaf6-bd57-8ade564e01a7';
+  String charactaristicuuid = '50961b6a-a603-42b8-a2a7-a4fadbe94fa5';
 
   @override
   void initState() {
@@ -99,6 +113,7 @@ class _ExchangeState extends State<ExchangePage>
       vsync: this,
     )..repeat();
     checkPermission();
+    strtAdvertise();
   }
 
   @override
@@ -150,10 +165,7 @@ class _ExchangeState extends State<ExchangePage>
                       );
                     },
                   ),
-                  ShakeGesture(
-                    onShake: startScan,
-                    child: const Text("")
-                  ),
+                  ShakeGesture(onShake: startScan, child: const Text("")),
                 ],
               ),
             ),
@@ -192,6 +204,114 @@ class _ExchangeState extends State<ExchangePage>
     return result;
   }
 
+  //以下ペリフェラル側の処理
+  //ペリフェラル側のサービス処理
+  void _initializePeripheral() async {
+    // Readリクエストのコールバック設定
+    ble_peripheral.BlePeripheral.setReadRequestCallback(
+        (device, characteristic, offset, value) {
+      try {
+        //送信するデータ
+        Uint8List senddata =
+            _jsonToUint8List({'user': 'Tapipipipi', 'message': 'ペリフェラルだよ～'});
+
+        //データが大きい場合を考慮し、offsetを使用して分割読み出しを行う
+        Uint8List partialData = senddata.sublist(offset);
+
+        return ble_peripheral.ReadRequestResult(
+            value: partialData, status: 0 // GATT_SUCCESS
+            );
+      } catch (e) {
+        print("Error in ReadRequestCallback: $e");
+
+        return ble_peripheral.ReadRequestResult(
+            value: Uint8List(0), // 空のデータを返す
+            status: 1 //GATT_FAILURE
+            );
+      }
+    });
+
+    //Writeリクエストのコールバック設定
+    ble_peripheral.BlePeripheral.setWriteRequestCallback(
+        (device, charactaristic, offset, value) {
+      //値がUnit8Listじゃない場合エラーを返す
+      if (value == null) {
+        print("Received null value");
+        return ble_peripheral.WriteRequestResult(status: 1);
+      }
+
+      try {
+        setState(() {
+          //受け取ったデータをデコード
+          String received = utf8.decode(value);
+          print("Received raw data: $received");
+
+          // JSON形式に変換して取得
+          receivedData = Map<String, String>.from(jsonDecode(received));
+          print("Decoded JSON: $receivedData");
+          _isReceived = true;
+        });
+
+        return ble_peripheral.WriteRequestResult(status: 0); // GATT_SUCCESS
+      } catch (e) {
+        print("Error: $e");
+
+        return ble_peripheral.WriteRequestResult(status: 1); //GATT_FAILURE
+      }
+    });
+
+    // サービスとキャラクタリスティックの作成
+    await ble_peripheral.BlePeripheral.addService(ble_peripheral.BleService(
+      uuid: serviceUuid,
+      primary: true,
+      characteristics: [
+        ble_peripheral.BleCharacteristic(
+            uuid: charactaristicuuid, // キャラクタリスティックUUID
+            properties: [
+              ble_peripheral.CharacteristicProperties.read.index,
+              ble_peripheral.CharacteristicProperties.write.index,
+              ble_peripheral.CharacteristicProperties.notify.index,
+            ],
+            descriptors: [
+              ble_peripheral.BleDescriptor(
+                uuid: '00002902-0000-1000-8000-00805f9b34fb',
+                value: Uint8List.fromList([0x01, 0x00]),
+              ),
+            ],
+            permissions: [
+              ble_peripheral.AttributePermissions.readable.index,
+              ble_peripheral.AttributePermissions.writeable.index
+            ]),
+      ],
+    ));
+  }
+
+  //宣伝開始
+  void strtAdvertise() async {
+    await ble_peripheral.BlePeripheral.startAdvertising(
+        services: [serviceUuid], localName: "Cacalia"); //開始
+    print("開始");
+
+    //状態更新
+    setState(() {
+      _isSupported = true;
+    });
+  }
+
+  //宣伝終了
+  void stopAdvertise() async {
+    await ble_peripheral.BlePeripheral.stopAdvertising(); //停止
+    print("停止");
+    // displayText = "宣伝してよ...o(≧口≦)o";
+
+    //状態更新
+    setState(() {
+      _isSupported;
+    });
+  }
+  //ここまで
+
+  //以下セントラル側の処理
   //接続できる端末を探すメソッド
   void startScan() async {
     //処理中にメソッドが呼び出された場合
@@ -320,6 +440,7 @@ class _ExchangeState extends State<ExchangePage>
         .write(_jsonToUint8List({'user': 'Tapi', 'message': 'セントラルだよ～'}));
     disconnectDevaice(selectdevaice!);
   }
+  //ここまで
 
   _showProfilePopup() {
     showDialog(
