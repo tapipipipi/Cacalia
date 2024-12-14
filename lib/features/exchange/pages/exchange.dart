@@ -41,7 +41,8 @@ Future<void> checkPermission() async {
   await requestPermissions(Permission.location, "位置情報");
   await requestPermissions(Permission.bluetoothScan, "Bluetooth Scan");
   await requestPermissions(Permission.bluetoothConnect, "Bluetooth Connect");
-  await requestPermissions(Permission.bluetoothAdvertise, "Bluetooth Advertise");
+  await requestPermissions(
+      Permission.bluetoothAdvertise, "Bluetooth Advertise");
 }
 
 class _ExchangeState extends State<ExchangePage>
