@@ -1,7 +1,10 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -14,32 +17,8 @@ import 'package:ble_peripheral/ble_peripheral.dart' as ble_peripheral;
 //UUIDを作成するライブラリ
 import 'package:uuid/uuid.dart';
 
-//このページだけ触るために一時的に宣言
-void main() {
-  runApp(const MyApp());
-}
-
-//このページだけ触るために一時的に宣言
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'BLE connect test',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const ExchangePage(title: 'BLE central'),
-    );
-  }
-}
-
 class ExchangePage extends StatefulWidget {
-  const ExchangePage({super.key, required this.title});
-
-  final String title;
+  const ExchangePage({super.key});
 
   @override
   State<ExchangePage> createState() => _ExchangeState();
@@ -62,6 +41,7 @@ Future<void> checkPermission() async {
   await requestPermissions(Permission.location, "位置情報");
   await requestPermissions(Permission.bluetoothScan, "Bluetooth Scan");
   await requestPermissions(Permission.bluetoothConnect, "Bluetooth Connect");
+  await requestPermissions(Permission.bluetoothAdvertise, "Bluetooth Advertise");
 }
 
 class _ExchangeState extends State<ExchangePage>
@@ -93,7 +73,7 @@ class _ExchangeState extends State<ExchangePage>
   bool _isSupported = false;
 
   //データを受けとったかどうか
-  bool _isReceived = false;
+  final isReceived = StreamController<bool>();
 
   //スキャン処理状態を保持する変数
   bool _isScanning = false;
@@ -102,18 +82,62 @@ class _ExchangeState extends State<ExchangePage>
   var uuid = Uuid();
 
   //BLEの通信処理に使う変数
-  String serviceUuid = '8365a53a-b88e-eaf6-bd57-8ade564e01a7';
-  String charactaristicuuid = '50961b6a-a603-42b8-a2a7-a4fadbe94fa5';
+  // String serviceUuid = '8365a53a-b88e-eaf6-bd57-8ade564e01a7'; // UUID
+  String serviceUuid = ""; // UUID
+  // String charactaristicuuid =
+  //     '50961b6a-a603-42b8-a2a7-a4fadbe94fa5'; // キャラクタリスティックUUID
+  String charactaristicuuid = "";
 
   @override
   void initState() {
     super.initState();
+
+    // アニメーションコントローラーの初期化
     _controller = AnimationController(
       duration: const Duration(seconds: 20),
       vsync: this,
     )..repeat();
-    checkPermission();
-    strtAdvertise();
+
+    // ストリームリスナーの設定
+    _setupStreamListener();
+
+    _generateUuids();
+
+    Future.delayed(Duration.zero, () {
+      start();
+    });
+  }
+
+  void start() async {
+    await checkPermission();
+
+    // BLEペリフェラルの初期化
+    await ble_peripheral.BlePeripheral.initialize();
+
+    await initializePeripheral();
+
+    await strtAdvertise();
+  }
+
+  _setupStreamListener() {
+    isReceived.stream.listen(
+      (value) {
+        if (value) {
+          stopAdvertise();
+          _showProfilePopup();
+        }
+      },
+      onError: (error) {
+        print('ストリームエラー: $error');
+      },
+      cancelOnError: false,
+    );
+  }
+
+  _generateUuids() {
+    // Stateの更新を最適化
+    serviceUuid = uuid.v4();
+    charactaristicuuid = uuid.v4();
   }
 
   @override
@@ -206,7 +230,8 @@ class _ExchangeState extends State<ExchangePage>
 
   //以下ペリフェラル側の処理
   //ペリフェラル側のサービス処理
-  void _initializePeripheral() async {
+  initializePeripheral() async {
+    await checkPermission();
     // Readリクエストのコールバック設定
     ble_peripheral.BlePeripheral.setReadRequestCallback(
         (device, characteristic, offset, value) {
@@ -249,7 +274,7 @@ class _ExchangeState extends State<ExchangePage>
           // JSON形式に変換して取得
           receivedData = Map<String, String>.from(jsonDecode(received));
           print("Decoded JSON: $receivedData");
-          _isReceived = true;
+          isReceived.add(true);
         });
 
         return ble_peripheral.WriteRequestResult(status: 0); // GATT_SUCCESS
@@ -267,17 +292,21 @@ class _ExchangeState extends State<ExchangePage>
       characteristics: [
         ble_peripheral.BleCharacteristic(
             uuid: charactaristicuuid, // キャラクタリスティックUUID
+            //キャラクタリスティックの特性を設定
             properties: [
-              ble_peripheral.CharacteristicProperties.read.index,
-              ble_peripheral.CharacteristicProperties.write.index,
-              ble_peripheral.CharacteristicProperties.notify.index,
+              ble_peripheral.CharacteristicProperties.read.index, //読み込み
+              ble_peripheral.CharacteristicProperties.write.index, //書き込み
+              ble_peripheral
+                  .CharacteristicProperties.notify.index, //通知（コールバック使うため必要）
             ],
+            //notifyを使用するための記述
             descriptors: [
               ble_peripheral.BleDescriptor(
-                uuid: '00002902-0000-1000-8000-00805f9b34fb',
-                value: Uint8List.fromList([0x01, 0x00]),
+                uuid: '00002902-0000-1000-8000-00805f9b34fb', //固定uuid
+                value: Uint8List.fromList([0x01, 0x00]), //許可
               ),
             ],
+            //許可する権限を付与
             permissions: [
               ble_peripheral.AttributePermissions.readable.index,
               ble_peripheral.AttributePermissions.writeable.index
@@ -287,7 +316,7 @@ class _ExchangeState extends State<ExchangePage>
   }
 
   //宣伝開始
-  void strtAdvertise() async {
+  strtAdvertise() async {
     await ble_peripheral.BlePeripheral.startAdvertising(
         services: [serviceUuid], localName: "Cacalia"); //開始
     print("開始");
@@ -299,7 +328,7 @@ class _ExchangeState extends State<ExchangePage>
   }
 
   //宣伝終了
-  void stopAdvertise() async {
+  stopAdvertise() async {
     await ble_peripheral.BlePeripheral.stopAdvertising(); //停止
     print("停止");
     // displayText = "宣伝してよ...o(≧口≦)o";
@@ -314,6 +343,7 @@ class _ExchangeState extends State<ExchangePage>
   //以下セントラル側の処理
   //接続できる端末を探すメソッド
   void startScan() async {
+    await stopAdvertise();
     //処理中にメソッドが呼び出された場合
     if (_isScanning) return;
 
@@ -321,7 +351,7 @@ class _ExchangeState extends State<ExchangePage>
       //判定に必要な変数を初期化
       _isfinded = false;
       _isScanning = true;
-      // _isReceived = false;
+      isReceived.add(false);
       _isConnected = false;
       // displayText = "スキャン中...";
     });
@@ -360,11 +390,7 @@ class _ExchangeState extends State<ExchangePage>
 
       //スキャンが終わりデバイスが見つからなかった場合
       await Future.delayed(const Duration(seconds: 3), () {
-        // if (displayText == "スキャン中...") {
-        //   setState(() {
-        //     displayText = "デバイスが見つかりませんでした。";
-        //   });
-        // }
+        strtAdvertise();
       });
     } catch (e) {
       setState(() {
@@ -387,23 +413,27 @@ class _ExchangeState extends State<ExchangePage>
       //接続されたデバイスのサービスを取得
       await Future.delayed(const Duration(seconds: 1));
       services = await device.discoverServices();
-      readCharacteristic(); //ReadWrighメソッド
+      await readCharacteristic(); //ReadWrighメソッド
+      disconnectDevaice(device);
     } catch (e) {
       print('エラーでちゃった。。。');
+      _isConnected = false;
+      strtAdvertise();
     }
   }
 
   //接続を解除するメソッド
   disconnectDevaice(BluetoothDevice device) async {
     await device.disconnect();
+    print('接続解除');
     setState(() {
       _isConnected = false;
-      // _isReceived = false;
+      isReceived.add(false);
     });
   }
 
   //ペリフェラル側から送られてきた値を受信し、送信もするメソッド
-  void readCharacteristic() async {
+  readCharacteristic() async {
     //サービス一覧を表示
     for (BluetoothService service in services) {
       print('さーびす:$service');
@@ -423,8 +453,10 @@ class _ExchangeState extends State<ExchangePage>
               receivedData = Map<String, String>.from(jsonDecode(received));
               print("Caractaristic:${characteristic.uuid}");
               print("Received: $receivedData");
-              // _isReceived = true;
+              isReceived.add(true);
               _isConnected = true;
+              disconnectDevaice(selectdevaice!);
+              strtAdvertise();
             });
             _showProfilePopup();
           });
@@ -472,11 +504,6 @@ class _ExchangeState extends State<ExchangePage>
                   'コメント：${receivedData['message']}',
                   style: const TextStyle(fontSize: 16),
                 ),
-                ElevatedButton(
-                    onPressed: () async {
-                      await disconnectDevaice(selectdevaice!);
-                    },
-                    child: const Text("接続を解除"))
               ],
             ),
           ),
