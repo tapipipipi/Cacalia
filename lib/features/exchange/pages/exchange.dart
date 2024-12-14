@@ -10,32 +10,8 @@ import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 //振る処理のライブラリ
 import 'package:shake_gesture/shake_gesture.dart';
 
-//このページだけ触るために一時的に宣言
-void main() {
-  runApp(const MyApp());
-}
-
-//このページだけ触るために一時的に宣言
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'BLE connect test',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const ExchangePage(title: 'BLE central'),
-    );
-  }
-}
-
 class ExchangePage extends StatefulWidget {
-  const ExchangePage({super.key, required this.title});
-
-  final String title;
+  const ExchangePage({super.key});
 
   @override
   State<ExchangePage> createState() => _ExchangeState();

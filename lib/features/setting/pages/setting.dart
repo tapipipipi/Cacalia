@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:cacalia/component/footer.dart';
 import 'package:cacalia/component/card.dart';
+import 'package:go_router/go_router.dart';
 
 class Setting extends StatelessWidget {
   const Setting({super.key});
@@ -43,32 +44,41 @@ class Setting extends StatelessWidget {
                   ]),
                 ),
                 // 名刺
-                const UserCard(userId: 1),
-                // Container(
-                //   margin: const EdgeInsets.only(
-                //       top: 100, right: 20, bottom: 30, left: 40),
-                //   width: 80,
-                //   height: 80,
-                //   color: Colors.black,
-                // ),
-
+                Container(
+                  margin: const EdgeInsets.only(top: 50, bottom: 70),
+                  child: const UserCard(userId: 1),
+                ),
                 // 編集の項目
                 Container(
-                  margin: EdgeInsets.only(top: 100), // 名刺のコンテナの位置高さ調整
-                  child: const Column(
+                  child: Column(
                     mainAxisSize: MainAxisSize.min, // サイズを必要最小限に
                     children: [
-                      CustomListTile(
-                        icon: Icons.badge_outlined,
-                        text: '名前の編集',
+                      InkWell(
+                        onTap: () {
+                          context.go('/cardEdit');
+                        },
+                        child: const CustomListTile(
+                          icon: Icons.badge_outlined,
+                          text: '名刺の編集',
+                        ),
                       ),
-                      CustomListTile(
-                        icon: Icons.person,
-                        text: 'プロフィールの編集',
+                      InkWell(
+                        onTap: () {
+                          context.go('/profEdit');
+                        },
+                        child: const CustomListTile(
+                          icon: Icons.person,
+                          text: 'プロフィールの編集',
+                        ),
                       ),
-                      CustomListTile(
-                        icon: Icons.settings,
-                        text: 'アプリの設定',
+                      InkWell(
+                        onTap: () {
+                          context.go('/profEdit');
+                        },
+                        child: const CustomListTile(
+                          icon: Icons.settings,
+                          text: 'アプリの設定',
+                        ),
                       ),
                     ],
                   ),
