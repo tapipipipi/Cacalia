@@ -5,13 +5,14 @@ import 'package:cacalia/features/login/pages/login.dart';
 import 'package:cacalia/features/home/pages/home.dart';
 import 'package:cacalia/features/signUp/pages/signUpName.dart';
 import 'package:cacalia/features/signUp/pages/signUpPass.dart';
+import '../../store.dart';
 
 final router = GoRouter(
-  initialLocation: '/',
+  initialLocation: '/', // LoginPageを初期画面に設定
   routes: [
     GoRoute(
       path: '/',
-      builder: (context, state) => const LoginPage(), // LoginPageを初期画面に設定
+      builder: (context, state) => const LoginPage(), 
     ),
     GoRoute(
       path: '/exchange',
@@ -28,6 +29,10 @@ final router = GoRouter(
     GoRoute(
       path: '/signUpPass',
       builder: (context, state) => const SignUpPassPage(),
+    ),
+    GoRoute(
+      path: '/store',
+      builder: (context, state) => const Store(),
     ),
 
   ],

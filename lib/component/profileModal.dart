@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../Auth/Authentication.dart';
 
 // ignore: non_constant_identifier_names
 void Profilemodal(BuildContext context) {
@@ -61,8 +62,10 @@ void Profilemodal(BuildContext context) {
                                   style: TextStyle(fontSize: 16),
                                 ),
                                 const SizedBox(height: 10), // 余白
+                                // ---------------プロフィールのkeyを一覧表示------------------
                                 for (int i = 10; i >= 0; i--) Category('カテゴリー'),
                                 const SizedBox(height: 70), // 余白(ボタンで隠れないように)
+                                // ----------------------------------------------------------
                               ],
                             ),
                           ),

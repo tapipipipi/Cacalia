@@ -105,13 +105,13 @@ class _editProfilePageState extends State<editProfilePage> {
                 String readName = bgController.text;
 
                 // key値はcreate.dartのprofileのmapの値参照
-                updateDoc(profile.keys.elementAt(1), name); // name
-                updateDoc(profile.keys.elementAt(4), come); // comment
-                updateDoc(profile.keys.elementAt(5), eve);  // events
-                updateDoc(profile.keys.elementAt(6), belong); // belong
-                updateDoc(profile.keys.elementAt(9), hoby);   // hoby
-                updateDoc(profile.keys.elementAt(10), background); // background
-                updateDoc(profile.keys.elementAt(12), readName); // background
+                updateProfile(profiles.keys.elementAt(1), name); // name
+                updateProfile(profiles.keys.elementAt(4), come); // comment
+                updateProfile(profiles.keys.elementAt(5), eve);  // events
+                updateProfile(profiles.keys.elementAt(6), belong); // belong
+                updateProfile(profiles.keys.elementAt(9), hoby);   // hoby
+                updateProfile(profiles.keys.elementAt(10), background); // background
+                updateProfile(profiles.keys.elementAt(12), readName); // background
               },
             ),  
             ElevatedButton(

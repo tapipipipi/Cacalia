@@ -1,7 +1,7 @@
 import 'package:cacalia/CS/profile.dart';
 import 'package:flutter/material.dart';
 import 'CS/create.dart';
-// import 'package:cloud_firestore/cloud_firestore.dart';
+import 'Auth/Authentication.dart';
 
 // コレクション＝テーブル
 // ドキュメント＝データ
@@ -14,7 +14,7 @@ class Store extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'CS test',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -34,6 +34,9 @@ class MyFirestorePage extends StatefulWidget {
 
 final colleController = TextEditingController();
 final docController = TextEditingController();
+final friendController = TextEditingController();
+final uid = Authentication().getuid(); // uid取得
+String friendid = "";
 
 class _MyFirestorePageState extends State<MyFirestorePage> {
   @override
@@ -43,28 +46,42 @@ class _MyFirestorePageState extends State<MyFirestorePage> {
         child: Column(
           children: <Widget>[
             TextField(
-              controller: docController,
-              decoration: InputDecoration(
-                hintText: 'userID',
-              ),
-            ),
-            TextField(
               controller: colleController,
               decoration: InputDecoration(
-                hintText: 'コレクション',
+                hintText: 'for test',
               ),
             ),
             ElevatedButton(
-              child: Text('set'),
+              child: Text('set uid'),
               onPressed: () async {
                 g_colle = colleController.text;
-                g_doc = docController.text;
+                // g_doc = docController.text;
+                g_doc = uid;
+              },
+            ),
+            TextField(
+              controller: friendController,
+              decoration: InputDecoration(
+                hintText: 'add friend id',
+              ),
+            ),
+            ElevatedButton(
+              child: Text('set friendid'),
+              onPressed: () async {
+                friendid = friendController.text;
+              },
+            ),
+            ElevatedButton(
+              child: Text('フレンド追加'),
+              onPressed: () async {
+                updateFriend("friend_uid", friendid);
               },
             ),
             ElevatedButton(
               child: Text('ドキュメント作成，追加'),
               onPressed: () async {
-                setDoc();
+                setUser();
+                setFriend();
               },
             ),
             ElevatedButton(
