@@ -21,6 +21,10 @@ dependencies:
   shake_gesture: ^1.0.8
   location: ^7.0.1
   get: ^4.6.6
+  ble_peripheral: ^2.3.3
+  uuid: ^4.5.1
+
+
 
 dev_dependencies:
   flutter_test:
