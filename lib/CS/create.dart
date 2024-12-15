@@ -1,8 +1,11 @@
+import 'package:cacalia/store.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 /// import 'package:firebase_auth/firebase_auth.dart';
-String friend = "friend";
+String friend = "friends"; // コレクション、ドキュメント指定用 /users/friends/friends
 String profile = "profile";
+String users = "users"; // コレクション指定用 /users
 String ini = ""; // 本番用 profileの初期値
 String g_doc = ""; // テスト用　将来的にはuid
 String g_colle = ""; // テスト用
@@ -12,8 +15,8 @@ final db = FirebaseFirestore.instance;
 
 /// collectionとdocmentを指定
 final mycollection = db // コレクション名、usersは固定にしてuserごとにコレクション持たせる方針で行こうかな。
-    .collection("users")
-    .doc(g_doc);
+    .collection(users)
+    .doc(uid);
 final myfriends = mycollection.collection(friend).doc(friend);
 
 /// 質問、投稿、募集は未作成
@@ -40,12 +43,12 @@ final field = <String, dynamic>{
 /// ---------------コレクション-------------
 
 /// 「＊」は自由記述
-/// 2230360@ecc.ac.com Hxva1aGnNMcwg8s7esKDNmNll6u1
+/// 2230360@ecc.ac.com   Hxva1aGnNMcwg8s7esKDNmNll6u1
 /// 2210089@ecc.com フカ eNWeRyxoF1TQcUicEWn25SyZN1p2
 /// 2230192@ecc.com ふみ f8MQVKc4hbMe4z9Gtu3Sz2ZLn123
 /// 2230329@ecc.com　ば
 /// 2230358@ecc.com 谷
-final profiles = <String, dynamic>{
+Map<String, dynamic> profiles = <String, dynamic>{
   "u_id": g_doc, // いらんかも
   "name": "文元　沙弥", //1
   "read_name": " Fumimoto Saya", // 2
@@ -54,17 +57,17 @@ final profiles = <String, dynamic>{
   "comment": "ダーツ友達ください", // ＊5
   "events": "HACK U", // ＊6
   "belong": "ECCコンピュータ専門学校", // ＊7
-  "interest": "0",
   "skill": "0",
-  "hoby": "カラオケ", // ＊8
-  "background": "何入れたら良いかわからんかったから適当に", // ＊9
-  "bairth": "05/14", // 10 後でやる
+  "interest": "0",
+  "hoby": "カラオケ", // ＊10
+  "background": "何入れたら良いかわからんかったから適当に", // ＊11
+  "bairth": "05/14", // 12 後でやる
   "serviceUuid": "forBLE",
   "charactaristicuuid": "forBLE"
 };
 
 // uid 格納していくスタイル
-final friends = <String, dynamic>{"friend_uid": []};
+Map<String, dynamic> friends = <String, dynamic>{"friend_uid": []};
 
 /// ---------------------------------------
 
@@ -85,8 +88,6 @@ void setFriend() {
       .set(friends, SetOptions(merge: true))
       .onError((e, _) => print("Error writing document: $e")); // errMessage
 }
-
-/// add()
 
 /// データ更新　プロフィール編集時に使用
 /// update( {更新したいカラム : 値} )
@@ -119,7 +120,7 @@ void deleteDoc() {
 
 /// select * from コレクション いらんかな
 void selectAll() {
-  db.collection("users").get().then(
+  db.collection(users).doc(uid).collection(friend).get().then(
     (querySnapshot) {
       print("Successfully completed");
       for (var docSnapshot in querySnapshot.docs) {
@@ -132,24 +133,78 @@ void selectAll() {
   );
 }
 
-/// 名詞一覧で使うだろう
-/// select * from freiends where doc = g_doc;
-void selectDoc() {
-  myfriends.get().then(
-    (DocumentSnapshot doc) {
-      final result = doc.data() as Map<String, dynamic>;
-      print(result); // 結果を出力
-    },
-    onError: (e) => print("Error getting document: $e"),
-  );
+/// プロフィールの一覧を取得
+/// ドキュメントから取得
+
+Future<Map<String, dynamic>> getProfile(String uid) async {
+  try {
+    // Firestore ドキュメントを取得
+    DocumentSnapshot<Map<String, dynamic>> doc =
+        await db.collection(users).doc(uid).get();
+
+    // ドキュメントが存在しない場合
+    if (!doc.exists || doc.data() == null) {
+      throw Exception('Document does not exist or has no data');
+    }
+    return doc.data()!;
+  } catch (e) {
+    print('Error getting profile: $e'); // エラーをキャッチ
+    return Map();
+  }
+}
+
+/// フレンドのuid一覧を取得
+/// フィールドから値を取得
+Future<String> getProfileField(String uid, String field) async {
+  try {
+    // Firestore ドキュメントを取得
+    DocumentSnapshot<Map<String, dynamic>> doc = await db.collection(users).doc(uid).get();
+
+    // ドキュメントが存在するか確認
+    if (doc.exists && doc.data() != null) {
+      // データを取得して指定フィールドの値を返す
+      Map<String, dynamic> record = doc.data()!;
+      return record[field] as String;
+    } else {
+      print('Document does not exist or has no data');
+      return "no data"; // データがない場合
+    }
+  } catch (e) {
+    print('Error getting profile: $e'); // エラーをキャッチ
+    return "err";
+  }
+}
+
+/// 名詞一覧の際にユーザーのフレンドのuidを配列で返す.
+/// home.dartに移行時に呼び出される
+Future<List<String>> getFriends() async {
+  String fieldName = "friend_uid";
+  try {
+    // Firestore ドキュメントを取得
+    DocumentSnapshot<Map<String, dynamic>> doc = await myfriends.get();
+
+    // ドキュメントデータを取得
+    Map<String, dynamic>? data = doc.data();
+
+    // 配列フィールドを取り出す
+    if (data != null && data[fieldName] != null) {
+      return (data[fieldName] as List<dynamic>).cast<String>();
+    } else {
+      throw Exception("Field $fieldName does not exist or is null");
+    }
+  } catch (e) {
+    print("err: $e");
+    return [];
+  }
 }
 
 /// 未
 /// filtter検索で使うだろう
+/// 名前でフィルターする感じかな
 /// select * from コレクション where name = sample;
 void selectWhere() {
   db
-      .collection("users") //　コレクション名
+      .collection(users) //　コレクション名
       .where("name", isEqualTo: "sample")
       .get()
       .then(

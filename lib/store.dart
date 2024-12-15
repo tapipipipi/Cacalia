@@ -35,6 +35,8 @@ class MyFirestorePage extends StatefulWidget {
 final colleController = TextEditingController();
 final docController = TextEditingController();
 final friendController = TextEditingController();
+final getController = TextEditingController();
+
 final uid = Authentication().getuid(); // uid取得
 String friendid = "";
 
@@ -71,6 +73,18 @@ class _MyFirestorePageState extends State<MyFirestorePage> {
                 friendid = friendController.text;
               },
             ),
+            TextField(
+              controller: getController,
+              decoration: InputDecoration(
+                hintText: 'select feild',
+              ),
+            ),
+            ElevatedButton(
+              child: Text('set feild'),
+              onPressed: () async {
+                print(await getProfileField(uid,getController.text));
+              },
+            ),
             ElevatedButton(
               child: Text('フレンド追加'),
               onPressed: () async {
@@ -91,9 +105,15 @@ class _MyFirestorePageState extends State<MyFirestorePage> {
               },
             ),
             ElevatedButton(
-              child: Text('selectDoc'),
+              child: Text('getFriends'),
               onPressed: () async {
-                selectDoc();
+                print(await (getFriends()));
+              },
+            ),
+            ElevatedButton(
+              child: Text('getProfile'),
+              onPressed: () async {
+                //getProfile();
               },
             ),
             ElevatedButton(
