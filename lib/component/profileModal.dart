@@ -59,7 +59,7 @@ void Profilemodal(
               ),
             ),
             Container(
-              margin: EdgeInsets.only(top: 50),
+              margin: const EdgeInsets.only(top: 50),
               child: Expanded(
                 // スクロール領域を制御
                 child: SingleChildScrollView(
@@ -118,6 +118,9 @@ void Profilemodal(
                                   color: Colors.white,
                                   width: 8,
                                 ),
+                                image: const DecorationImage(
+                                    image: AssetImage(
+                                        'assets/images/default_avatar.png')),
                               ),
                             ),
                           ),
@@ -189,6 +192,13 @@ class Category extends Container {
           decoration: BoxDecoration(
             color: const Color.fromRGBO(109, 91, 93, 1),
             borderRadius: BorderRadius.circular(10.0),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black26,
+                offset: Offset(0, 6),
+                blurRadius: 4.0, //ぼかし
+              ),
+            ],
           ),
           child: Text(
             categoryName,

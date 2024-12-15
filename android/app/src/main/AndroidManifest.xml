@@ -1,5 +1,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <!-- BLT通信に必要な権限 -->
+        <uses-feature android:name="android.hardware.bluetooth_le" android:required="false" />
+        <uses-permission android:name="android.permission.BLUETOOTH_SCAN"/>
+        <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+        <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+        <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
+        <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30" />
+        <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
+        <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" android:maxSdkVersion="28" />
+
     <application
+        android:enableOnBackInvokedCallback="true"
         android:label="cacalia"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
@@ -29,7 +41,18 @@
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data
             android:name="flutterEmbedding"
-            android:value="2" />
+            android:value="2" 
+        />
+
+        <meta-data
+                android:name="dev.fluttercommunity.shake_gesture_android.SHAKE_FORCE"
+                android:value="4"
+        />
+
+        <meta-data
+                android:name="dev.fluttercommunity.shake_gesture_android.MIN_NUM_SHAKES"
+                android:value="3"
+        />
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and
