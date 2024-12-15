@@ -96,10 +96,10 @@ void Profilemodal(
                                 const SizedBox(
                                   height: 70,
                                 ), // 余白(ボタンで隠れないように)
-                                Text(
-                                  name, // value
-                                  style: TextStyle(fontSize: 16),
-                                ),
+                                // Text(
+                                //  Text:"", // value
+                                //   style: TextStyle(fontSize: 30)
+                                // ),
                                 // ----------------------------------------------------------
                               ],
                             ),
@@ -203,6 +203,7 @@ class Category extends Container {
           width: 240,
           child: Text(
             value,
+            style: TextStyle(fontSize: 20),
           ),
         )
       ],
