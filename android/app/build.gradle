@@ -1,8 +1,13 @@
 plugins {
     id "com.android.application"
+    // START: FlutterFire Configuration
+    // id 'com.google.gms.google-services'
+    id("com.google.gms.google-services") version "4.3.15" apply false    //追加
+    // END: FlutterFire Configuration
     id "kotlin-android"
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id "dev.flutter.flutter-gradle-plugin"
+    
 }
 
 android {
@@ -41,6 +46,21 @@ android {
             signingConfig = signingConfigs.debug
         }
     }
+}
+
+dependencies {
+  // Import the Firebase BoM
+  implementation platform('com.google.firebase:firebase-bom:29.3.0')
+
+
+  // TODO: Add the dependencies for Firebase products you want to use
+  // When using the BoM, don't specify versions in Firebase dependencies
+  implementation 'com.google.firebase:firebase-analytics'
+
+
+    // auth
+  implementation 'com.firebaseui:firebase-ui-auth:7.2.0'
+  implementation 'com.google.firebase:firebase-firestore'
 }
 
 flutter {

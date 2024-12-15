@@ -1,7 +1,36 @@
+import 'package:cacalia/CS/create.dart';
 import 'package:flutter/material.dart';
 
+// todo フレンドの情報を使う
+List<String> keys = ["コメント", "イベント", "所属", "得意", "興味のあること", "趣味", "経歴"];
+List<String> feildnames = [
+  "comment",
+  "events",
+  "belong",
+  "skill",
+  "interest",
+  "hoby",
+  "background"
+];
+List<String> values = [];
+
 // ignore: non_constant_identifier_names
-void Profilemodal(BuildContext context) {
+void Profilemodal(
+    BuildContext context, Map<String, dynamic> profileList) async {
+  print(profileList);
+
+  for (int i = 0; i < feildnames.length; i++) {
+    int currentValue = i;
+    // print(await feildnames[currentValue]);
+    // print(await profileList["u_id"]);
+    String field =
+        await getProfileField(profileList["u_id"], feildnames[currentValue]);
+    values.add(field);
+  }
+
+  String name = profileList["name"];
+  String readname = profileList["read_name"];
+
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
@@ -30,13 +59,13 @@ void Profilemodal(BuildContext context) {
               ),
             ),
             Container(
-              margin: EdgeInsets.only(top: 50),
+              margin: const EdgeInsets.only(top: 50),
               child: Expanded(
                 // スクロール領域を制御
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      const Text(
+                      Text(
                         'about me',
                         style: TextStyle(fontSize: 40),
                       ),
@@ -52,17 +81,26 @@ void Profilemodal(BuildContext context) {
                             child: Column(
                               children: [
                                 const SizedBox(height: 50),
-                                const Text(
-                                  '苗字　名前',
+                                Text(
+                                  name,
                                   style: TextStyle(fontSize: 24),
                                 ),
-                                const Text(
-                                  'myoji namae',
+                                Text(
+                                  readname,
                                   style: TextStyle(fontSize: 16),
                                 ),
                                 const SizedBox(height: 10), // 余白
-                                for (int i = 10; i >= 0; i--) Category('カテゴリー'),
-                                const SizedBox(height: 70), // 余白(ボタンで隠れないように)
+                                // ---------------プロフィールを一覧表示------------------
+                                for (int i = 0; i < keys.length; i++)
+                                  Category(keys[i], values[i]),
+                                const SizedBox(
+                                  height: 70,
+                                ), // 余白(ボタンで隠れないように)
+                                // Text(
+                                //  Text:"", // value
+                                //   style: TextStyle(fontSize: 30)
+                                // ),
+                                // ----------------------------------------------------------
                               ],
                             ),
                           ),
@@ -80,6 +118,9 @@ void Profilemodal(BuildContext context) {
                                   color: Colors.white,
                                   width: 8,
                                 ),
+                                image: const DecorationImage(
+                                    image: AssetImage(
+                                        'assets/images/default_avatar.png')),
                               ),
                             ),
                           ),
@@ -136,8 +177,9 @@ void Profilemodal(BuildContext context) {
 // ignore: must_be_immutable
 class Category extends Container {
   String categoryName;
+  String value;
 
-  Category(this.categoryName);
+  Category(this.categoryName, this.value);
 
   @override
   Widget build(BuildContext context) {
@@ -150,6 +192,13 @@ class Category extends Container {
           decoration: BoxDecoration(
             color: const Color.fromRGBO(109, 91, 93, 1),
             borderRadius: BorderRadius.circular(10.0),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black26,
+                offset: Offset(0, 6),
+                blurRadius: 4.0, //ぼかし
+              ),
+            ],
           ),
           child: Text(
             categoryName,
@@ -162,6 +211,10 @@ class Category extends Container {
         Container(
           height: 100,
           width: 240,
+          child: Text(
+            value,
+            style: TextStyle(fontSize: 20),
+          ),
         )
       ],
     );
