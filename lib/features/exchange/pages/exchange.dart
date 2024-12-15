@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:google_generative_ai/google_generative_ai.dart';
 
 //BLEセントラル側のライブラリ
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
@@ -47,6 +48,8 @@ Future<void> checkPermission() async {
 class _ExchangeState extends State<ExchangePage>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
+
+  String generatedText = 'Loading...';
 
   //画面に表示するテキスト
   // String displayText = "近くにデバイスがありません。";
@@ -138,6 +141,29 @@ class _ExchangeState extends State<ExchangePage>
     // Stateの更新を最適化
     serviceUuid = uuid.v4();
     charactaristicuuid = uuid.v4();
+  }
+
+  Future<void> generateText() async {
+    final model = GenerativeModel(
+      model: 'gemini-1.5-flash-latest',
+      apiKey: 'AIzaSyDvlwupnHlUINeIAt5yBGP1KASRGNqlwVA',
+    );
+
+    const prompt = 'I`ll send 2 sentences. compare and find common points. then create any topic and say like this ["Topic u generated"という話題でお話してみませんか？] no need other explain. 1.I hate u 2.I dont like u';
+    final content = [Content.text(prompt)];
+
+    try {
+      final response = await model.generateContent(content);
+      print(response.text); // Log response to debug
+      setState(() {
+        generatedText = response.text ?? 'No response text';
+      });
+    } catch (e) {
+      print("Error: $e");
+      setState(() {
+        generatedText = '生成エラー: $e';
+      });
+    }
   }
 
   @override
