@@ -42,7 +42,8 @@ Future<void> checkPermission() async {
   await requestPermissions(Permission.location, "位置情報");
   await requestPermissions(Permission.bluetoothScan, "Bluetooth Scan");
   await requestPermissions(Permission.bluetoothConnect, "Bluetooth Connect");
-  await requestPermissions(Permission.bluetoothAdvertise, "Bluetooth Advertise");
+  await requestPermissions(
+      Permission.bluetoothAdvertise, "Bluetooth Advertise");
 }
 
 class _ExchangeState extends State<ExchangePage>
@@ -55,7 +56,7 @@ class _ExchangeState extends State<ExchangePage>
   // String displayText = "近くにデバイスがありません。";
 
   //受け取ったデータ
-  Map<String, String> receivedData = {};
+  Map<String, dynamic> receivedData = {};
 
   //デバイスに接続できるボタンの状態
   bool _isfinded = false;
@@ -149,7 +150,8 @@ class _ExchangeState extends State<ExchangePage>
       apiKey: 'AIzaSyDvlwupnHlUINeIAt5yBGP1KASRGNqlwVA',
     );
 
-    const prompt = 'I`ll send 2 sentences. compare and find common points. then create any topic and say like this ["Topic u generated"という話題でお話してみませんか？] no need other explain. 1.I hate u 2.I dont like u';
+    const prompt =
+        'I`ll send 2 sentences. compare and find common points. then create any topic and say like this ["Topic u generated"という話題でお話してみませんか？] no need other explain. 1.I hate u 2.I dont like u';
     final content = [Content.text(prompt)];
 
     try {
@@ -242,7 +244,7 @@ class _ExchangeState extends State<ExchangePage>
   }
 
   // JSONデータをUint8Listに変換
-  Uint8List _jsonToUint8List(Map<String, String> jsonData) {
+  Uint8List _jsonToUint8List(Map<String, dynamic> jsonData) {
     return Uint8List.fromList(utf8.encode(jsonEncode(jsonData)));
   }
 
@@ -263,8 +265,23 @@ class _ExchangeState extends State<ExchangePage>
         (device, characteristic, offset, value) {
       try {
         //送信するデータ
-        Uint8List senddata =
-            _jsonToUint8List({'user': 'Tapipipipi', 'message': 'ペリフェラルだよ～'});
+        Uint8List senddata = _jsonToUint8List({
+        "u_id": "g_doc",
+        "user": "文元 沙弥",
+        "read_name": " Fumimoto Saya",
+        "gender": "1",
+        "age": "2004",
+        "message": "ダーツ友達ください",
+        "events": "HACK U",
+        "belong": "ECCコンピュータ専門学校",
+        "skill": "0",
+        "interest": "0",
+        "hoby": "カラオケ",
+        "background": "何入れたら良いかわからんかったから適当に",
+        "bairth": "05/14",
+        "serviceUuid": "forBLE",
+        "charactaristicuuid": "forBLE"
+        });
 
         //データが大きい場合を考慮し、offsetを使用して分割読み出しを行う
         Uint8List partialData = senddata.sublist(offset);
@@ -530,6 +547,21 @@ class _ExchangeState extends State<ExchangePage>
                   'コメント：${receivedData['message']}',
                   style: const TextStyle(fontSize: 16),
                 ),
+                Text(
+                  generatedText,
+                  style: const TextStyle(fontSize: 16),
+                ),
+                // ListView.builder(
+                //   itemCount: receivedData.keys.length,
+                //   itemBuilder: (context, index) {
+                //     String key = receivedData.keys.elementAt(index);
+                //     String value = receivedData[key]!;
+                //     return ListTile(
+                //       title: Text(key),
+                //       subtitle: Text(value),
+                //     );
+                //   },
+                // ),
               ],
             ),
           ),
