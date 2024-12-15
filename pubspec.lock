@@ -290,10 +290,10 @@ packages:
     dependency: "direct main"
     description:
       name: firebase_auth
-      sha256: cfc2d970829202eca09e2896f0a5aa7c87302817ecc0bdfa954f026046bf10ba
+      sha256: "279b2773ff61afd9763202cb5582e2b995ee57419d826b9af6517302a59b672f"
       url: "https://pub.dev"
     source: hosted
-    version: "4.20.0"
+    version: "4.16.0"
   firebase_auth_platform_interface:
     dependency: transitive
     description:
@@ -306,10 +306,10 @@ packages:
     dependency: transitive
     description:
       name: firebase_auth_web
-      sha256: "64e067e763c6378b7e774e872f0f59f6812885e43020e25cde08f42e9459837b"
+      sha256: c7b1379ccef7abf4b6816eede67a868c44142198e42350f51c01d8fc03f95a7d
       url: "https://pub.dev"
     source: hosted
-    version: "5.12.0"
+    version: "5.8.13"
   firebase_core:
     dependency: "direct main"
     description:
@@ -330,10 +330,10 @@ packages:
     dependency: transitive
     description:
       name: firebase_core_web
-      sha256: "362e52457ed2b7b180964769c1e04d1e0ea0259fdf7025fdfedd019d4ae2bd88"
+      sha256: "9e69806bb3d905aeec3c1242e0e1475de6ea6d48f456af29d598fb229a2b4e5e"
       url: "https://pub.dev"
     source: hosted
-    version: "2.17.5"
+    version: "2.18.2"
   fixnum:
     dependency: transitive
     description:
@@ -661,8 +661,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.9.0"
-<<<<<<< HEAD
-=======
   permission_handler:
     dependency: "direct main"
     description:
@@ -711,7 +709,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.1"
->>>>>>> e8719ed0c8104ba9b1daa21a68fd49a88e1d754c
   plugin_platform_interface:
     dependency: transitive
     description:
@@ -969,10 +966,10 @@ packages:
     dependency: transitive
     description:
       name: web
-      sha256: "97da13628db363c635202ad97068d47c5b8aa555808e7a9411963c533b449b27"
+      sha256: cd3543bd5798f6ad290ea73d210f423502e71900302dde696f8bff84bf89a1cb
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.1"
+    version: "1.1.0"
   web_socket:
     dependency: transitive
     description:
@@ -998,10 +995,5 @@ packages:
     source: hosted
     version: "3.1.2"
 sdks:
-<<<<<<< HEAD
   dart: ">=3.5.0 <4.0.0"
   flutter: ">=3.24.0"
-=======
-  dart: ">=3.5.4 <4.0.0"
-  flutter: ">=3.22.0"
->>>>>>> e8719ed0c8104ba9b1daa21a68fd49a88e1d754c

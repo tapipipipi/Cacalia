@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 import 'package:cacalia/features/home/pages/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-=======
->>>>>>> e8719ed0c8104ba9b1daa21a68fd49a88e1d754c
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';

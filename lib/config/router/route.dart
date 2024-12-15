@@ -6,12 +6,9 @@ import 'package:cacalia/features/login/pages/login.dart';
 import 'package:cacalia/features/home/pages/home.dart';
 import 'package:cacalia/features/signUp/pages/signUpName.dart';
 import 'package:cacalia/features/signUp/pages/signUpPass.dart';
-<<<<<<< HEAD
 import '../../store.dart';
-=======
 import 'package:cacalia/features/profEdit/pages/profEdit.dart';
 import 'package:cacalia/features/cardEdit/pages/cardEdit.dart';
->>>>>>> e8719ed0c8104ba9b1daa21a68fd49a88e1d754c
 
 final router = GoRouter(
   initialLocation: '/', // LoginPageを初期画面に設定
@@ -37,12 +34,11 @@ final router = GoRouter(
       builder: (context, state) => const SignUpPassPage(),
     ),
     GoRoute(
-<<<<<<< HEAD
       path: '/store',
       builder: (context, state) => const Store(),
     ),
+    GoRoute(
 
-=======
       path: '/setting',
       builder: (context, state) => const Setting(),
     ),
@@ -58,6 +54,5 @@ final router = GoRouter(
       path: '/timeLine',
       builder: (context, state) => const Timeline(),
     ),
->>>>>>> e8719ed0c8104ba9b1daa21a68fd49a88e1d754c
   ],
 );

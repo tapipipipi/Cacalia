@@ -137,6 +137,7 @@ class _LoginPageState extends State<LoginPage> {
                       final nowuser = FirebaseAuth.instance.currentUser;
                       if (nowuser != null) {
                         print('User already signed in: ${nowuser.email}');
+                        context.go('/home'); //これよくない
                       } else {
                         // Sign-in logic
                         // メール/パスワードでログイン
