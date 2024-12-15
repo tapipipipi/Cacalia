@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cacalia/component/card.dart';
 import 'package:cacalia/component/footer.dart';
@@ -97,6 +98,8 @@ class _HomeState extends State<Home> {
                               child: TextField(
                                 decoration: InputDecoration(
                                   hintText: '検索',
+                                  hintStyle: const TextStyle(
+                                      fontFamily: 'DotGothic16'),
                                   prefixIcon: const Icon(Icons.search),
                                   contentPadding: const EdgeInsets.symmetric(
                                     horizontal: 16,
