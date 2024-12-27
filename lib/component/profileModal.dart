@@ -18,7 +18,7 @@ List<String> values = [];
 void Profilemodal(
     BuildContext context, Map<String, dynamic> profileList) async {
   print(profileList);
-
+  List<String> values = [];
   for (int i = 0; i < feildnames.length; i++) {
     int currentValue = i;
     // print(await feildnames[currentValue]);

@@ -27,10 +27,6 @@ String fid = "";
 //uid取得
 String myuid = Authentication().getuid();
 
-
-
-
-
 class _HomeState extends State<Home> {
   @override
   void initState() {
@@ -43,24 +39,27 @@ class _HomeState extends State<Home> {
     setState(() {}); // データ取得後にUIを更新
   }
 
+  // cardListにフレンドごとの名前と読みを追加していく
   Future<void> getcard() async {
-  friends = await getFriends();
+    cardList = [];     // リフレッシュ
+    profileList = {};  // リフレッシュ
+    friends = await getFriends();
 
-  for (int i = 0; i < friends.length; i++) {
-    fid = friends[i];
-    profileList[fid] = await getProfile(fid);
+    for (int i = 0; i < friends.length; i++) {
+      fid = friends[i];
+      profileList[fid] = await getProfile(fid);
 
-    // 毎回新しいリストを作成して追加
-    List<Object> addList = [
-      profileList[fid]["name"],
-      profileList[fid]["read_name"],
-    ];
-    cardList.add(addList);
+      // 毎回新しいリストを作成して追加(リフレッシュ)
+      List<Object> addList = [
+        profileList[fid]["name"],
+        profileList[fid]["read_name"],
+      ];
+      cardList.add(addList);
+    }
+
+    // 状態を更新
+    setState(() {});
   }
-
-  // 状態を更新
-  setState(() {});
-}
 
   final ScrollController _controller = ScrollController();
   bool isVisible = false; // 初期値
@@ -200,8 +199,10 @@ class _HomeState extends State<Home> {
                                     // friendsCardList: cardList,
                                     ),
                                 onTap: () {
+                                  print(index);
                                   // friends[index] をキーに profileList から該当データを取得
-                                  var selectedProfile = profileList[friends[index]];
+                                  var selectedProfile =
+                                      profileList[friends[index]];
                                   Profilemodal(context, selectedProfile);
                                 },
                               ));
@@ -214,7 +215,7 @@ class _HomeState extends State<Home> {
             ],
           ),
         ),
-        bottomNavigationBar:  Footer(),
+        bottomNavigationBar: Footer(),
       );
     } else {
       return Scaffold();

@@ -19,6 +19,8 @@ final mycollection = db // コレクション名、usersは固定にしてuser�
     .doc(uid);
 final myfriends = mycollection.collection(friend).doc(friend);
 
+final createuser = db.collection(users).doc("aVhf5tTSWNRAmFAaikon0hyl08C3");
+
 /// 質問、投稿、募集は未作成
 
 /// 性別 いらんかも
@@ -50,18 +52,18 @@ final field = <String, dynamic>{
 /// 2230358@ecc.com 谷
 Map<String, dynamic> profiles = <String, dynamic>{
   "u_id": g_doc, // いらんかも
-  "name": "文元　沙弥", //1
-  "read_name": " Fumimoto Saya", // 2
-  "gender": "1", //3
-  "age": 2004, //4
-  "comment": "ダーツ友達ください", // ＊5
-  "events": "HACK U", // ＊6
-  "belong": "ECCコンピュータ専門学校", // ＊7
+  "name": "谷岡 義貴",
+  "read_name": "Tanioka Yoshitaka",
+  "gender": "男",
+  "age": '2004',
+  "comment": "ドラムが好きです",
+  "events": "HACK U",
+  "belong": "ECCコンピュータ専門学校",
   "skill": "0",
   "interest": "0",
-  "hoby": "カラオケ", // ＊10
-  "background": "何入れたら良いかわからんかったから適当に", // ＊11
-  "bairth": "05/14", // 12 後でやる
+  "hoby": "カラオケ",
+  "background": "基本情報技術者試験取得、Hack U NAGOYA優秀賞",
+  "bairth": "12/26",
   "serviceUuid": "forBLE",
   "charactaristicuuid": "forBLE"
 };
@@ -73,7 +75,7 @@ Map<String, dynamic> friends = <String, dynamic>{"friend_uid": []};
 
 /// コレクションprofile作成(サインインアップ後一度だけ呼び出される)
 void setUser() {
-  mycollection
+  createuser
       // 第二引数なくてもいい
       // 　同じドキュメントにset()メソッドを呼び出した際に
       // 　false -> 既存のデータを消して上書きするか
@@ -158,7 +160,8 @@ Future<Map<String, dynamic>> getProfile(String uid) async {
 Future<String> getProfileField(String uid, String field) async {
   try {
     // Firestore ドキュメントを取得
-    DocumentSnapshot<Map<String, dynamic>> doc = await db.collection(users).doc(uid).get();
+    DocumentSnapshot<Map<String, dynamic>> doc =
+        await db.collection(users).doc(uid).get();
 
     // ドキュメントが存在するか確認
     if (doc.exists && doc.data() != null) {

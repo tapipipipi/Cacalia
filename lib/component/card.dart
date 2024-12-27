@@ -29,7 +29,7 @@ class UserCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //cardList = getuid();
+    //cardListでフレンドの名前と読み仮名を取得している
     print(cardList);
 
     return Stack(
