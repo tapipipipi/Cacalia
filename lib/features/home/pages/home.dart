@@ -26,6 +26,7 @@ List<Object> addList = []; // cardList追加時に使用
 String fid = "";
 //uid取得
 String myuid = Authentication().getuid();
+int mycard = 0;
 
 class _HomeState extends State<Home> {
   @override
@@ -41,8 +42,8 @@ class _HomeState extends State<Home> {
 
   // cardListにフレンドごとの名前と読みを追加していく
   Future<void> getcard() async {
-    cardList = [];     // リフレッシュ
-    profileList = {};  // リフレッシュ
+    cardList = []; // リフレッシュ
+    profileList = {}; // リフレッシュ
     friends = await getFriends();
 
     for (int i = 0; i < friends.length; i++) {
@@ -56,6 +57,15 @@ class _HomeState extends State<Home> {
       ];
       cardList.add(addList);
     }
+    mycard = cardList.length;
+
+    // 自身のプロフィールを獲得しcardlistに追加
+    profileList[myuid] = await getProfile(myuid);
+    List<Object> addList = [
+      profileList[myuid]["name"],
+      profileList[myuid]["read_name"],
+    ];
+    cardList.add(addList);
 
     // 状態を更新
     setState(() {});
@@ -190,7 +200,7 @@ class _HomeState extends State<Home> {
                     Expanded(
                       child: ListView.builder(
                         padding: const EdgeInsets.all(20),
-                        itemCount: cardList.length, // フレンドの数だけ表示
+                        itemCount: mycard, // フレンドの数だけ表示
                         itemBuilder: (context, index) {
                           return Transform.translate(
                               offset: Offset(0, -index * 30.0), // カードを重ねて表示

@@ -1,4 +1,5 @@
 // アプリ設定画面
+import 'package:cacalia/features/home/pages/home.dart';
 import 'package:cacalia/store.dart';
 import 'package:flutter/material.dart';
 import 'package:cacalia/component/footer.dart';
@@ -49,7 +50,7 @@ class Setting extends StatelessWidget {
                 // 名刺----------------------------------------
                 Container(
                   margin: const EdgeInsets.only(top: 50, bottom: 70),
-                  child:  UserCard(userId: 1), // ユーザーの番号
+                  child:  UserCard(userId: mycard), // ユーザーの番号
                 ),
                 // 編集の項目
                 Container(
