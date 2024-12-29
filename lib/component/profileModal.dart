@@ -1,7 +1,7 @@
 import 'package:cacalia/CS/create.dart';
 import 'package:flutter/material.dart';
 
-// todo フレンドの情報を使う
+// フレンドのプロフィールを取得し表示させる
 List<String> keys = ["コメント", "イベント", "所属", "得意", "興味のあること", "趣味", "経歴"];
 List<String> feildnames = [
   "comment",
@@ -18,11 +18,11 @@ List<String> values = [];
 void Profilemodal(
     BuildContext context, Map<String, dynamic> profileList) async {
   print(profileList);
-  List<String> values = [];
+  List<String> values = []; // リフレッシュ
+
+  // フレンドの該当するプロフィールを取得しvaluesに格納
   for (int i = 0; i < feildnames.length; i++) {
     int currentValue = i;
-    // print(await feildnames[currentValue]);
-    // print(await profileList["u_id"]);
     String field =
         await getProfileField(profileList["u_id"], feildnames[currentValue]);
     values.add(field);
@@ -96,10 +96,6 @@ void Profilemodal(
                                 const SizedBox(
                                   height: 70,
                                 ), // 余白(ボタンで隠れないように)
-                                // Text(
-                                //  Text:"", // value
-                                //   style: TextStyle(fontSize: 30)
-                                // ),
                                 // ----------------------------------------------------------
                               ],
                             ),

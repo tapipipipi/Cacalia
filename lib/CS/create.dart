@@ -56,7 +56,7 @@ Map<String, dynamic> profiles = <String, dynamic>{
   "read_name": "Tanioka Yoshitaka",
   "gender": "男",
   "age": '2004',
-  "comment": "ドラムが好きです",
+  "comment": "ドラムが好きです", // 5
   "events": "HACK U",
   "belong": "ECCコンピュータ専門学校",
   "skill": "0",

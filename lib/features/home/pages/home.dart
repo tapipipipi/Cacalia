@@ -57,6 +57,8 @@ class _HomeState extends State<Home> {
       ];
       cardList.add(addList);
     }
+
+    // 最終的にできるcardlistの最後尾を代入
     mycard = cardList.length;
 
     // 自身のプロフィールを獲得しcardlistに追加
@@ -206,10 +208,8 @@ class _HomeState extends State<Home> {
                               offset: Offset(0, -index * 30.0), // カードを重ねて表示
                               child: InkWell(
                                 child: UserCard(userId: index
-                                    // friendsCardList: cardList,
                                     ),
                                 onTap: () {
-                                  print(index);
                                   // friends[index] をキーに profileList から該当データを取得
                                   var selectedProfile =
                                       profileList[friends[index]];

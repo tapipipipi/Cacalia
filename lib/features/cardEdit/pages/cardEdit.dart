@@ -14,7 +14,9 @@ class CardEdit extends StatelessWidget {
         alignment: Alignment.center,
         children: [
           UserCard(userId: mycard),
-          EditButtons(editType: false),
+          //-------------------------todo--------------------------
+         // 保存メソッドを作成し、第二引数にいれよ
+          // EditButtons(editType: false, onSave: ),
         ],
       ),
     );

@@ -6,31 +6,17 @@ class UserCard extends StatelessWidget {
   // 変数を宣言
   final int userId; // test
 
-  // final List<String> friends;
-  // List<List<Object>> friendsCardList = []; // ユーザーの名前と読み仮名格納用
-
   // super.keyと引数の指定
   UserCard({super.key, required this.userId
       //required dynamic friendsCardList // required 修飾子を付ける(非null制約を解除)
       });
-
-  // テストデータ(ユーザー)
-  static const userList = [
-    [0, '文元 沙弥', 'Humimoto Saya'],
-    [1, '谷岡 義貴', 'Tanioka Yoshitaka'],
-    [2, '深尾 悠', 'Hukao Yu'],
-    [3, '財前 颯', 'Zaizen Hayate'],
-    [4, '馬場 周友', 'Banba Syuyu'],
-  ];
-
-  // freindsから情報を取得する
 
   final String bgImg = 'assets/images/noImage.png';
 
   @override
   Widget build(BuildContext context) {
     //cardListでフレンドの名前と読み仮名を取得している
-    print(cardList);
+    // print(cardList);
 
     return Stack(
       alignment: Alignment.centerRight,
@@ -53,7 +39,7 @@ class UserCard extends StatelessWidget {
                 const Padding(padding: EdgeInsets.only(top: 15)),
                 // 読み仮名
                 Text(
-                  cardList[userId][1] as String, // '文元沙弥' のような名前を取得
+                  cardList[userId][1] as String, 
                   style: const TextStyle(fontSize: 14),
                 ),
                 // 名前
