@@ -8,11 +8,11 @@ import 'store.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();   
-  // Firebase初期化処理　ここから
+  // // Firebase初期化処理　ここから
   // await Firebase.initializeApp(
   //   options: DefaultFirebaseOptions.currentPlatform,
   // );                                           
-  //Firebase初期化処理　ここまで
+  // // Firebase初期化処理　ここまで
   // await FirebaseAuth.instance.signOut();
   runApp(const MyApp());
 }

@@ -15,7 +15,6 @@ List<String> feildnames = [
   "hoby",
   "background"
 ];
-// List<String> feildelements = [];
 
 class ProfEdit extends StatelessWidget {
   ProfEdit({super.key});
@@ -38,31 +37,30 @@ class ProfEdit extends StatelessWidget {
       values.add(field);
     }
 
-for (int i = 0; i < controllers.length; i++) {
-    controllers[i].text = values[i];
-  }
-  controllers.forEach((controller) {
-  print('Controller text: ${controller.text}');
-});
+    for (int i = 0; i < controllers.length; i++) {
+      controllers[i].text = values[i];
+    }
+    controllers.forEach((controller) {
+      print('Controller text: ${controller.text}');
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     // EditButtonsで使用するコントローラーから値を取得する関数
-    Future <void> saveValues() async {
+    Future<void> saveValues() async {
       List<String> updatedValues =
           controllers.map((controller) => controller.text).toList();
       print("Updated Values: $updatedValues");
       // ここでupdatedValuesを保存する処理を追加
       for (int i = 0; i < feildnames.length; i++) {
-         updateProfile(feildnames[i], updatedValues[i]);
+        updateProfile(feildnames[i], updatedValues[i]);
       }
     }
 
     // 自身のプロフィールを取得するため、描画する前に通信する処理
     return FutureBuilder(
         future: setprofileList(),
-
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
@@ -214,16 +212,11 @@ class Category extends Container {
   String categoryName; // key
   String value; // value
   final TextEditingController feildcontroller;
-  Category(this.categoryName, this.value, this.feildcontroller){
-    //feildcontroller = TextEditingController(text: value);
-  }
-  
+  Category(this.categoryName, this.value, this.feildcontroller);
+
   @override
   Widget build(BuildContext context) {
-    // TextEditingControllerで初期値を設定
-    // feildcontroller = TextEditingController(text: value);
-    // print(value);
-    print(feildcontroller.text);
+
 
     return Column(
       children: [

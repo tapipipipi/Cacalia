@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'signupScreen.dart';
+import '../features/home/pages/home.dart';
 /*
 flutter foundation パッケージに用意されている変数で、
 アプリケーションが Web 上で実行するようにコンパイルされているかどうかを調べるための変数です。
@@ -13,56 +14,58 @@ import 'package:flutter/foundation.dart';
 import 'package:cacalia/firebase_options.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
-
-
 // 認証系のメソッドをまとめたやつ( 2024/12/13:現在googleの認証は機能してません.理由は知らん)
 class Authentication {
   // Firebase initialization
   static Future<FirebaseApp> initializeFirebase(
-      {required BuildContext context}) async {
-        FirebaseApp firebaseApp = await Firebase.initializeApp(
-          options: DefaultFirebaseOptions.currentPlatform,
-        );
-      await FirebaseAuth.instance.signOut();  // キャッシュユーザー強制ログアウト
-
+      {required BuildContext context}) 
+      async {
+    FirebaseApp firebaseApp = await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    // await FirebaseAuth.instance.signOut();  // キャッシュユーザー強制ログアウト
 
     // ---------------なんか悪さしてる----------------------
-    // User? user = FirebaseAuth.instance.currentUser;
+    User? user = await FirebaseAuth.instance.currentUser;
 
     // // 自動ログイン.
-    // if (user != null) {  //userがloginしていれば.
+    // if (user != null) {
+    //   // userがloginしていれば.
     //   Navigator.of(context).pushReplacement(
     //     MaterialPageRoute(
-    //       builder: (context) => UserInfoScreen( //画面遷移 ログイン状態を保持しているならここでメインメニューに切り替えてもよい.
-    //         user: user,
+    //       builder: (context) => Home( //画面遷移 ログイン状態を保持しているならここでメインメニューに切り替えてもよい.
+    //         // user: user,
     //       ),
     //     ),
     //   );
+
     // }
 
     // ---------------なんか悪さしてる----------------------
 
     return firebaseApp;
-    }
+  }
 
   // uidを返す関数
-  String getuid (){
+  String getuid() {
     /// FirebaseAuthインスタンスのcurrentUserプロパティを使う
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       print(FirebaseAuth.instance.currentUser?.uid);
       return user.uid;
-    }else {
+    } else {
       return "nouser";
     }
   }
+
   // GoogleSignIn
   // for web (KIWEb)
   static Future<User?> signInWithGoogle({required BuildContext context}) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user;
 
-    if (kIsWeb) { // web版
+    if (kIsWeb) {
+      // web版
       GoogleAuthProvider authProvider = GoogleAuthProvider();
 
       try {
@@ -73,7 +76,8 @@ class Authentication {
       } catch (e) {
         print(e);
       }
-    } else {  // mobile
+    } else {
+      // mobile
       final GoogleSignIn googleSignIn = GoogleSignIn();
 
       final GoogleSignInAccount? googleSignInAccount =
@@ -107,13 +111,14 @@ class Authentication {
 
     return user;
   }
-  
+
   // GoogleSignOut
   static Future<void> signOut({required BuildContext context}) async {
     final GoogleSignIn googleSignIn = GoogleSignIn();
 
     try {
-      if (!kIsWeb) {  // mobileの場合
+      if (!kIsWeb) {
+        // mobileの場合
         await googleSignIn.signOut();
       }
       await FirebaseAuth.instance.signOut();

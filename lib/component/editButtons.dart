@@ -1,17 +1,15 @@
 //編集画面で使うボタン
-import 'package:cacalia/CS/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:cacalia/component/editModal.dart';
-import '../features/profEdit/pages/profEdit.dart';
-import '../CS/create.dart';
+import '../features/cardEdit/pages/cardEdit.dart';
 
 class EditButtons extends StatelessWidget {
   //プロフィールと名刺の編集を入れ替えるボタン部分に使う変数
   //true：名刺編集へ　false：プロフィール編集へ
   bool editType;
-  final VoidCallback onSave;
-  
+  final VoidCallback onSave;  // 変更を保存する
+
   EditButtons({super.key, required this.editType, required this.onSave});
 
   @override
@@ -58,14 +56,8 @@ class EditButtons extends StatelessWidget {
             alignment: Alignment.bottomRight,
             margin: const EdgeInsets.only(right: 20),
             child: ElevatedButton(
-              // ------------------------------------todo-----------------------------------------
               onPressed: () async {
-                // firebaseに上書き処理(このボタンってテーマとかの変更にも使ってるならその処理もここで書くのかな？)
-
-                /// 1.変更した値をコントローラーから持ってくる。
-                ///  -> いったん配列に入れなあかんな
-                ///   newvalues[]に値を格納して保存するボタンを押したらその値をもとに代入していく。継承は確認済み。
-                /// 2.updateメソッドで更新する
+                // 保存する処理を実行
                 onSave();
 
                 context.go('/setting');

@@ -7,6 +7,13 @@ import 'package:cacalia/component/card.dart';
 class CardEdit extends StatelessWidget {
   const CardEdit({super.key});
 
+  /*
+    名詞の編集を保存する処理
+  */
+  Future<void> saveCards() async {
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,9 +21,7 @@ class CardEdit extends StatelessWidget {
         alignment: Alignment.center,
         children: [
           UserCard(userId: mycard),
-          //-------------------------todo--------------------------
-         // 保存メソッドを作成し、第二引数にいれよ
-          // EditButtons(editType: false, onSave: ),
+          EditButtons(editType: false, onSave: saveCards),
         ],
       ),
     );

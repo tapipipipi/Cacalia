@@ -50,22 +50,25 @@ final field = <String, dynamic>{
 /// 2230192@ecc.com ふみ f8MQVKc4hbMe4z9Gtu3Sz2ZLn123
 /// 2230329@ecc.com　ば
 /// 2230358@ecc.com 谷
+/// 
+/// 誕生日とかの設定が未解決問題
+/// どこで設定するか
 Map<String, dynamic> profiles = <String, dynamic>{
-  "u_id": g_doc, // いらんかも
-  "name": "谷岡 義貴",
-  "read_name": "Tanioka Yoshitaka",
-  "gender": "男",
-  "age": '2004',
-  "comment": "ドラムが好きです", // 5
-  "events": "HACK U",
-  "belong": "ECCコンピュータ専門学校",
-  "skill": "0",
-  "interest": "0",
-  "hoby": "カラオケ",
-  "background": "基本情報技術者試験取得、Hack U NAGOYA優秀賞",
-  "bairth": "12/26",
-  "serviceUuid": "forBLE",
-  "charactaristicuuid": "forBLE"
+  "u_id": g_doc, 
+  "name": "",
+  "read_name": "",
+  "gender": "",
+  "age": '',
+  "comment": "", 
+  "events": "",
+  "belong": "",
+  "skill": "",
+  "interest": "",
+  "hoby": "",
+  "background": "",
+  "bairth": "",
+  "serviceUuid": "",
+  "charactaristicuuid": ""
 };
 
 // uid 格納していくスタイル
