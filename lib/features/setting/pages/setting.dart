@@ -46,7 +46,7 @@ class Setting extends StatelessWidget {
                 // 名刺
                 Container(
                   margin: const EdgeInsets.only(top: 50, bottom: 70),
-                  child: const UserCard(userId: 1),
+                  child: const UserCard(userId: 1, state: false),
                 ),
                 // 編集の項目
                 Container(

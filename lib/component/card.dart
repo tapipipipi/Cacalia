@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 class UserCard extends StatelessWidget {
   // 変数を宣言
-  final int userId;
+  final int userId; // ユーザーID
+  final bool state; // Gitの更新、募集予定のマークの表示設定
 
   // テストデータ(ユーザー)
   static const userList = [
@@ -16,14 +17,16 @@ class UserCard extends StatelessWidget {
   final String bgImg = 'assets/images/noImage.png';
 
   // super.keyと引数の指定
-  const UserCard(
-      {super.key, required this.userId // required 修飾子を付ける(非null制約を解除)
-      });
+  const UserCard({
+    super.key,
+    required this.userId,
+    required this.state, // required 修飾子を付ける(非null制約を解除)
+  });
 
   @override
   Widget build(BuildContext context) {
     return Stack(
-      alignment: Alignment.centerRight,
+      alignment: Alignment.center,
       children: [
         Card(
           elevation: 5, // 影の離れ具合
@@ -55,35 +58,38 @@ class UserCard extends StatelessWidget {
             ),
           ),
         ),
-        // 影の部分
-        Container(
-          height: 159,
-          width: 60,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.transparent, Colors.grey.shade400],
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
-            ),
-          ),
-          child: const Column(
-            children: [
-              Padding(padding: EdgeInsets.only(top: 10)),
-              //Todo:tureなら黄色、falseなら白にする処理
-              Icon(
-                Icons.lightbulb_rounded,
-                color: Color.fromRGBO(247, 204, 65, 1),
-                // color: Colors.white,
-              ),
-              SizedBox(height: 10), // margin代わり
-              Icon(
-                Icons.event,
-                // color: Color.fromRGBO(247, 204, 65, 1),
-                color: Colors.white,
-              ),
-            ],
-          ),
-        )
+        (state
+            ?
+            // 影の部分
+            Container(
+                height: 159,
+                width: 60,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Colors.transparent, Colors.grey.shade400],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  ),
+                ),
+                child: const Column(
+                  children: [
+                    Padding(padding: EdgeInsets.only(top: 10)),
+                    //Todo:tureなら黄色、falseなら白にする処理
+                    Icon(
+                      Icons.lightbulb_rounded,
+                      color: Color.fromRGBO(247, 204, 65, 1),
+                      // color: Colors.white,
+                    ),
+                    SizedBox(height: 10), // margin代わり
+                    Icon(
+                      Icons.event,
+                      // color: Color.fromRGBO(247, 204, 65, 1),
+                      color: Colors.white,
+                    ),
+                  ],
+                ),
+              )
+            : Container())
       ],
     );
   }

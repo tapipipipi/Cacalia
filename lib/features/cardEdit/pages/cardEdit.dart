@@ -12,7 +12,7 @@ class CardEdit extends StatelessWidget {
       body: Stack(
         alignment: Alignment.center,
         children: [
-          const UserCard(userId: 1),
+          const UserCard(userId: 1, state: false),
           EditButtons(editType: false),
         ],
       ),

@@ -149,7 +149,7 @@ class _HomeState extends State<Home> {
                         return Transform.translate(
                             offset: Offset(0, -index * 30.0), // カードを重ねて表示
                             child: InkWell(
-                              child: UserCard(userId: index),
+                              child: UserCard(userId: index, state: true),
                               onTap: () {
                                 Profilemodal(context);
                               },
