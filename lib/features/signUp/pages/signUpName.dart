@@ -191,7 +191,7 @@ class _SignUpNamePageState extends State<SignUpNamePage> {
                       // final String? uid = user?.uid;
                       if (loginuser != null) {
                         print("ログインしました ${loginuser.email} , ${loginuser.uid}");
-                        setUser();
+                        //setUser();
                         // ignore: use_build_context_synchronously
                         context.go('/home');
                       }

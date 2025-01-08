@@ -19,7 +19,7 @@ final mycollection = db // コレクション名、usersは固定にしてuser�
     .doc(uid);
 final myfriends = mycollection.collection(friend).doc(friend);
 
-final createuser = db.collection(users).doc("aVhf5tTSWNRAmFAaikon0hyl08C3");
+// final createuser = db.collection(users).doc("aVhf5tTSWNRAmFAaikon0hyl08C3");
 
 /// 質問、投稿、募集は未作成
 // final createuser = db.collection(users).doc("aVhf5tTSWNRAmFAaikon0hyl08C3");
@@ -54,13 +54,14 @@ final field = <String, dynamic>{
 /// 誕生日とかの設定が未解決問題
 /// どこで設定するか
 ///  -> 名前と読み仮名は名詞で編集すると思われ
-Map<String, dynamic> profiles = <String, dynamic>{  //　初期設定
-  "u_id": g_doc, 
+Map<String, dynamic> profiles = <String, dynamic>{
+  //　初期設定
+  "u_id": uid,
   "name": "ECC 太郎",
   "read_name": "ECC taro",
   "gender": "f",
   "age": "0",
-  "comment": "よろしくお願いします！！", 
+  "comment": "よろしくお願いします！！",
   "events": "HACK_U",
   "belong": "ECCコンピュータ専門学校",
   "skill": "MySQL",
@@ -78,14 +79,19 @@ Map<String, dynamic> friends = <String, dynamic>{"friend_uid": []};
 /// ---------------------------------------
 
 /// コレクションprofile作成(サインインアップ後一度だけ呼び出される)
-void setUser() {
-  createuser
+void setUser(String uid) {
+  print("setuser()");
+  profiles["u_id"] = uid;
+  db
+      .collection(users)
+      .doc(uid)
       // 第二引数なくてもいい
       // 　同じドキュメントにset()メソッドを呼び出した際に
       // 　false -> 既存のデータを消して上書きするか
       // 　true - > 追加して保存するかを設定する。
       .set(profiles, SetOptions(merge: true))
       .onError((e, _) => print("Error writing document: $e")); // errMessage
+  print(profiles);
 }
 
 /// サブコレクションfriends作成(サインインアップ後一度だけ呼び出される)
@@ -144,12 +150,17 @@ void selectAll() {
 
 Future<Map<String, dynamic>> getProfile(String uid) async {
   try {
+    print("getprofile");
     // Firestore ドキュメントを取得
     DocumentSnapshot<Map<String, dynamic>> doc =
         await db.collection(users).doc(uid).get();
 
-    // ドキュメントが存在しない場合
+    // ドキュメントが存在しない場合、ドキュメントを作成
     if (!doc.exists || doc.data() == null) {
+      print(uid);
+      setUser(uid); // userprofike作成
+      setFriend();  // freendlist作成
+      print("serUser()successed");
       throw Exception('Document does not exist or has no data');
     }
     return doc.data()!;
@@ -186,6 +197,7 @@ Future<String> getProfileField(String uid, String field) async {
 /// home.dartに移行時に呼び出される
 Future<List<String>> getFriends() async {
   String fieldName = "friend_uid";
+  print("getfriend");
   try {
     // Firestore ドキュメントを取得
     DocumentSnapshot<Map<String, dynamic>> doc = await myfriends.get();
