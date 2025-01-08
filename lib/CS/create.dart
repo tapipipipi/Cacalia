@@ -55,10 +55,10 @@ final field = <String, dynamic>{
 /// どこで設定するか
 Map<String, dynamic> profiles = <String, dynamic>{
   "u_id": g_doc, 
-  "name": "",
-  "read_name": "",
+  "name": "ECC 太郎",
+  "read_name": "ECC taro",
   "gender": "",
-  "age": '',
+  "age": "",
   "comment": "", 
   "events": "",
   "belong": "",

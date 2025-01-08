@@ -112,7 +112,9 @@ class _HomeState extends State<Home> {
                   shape: const CircleBorder(),
                   padding: EdgeInsets.zero,
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  context.go('/exchange');
+                },
                 child: Image.asset('assets/images/exchangeBtn.png'),
               ),
             ),
@@ -207,8 +209,7 @@ class _HomeState extends State<Home> {
                           return Transform.translate(
                               offset: Offset(0, -index * 30.0), // カードを重ねて表示
                               child: InkWell(
-                                child: UserCard(userId: index
-                                    ),
+                                child: UserCard(userId: index),
                                 onTap: () {
                                   // friends[index] をキーに profileList から該当データを取得
                                   var selectedProfile =
