@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../../../CS/create.dart';
+import '../../../Auth/Authentication.dart';
 
 // Future shinUp() async {
 //   try {
@@ -49,12 +51,10 @@ class SignUpNamePage extends StatefulWidget {
   State<SignUpNamePage> createState() => _SignUpNamePageState();
 }
 
-class _SignUpNamePageState extends State<SignUpNamePage>  {
+class _SignUpNamePageState extends State<SignUpNamePage> {
   final _formKey = GlobalKey<FormState>();
   final _usernameController = TextEditingController();
   final _mailaddressController = TextEditingController();
-
-  
 
   // 入力したメールアドレス・パスワード
   String _email = 'sample@ecc.com';
@@ -178,11 +178,24 @@ class _SignUpNamePageState extends State<SignUpNamePage>  {
                         email: _email,
                         password: _pass,
                       );
+                      print("seccess");
+                      // // 登録したユーザー情報
+                      // User? user = await result.user!;
+                      // print("ユーザ登録しました ${user.email} , ${user.uid}");
 
-                      // 登録したユーザー情報
-                      final User user = result.user!;
-                      print("ユーザ登録しました ${user.email} , ${user.uid}");
-                      context.go('/');
+                      // メール/パスワードでログイン
+                      final User? loginuser = (await FirebaseAuth.instance
+                              .signInWithEmailAndPassword(
+                                  email: _email, password: _pass))
+                          .user;
+                      // final String? uid = user?.uid;
+                      if (loginuser != null) {
+                        print("ログインしました ${loginuser.email} , ${loginuser.uid}");
+                        //setUser();
+                        // ignore: use_build_context_synchronously
+                        context.go('/home');
+                      }
+                      // context.go('/');
                     } catch (e) {
                       print("失敗");
                       print(e);
