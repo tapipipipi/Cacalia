@@ -50,25 +50,25 @@ final field = <String, dynamic>{
 /// 2230192@ecc.com ふみ f8MQVKc4hbMe4z9Gtu3Sz2ZLn123
 /// 2230329@ecc.com　ば
 /// 2230358@ecc.com 谷
-/// 
 /// 誕生日とかの設定が未解決問題
 /// どこで設定するか
-Map<String, dynamic> profiles = <String, dynamic>{
+///  -> 名前と読み仮名は名詞で編集すると思われ
+Map<String, dynamic> profiles = <String, dynamic>{  //　初期設定
   "u_id": g_doc, 
   "name": "ECC 太郎",
   "read_name": "ECC taro",
-  "gender": "",
-  "age": "",
-  "comment": "", 
-  "events": "",
-  "belong": "",
-  "skill": "",
-  "interest": "",
-  "hoby": "",
-  "background": "",
-  "bairth": "",
-  "serviceUuid": "",
-  "charactaristicuuid": ""
+  "gender": "f",
+  "age": "0",
+  "comment": "よろしくお願いします！！", 
+  "events": "HACK_U",
+  "belong": "ECCコンピュータ専門学校",
+  "skill": "MySQL",
+  "interest": "Mongo",
+  "hoby": "山登り",
+  "background": "ハッカソン企業賞獲得しました！",
+  "bairth": "1/1",
+  "serviceUuid": "forble",
+  "charactaristicuuid": "forble"
 };
 
 // uid 格納していくスタイル
