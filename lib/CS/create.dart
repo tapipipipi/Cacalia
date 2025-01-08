@@ -22,6 +22,7 @@ final myfriends = mycollection.collection(friend).doc(friend);
 final createuser = db.collection(users).doc("aVhf5tTSWNRAmFAaikon0hyl08C3");
 
 /// 質問、投稿、募集は未作成
+// final createuser = db.collection(users).doc("aVhf5tTSWNRAmFAaikon0hyl08C3");
 
 /// 性別 いらんかも
 final gender = <String, dynamic>{
@@ -103,7 +104,7 @@ void updateProfile(String key, String val) {
 }
 
 /// 通信(名刺交換)後に呼び出し.valは通信の際に受け取ったデータ(uid)を代入
-void updateFriend(String key, String val) {
+updateFriend(String key, String val) {
   myfriends.update({
     key: FieldValue.arrayUnion([val])
   }).then((value) => print("update sucessed"),
