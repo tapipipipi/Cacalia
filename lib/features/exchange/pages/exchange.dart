@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
+import 'package:cacalia/CS/create.dart';
 
 //BLEセントラル側のライブラリ
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
@@ -23,6 +24,7 @@ class ExchangePage extends StatefulWidget {
 
   @override
   State<ExchangePage> createState() => _ExchangeState();
+  
 }
 
 ///必要な権限を許可するメソッド
@@ -50,13 +52,32 @@ class _ExchangeState extends State<ExchangePage>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
+  bool setAI = false;
+
+  Map<String, String> myprofiles = <String, String>{
+    "name": "谷岡 義貴",
+    "read_name": "Tanioka Yoshitaka",
+    "gender": "男",
+    "age": '2004',
+    "comment": "ドラムが好きです",
+    "events": "HACK U",
+    "belong": "ECCコンピュータ専門学校",
+    "skill": "0",
+    "interest": "0",
+    "hoby": "カラオケ",
+    "background": "基本情報技術者試験取得、Hack U NAGOYA優秀賞",
+    "bairth": "12/26",
+    "serviceUuid": "forBLE",
+    "charactaristicuuid": "forBLE"
+  };
+
   String generatedText = 'Loading...';
 
   //画面に表示するテキスト
   // String displayText = "近くにデバイスがありません。";
 
   //受け取ったデータ
-  Map<String, dynamic> receivedData = {};
+  Map<String, String> receivedData = {};
 
   //デバイスに接続できるボタンの状態
   bool _isfinded = false;
@@ -128,6 +149,7 @@ class _ExchangeState extends State<ExchangePage>
       (value) {
         if (value) {
           stopAdvertise();
+          // generateText();
           _showProfilePopup();
         }
       },
@@ -244,7 +266,7 @@ class _ExchangeState extends State<ExchangePage>
   }
 
   // JSONデータをUint8Listに変換
-  Uint8List _jsonToUint8List(Map<String, dynamic> jsonData) {
+  Uint8List _jsonToUint8List(Map<String, String> jsonData) {
     return Uint8List.fromList(utf8.encode(jsonEncode(jsonData)));
   }
 
@@ -266,21 +288,21 @@ class _ExchangeState extends State<ExchangePage>
       try {
         //送信するデータ
         Uint8List senddata = _jsonToUint8List({
-        "u_id": "g_doc",
-        "user": "文元 沙弥",
-        "read_name": " Fumimoto Saya",
-        "gender": "1",
-        "age": "2004",
-        "message": "ダーツ友達ください",
-        "events": "HACK U",
-        "belong": "ECCコンピュータ専門学校",
-        "skill": "0",
-        "interest": "0",
-        "hoby": "カラオケ",
-        "background": "何入れたら良いかわからんかったから適当に",
-        "bairth": "05/14",
-        "serviceUuid": "forBLE",
-        "charactaristicuuid": "forBLE"
+          'uid': "Hxva1aGnNMcwg8s7esKDNmNll6u1",
+          "name": "谷岡 義貴",
+          "read_name": "Tanioka Yoshitaka",
+          "gender": "男",
+          "age": '2004',
+          "comment": "ドラムが好きです",
+          "events": "HACK U",
+          "belong": "ECCコンピュータ専門学校",
+          "skill": "0",
+          "interest": "0",
+          "hoby": "カラオケ",
+          "background": "基本情報技術者試験取得、Hack U NAGOYA優秀賞",
+          "bairth": "12/26",
+          "serviceUuid": "forBLE",
+          "charactaristicuuid": "forBLE"
         });
 
         //データが大きい場合を考慮し、offsetを使用して分割読み出しを行う
@@ -396,6 +418,7 @@ class _ExchangeState extends State<ExchangePage>
       _isScanning = true;
       isReceived.add(false);
       _isConnected = false;
+      setAI = false;
       // displayText = "スキャン中...";
     });
 
@@ -511,13 +534,55 @@ class _ExchangeState extends State<ExchangePage>
   }
 
   void writeCaracteristic(BluetoothCharacteristic characteristic) async {
-    await characteristic
-        .write(_jsonToUint8List({'user': 'Tapi', 'message': 'セントラルだよ～'}));
+    await characteristic.write(_jsonToUint8List({
+      'uid': "Hxva1aGnNMcwg8s7esKDNmNll6u1",
+      "name": "文元 沙弥",
+      "read_name": " Fumimoto Saya",
+      "gender": "女",
+      "age": "2004",
+      "comment": "ダーツ友達ください",
+      "events": "HACK U",
+      "belong": "ECCコンピュータ専門学校",
+      "skill": "0",
+      "interest": "0",
+      "hoby": "カラオケ",
+      "background": "Geekハッカソン企業賞、基本情報技術者試験取得",
+      "bairth": "05/14",
+      "serviceUuid": "forBLE",
+      "charactaristicuuid": "forBLE"
+    }));
     disconnectDevaice(selectdevaice!);
   }
   //ここまで
 
-  _showProfilePopup() {
+  _showProfilePopup() async {
+    List<String> keys = ["events", "comment", "hoby","background"];
+    List<String> receivevalue = keys.map((key) => receivedData[key] ?? "N/A").toList();
+    List<String> myvevalue = keys.map((key) => myprofiles[key] ?? "N/A").toList();
+    print('受け渡す値：$myvevalue : $receivevalue');
+
+    final model = GenerativeModel(
+      model: 'gemini-1.5-flash-latest',
+      apiKey: 'AIzaSyDvlwupnHlUINeIAt5yBGP1KASRGNqlwVA',
+    );
+
+    final prompt =
+        'I`ll send 2 sentences. compare and find common points. then create any topic and only say like this ["Topic u generated"という話題でお話してみませんか？] no need other explain. 1.$receivevalue 2.$myvevalue}';
+    final content = [Content.text(prompt)];
+
+    try {
+      final response = await model.generateContent(content);
+      print(response.text); // Log response to debug
+      setState(() {
+        generatedText = response.text ?? 'No response text';
+      });
+    } catch (e) {
+      print("Error: $e");
+      setState(() {
+        generatedText = '生成エラー: $e';
+      });
+    }
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -537,31 +602,26 @@ class _ExchangeState extends State<ExchangePage>
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'ユーザ：${receivedData['user']}',
+                  'ユーザ：${receivedData['name']}',
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 Text(
-                  'コメント：${receivedData['message']}',
+                  'コメント：${receivedData['comment']}',
                   style: const TextStyle(fontSize: 16),
                 ),
                 Text(
                   generatedText,
                   style: const TextStyle(fontSize: 16),
                 ),
-                // ListView.builder(
-                //   itemCount: receivedData.keys.length,
-                //   itemBuilder: (context, index) {
-                //     String key = receivedData.keys.elementAt(index);
-                //     String value = receivedData[key]!;
-                //     return ListTile(
-                //       title: Text(key),
-                //       subtitle: Text(value),
-                //     );
-                //   },
-                // ),
+                // ElevatedButton(
+                //   onPressed: updateFriend('uid',receivedData['uid']), 
+                //   child:  const Text(
+                //     'フレンドに追加',
+                //     style: TextStyle(fontSize: 16),
+                //     ))
               ],
             ),
           ),

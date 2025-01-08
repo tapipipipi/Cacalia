@@ -164,15 +164,15 @@ class _LoginPageState extends State<LoginPage> {
                   child: const Text('ログイン'),
                 ),
                 const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    context.go('/home');
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.grey,
-                  ),
-                  child: const Text('デバッグ用：ホーム画面へ'),
-                ),
+                // ElevatedButton(
+                //   onPressed: () {
+                //     context.go('/home');
+                //   },
+                //   style: ElevatedButton.styleFrom(
+                //     backgroundColor: Colors.grey,
+                //   ),
+                //   child: const Text('デバッグ用：ホーム画面へ'),
+                // ),
                 const SizedBox(height: 16),
                 // ElevatedButton(
                 //   onPressed: () async {
