@@ -2,13 +2,15 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:cacalia/component/editModal.dart';
+import '../features/cardEdit/pages/cardEdit.dart';
 
 class EditButtons extends StatelessWidget {
   //プロフィールと名刺の編集を入れ替えるボタン部分に使う変数
   //true：名刺編集へ　false：プロフィール編集へ
   bool editType;
+  final VoidCallback onSave;  // 変更を保存する
 
-  EditButtons({super.key, required this.editType});
+  EditButtons({super.key, required this.editType, required this.onSave});
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +56,10 @@ class EditButtons extends StatelessWidget {
             alignment: Alignment.bottomRight,
             margin: const EdgeInsets.only(right: 20),
             child: ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
+                // 保存する処理を実行
+                onSave();
+
                 context.go('/setting');
               },
               style: ElevatedButton.styleFrom(

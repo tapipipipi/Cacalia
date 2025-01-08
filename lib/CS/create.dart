@@ -19,6 +19,8 @@ final mycollection = db // コレクション名、usersは固定にしてuser�
     .doc(uid);
 final myfriends = mycollection.collection(friend).doc(friend);
 
+final createuser = db.collection(users).doc("aVhf5tTSWNRAmFAaikon0hyl08C3");
+
 /// 質問、投稿、募集は未作成
 // final createuser = db.collection(users).doc("aVhf5tTSWNRAmFAaikon0hyl08C3");
 
@@ -49,22 +51,25 @@ final field = <String, dynamic>{
 /// 2230192@ecc.com ふみ f8MQVKc4hbMe4z9Gtu3Sz2ZLn123
 /// 2230329@ecc.com　ば
 /// 2230358@ecc.com 谷
+/// 
+/// 誕生日とかの設定が未解決問題
+/// どこで設定するか
 Map<String, dynamic> profiles = <String, dynamic>{
-  "u_id": g_doc, // いらんかも
-  "name": "谷岡 義貴",
-  "read_name": "Tanioka Yoshitaka",
-  "gender": "男",
-  "age": '2004',
-  "comment": "ドラムが好きです",
-  "events": "HACK U",
-  "belong": "ECCコンピュータ専門学校",
-  "skill": "0",
-  "interest": "0",
-  "hoby": "カラオケ",
-  "background": "基本情報技術者試験取得、Hack U NAGOYA優秀賞",
-  "bairth": "12/26",
-  "serviceUuid": "forBLE",
-  "charactaristicuuid": "forBLE"
+  "u_id": g_doc, 
+  "name": "ECC 太郎",
+  "read_name": "ECC taro",
+  "gender": "",
+  "age": "",
+  "comment": "", 
+  "events": "",
+  "belong": "",
+  "skill": "",
+  "interest": "",
+  "hoby": "",
+  "background": "",
+  "bairth": "",
+  "serviceUuid": "",
+  "charactaristicuuid": ""
 };
 
 // uid 格納していくスタイル
@@ -74,7 +79,7 @@ Map<String, dynamic> friends = <String, dynamic>{"friend_uid": []};
 
 /// コレクションprofile作成(サインインアップ後一度だけ呼び出される)
 void setUser() {
-  myfriends
+  createuser
       // 第二引数なくてもいい
       // 　同じドキュメントにset()メソッドを呼び出した際に
       // 　false -> 既存のデータを消して上書きするか

@@ -26,37 +26,52 @@ List<Object> addList = []; // cardList追加時に使用
 String fid = "";
 //uid取得
 String myuid = Authentication().getuid();
+int mycard = 0;
 
 class _HomeState extends State<Home> {
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   fetchCardData(); // 非同期データを初期化時に取得
-  // }
+  @override
+  void initState() {
+    super.initState();
+    fetchCardData(); // 非同期データを初期化時に取得
+  }
 
-  // Future<void> fetchCardData() async {
-  //   await getcard();
-  //   setState(() {}); // データ取得後にUIを更新
-  // }
+  Future<void> fetchCardData() async {
+    await getcard();
+    setState(() {}); // データ取得後にUIを更新
+  }
 
-  // Future<void> getcard() async {
-  //   friends = await getFriends();
+  // cardListにフレンドごとの名前と読みを追加していく
+  Future<void> getcard() async {
+    cardList = []; // リフレッシュ
+    profileList = {}; // リフレッシュ
+    friends = await getFriends();
 
-  //   for (int i = 0; i < friends.length; i++) {
-  //     fid = friends[i];
-  //     profileList[fid] = await getProfile(fid);
+    for (int i = 0; i < friends.length; i++) {
+      fid = friends[i];
+      profileList[fid] = await getProfile(fid);
 
-  //     // 毎回新しいリストを作成して追加
-  //     List<Object> addList = [
-  //       profileList[fid]["name"],
-  //       profileList[fid]["read_name"],
-  //     ];
-  //     cardList.add(addList);
-  //   }
+      // 毎回新しいリストを作成して追加(リフレッシュ)
+      List<Object> addList = [
+        profileList[fid]["name"],
+        profileList[fid]["read_name"],
+      ];
+      cardList.add(addList);
+    }
 
-  //   // 状態を更新
-  //   setState(() {});
-  // }
+    // 最終的にできるcardlistの最後尾を代入
+    mycard = cardList.length;
+
+    // 自身のプロフィールを獲得しcardlistに追加
+    profileList[myuid] = await getProfile(myuid);
+    List<Object> addList = [
+      profileList[myuid]["name"],
+      profileList[myuid]["read_name"],
+    ];
+    cardList.add(addList);
+
+    // 状態を更新
+    setState(() {});
+  }
 
   final ScrollController _controller = ScrollController();
   bool isVisible = false; // 初期値
@@ -189,14 +204,12 @@ class _HomeState extends State<Home> {
                     Expanded(
                       child: ListView.builder(
                         padding: const EdgeInsets.all(20),
-                        itemCount: cardList.length, // フレンドの数だけ表示
+                        itemCount: mycard, // フレンドの数だけ表示
                         itemBuilder: (context, index) {
                           return Transform.translate(
                               offset: Offset(0, -index * 30.0), // カードを重ねて表示
                               child: InkWell(
-                                child: UserCard(userId: index
-                                    // friendsCardList: cardList,
-                                    ),
+                                child: UserCard(userId: index),
                                 onTap: () {
                                   // friends[index] をキーに profileList から該当データを取得
                                   var selectedProfile =
