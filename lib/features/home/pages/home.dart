@@ -79,9 +79,9 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     if (mounted) {
-      if (friends.isEmpty || cardList.isEmpty) {
-        return Center(child: CircularProgressIndicator()); // ローディング中
-      }
+      // if (friends.isEmpty || cardList.isEmpty) {
+      //   return Center(child: CircularProgressIndicator()); // ローディング中
+      // }
       return Scaffold(
         appBar: AppBar(
           title: Image.asset(

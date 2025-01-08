@@ -11,7 +11,7 @@ import 'package:cacalia/features/profEdit/pages/profEdit.dart';
 import 'package:cacalia/features/cardEdit/pages/cardEdit.dart';
 
 final router = GoRouter(
-  initialLocation: '/', // LoginPageを初期画面に設定
+  initialLocation: '/home', // LoginPageを初期画面に設定
   routes: [
     GoRoute(
       path: '/',
