@@ -38,6 +38,8 @@ dependencies:
   get: ^4.6.6
   ble_peripheral: ^2.3.3
   uuid: ^4.5.1
+  google_generative_ai: ^0.4.6
+
 
 
 
