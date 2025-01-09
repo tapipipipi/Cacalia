@@ -23,7 +23,7 @@ class Authentication {
     FirebaseApp firebaseApp = await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
-    // await FirebaseAuth.instance.signOut();  // キャッシュユーザー強制ログアウト
+    await FirebaseAuth.instance.signOut();  // キャッシュユーザー強制ログアウト
 
     // ---------------なんか悪さしてる----------------------
     User? user = await FirebaseAuth.instance.currentUser;

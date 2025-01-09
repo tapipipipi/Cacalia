@@ -17,14 +17,14 @@ import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:shake_gesture/shake_gesture.dart';
 //BLEペリフェラル側のライブラリ
 import 'package:ble_peripheral/ble_peripheral.dart' as ble_peripheral;
-
+//UUIDを作成するライブラリ
+import 'package:uuid/uuid.dart';
 
 class ExchangePage extends StatefulWidget {
   const ExchangePage({super.key});
 
   @override
   State<ExchangePage> createState() => _ExchangeState();
-  
 }
 
 ///必要な権限を許可するメソッド
@@ -55,22 +55,21 @@ class _ExchangeState extends State<ExchangePage>
   bool setAI = false;
 
   Map<String, String> myprofiles = <String, String>{
-    'uid': "Hxva1aGnNMcwg8s7esKDNmNll6u1",
-    "name": "谷岡 義貴",
-    "read_name": "Tanioka Yoshitaka",
-    "gender": "男",
-    "age": '2004',
-    "comment": "ドラムが好きです",
-    "events": "HACK U",
-    "belong": "ECCコンピュータ専門学校",
-    "skill": "0",
-    "interest": "0",
-    "hoby": "カラオケ",
-    "background": "基本情報技術者試験取得、Hack U NAGOYA優秀賞",
-    "bairth": "12/26",
-    "serviceUuid": "forBLE",
-    "charactaristicuuid": "forBLE"
-        
+    'u_id': profileList[myuid]["u_id"],
+    "name": profileList[myuid]["name"],
+    "read_name": profileList[myuid]["read_name"],
+    "gender": profileList[myuid]["gender"],
+    "age": profileList[myuid]["age"],
+    "comment": profileList[myuid]["comment"],
+    "events": profileList[myuid]["events"],
+    "belong": profileList[myuid]["belong"],
+    "skill": profileList[myuid]["skill"],
+    "interest": profileList[myuid]["interest"],
+    "hoby": profileList[myuid]["hoby"],
+    "background": profileList[myuid]["background"],
+    "bairth": profileList[myuid]["bairth"],
+    "serviceUuid": profileList[myuid]["serviceUuid"],
+    "charactaristicuuid": profileList[myuid]["charactaristicuuid"]
   };
 
   String generatedText = 'Loading...';
@@ -79,7 +78,7 @@ class _ExchangeState extends State<ExchangePage>
   // String displayText = "近くにデバイスがありません。";
 
   //受け取ったデータ
-  Map<String, String> receivedData = {};
+  Map<String, dynamic> receivedData = {};
 
   //デバイスに接続できるボタンの状態
   bool _isfinded = false;
@@ -106,14 +105,17 @@ class _ExchangeState extends State<ExchangePage>
   bool _isScanning = false;
 
   //Uuidを生成
-  // var uuid = Uuid();
+  var uuid = Uuid();
 
   //BLEの通信処理に使う変数
   // String serviceUuid = '8365a53a-b88e-eaf6-bd57-8ade564e01a7'; // UUID
-  String serviceUuid = profileList[myuid]["serviceUuid"]; // UUID
+  String serviceUuid = ""; // UUID
   // String charactaristicuuid =
   //     '50961b6a-a603-42b8-a2a7-a4fadbe94fa5'; // キャラクタリスティックUUID
-  String charactaristicuuid = profileList[myuid]["charactaristicuuid"];
+  String charactaristicuuid = "";
+
+  //受け取った値をデコードする変数
+  Map<String, String> decodereceived = {};
 
   @override
   void initState() {
@@ -128,7 +130,9 @@ class _ExchangeState extends State<ExchangePage>
     // ストリームリスナーの設定
     _setupStreamListener();
 
-    // print(profileList[myuid]["uid"]);
+    generateUuids();
+
+    print(profileList);
 
     Future.delayed(Duration.zero, () {
       start();
@@ -143,7 +147,9 @@ class _ExchangeState extends State<ExchangePage>
 
     await initializePeripheral();
 
-    await strtAdvertise();
+    // await startAdvertise();
+
+    ///
   }
 
   _setupStreamListener() {
@@ -160,6 +166,13 @@ class _ExchangeState extends State<ExchangePage>
       },
       cancelOnError: false,
     );
+  }
+
+  //ユーザのUUIDを生成
+  generateUuids() {
+    serviceUuid = uuid.v4();
+    charactaristicuuid = uuid.v4();
+    print('UUIDを作成しました');
   }
 
   Future<void> generateText() async {
@@ -262,8 +275,8 @@ class _ExchangeState extends State<ExchangePage>
   }
 
   // JSONデータをUint8Listに変換
-  Uint8List _jsonToUint8List(Map<String, String> jsonData) {
-    return Uint8List.fromList(utf8.encode(jsonEncode(jsonData)));
+  Uint8List _jsonToUint8List(Map<String, dynamic> uidData) {
+    return Uint8List.fromList(utf8.encode(jsonEncode(uidData)));
   }
 
   //受信データからuuidのみ取り出すメソッド([uuid]のような形式で送られてくる)
@@ -282,42 +295,7 @@ class _ExchangeState extends State<ExchangePage>
     ble_peripheral.BlePeripheral.setReadRequestCallback(
         (device, characteristic, offset, value) {
       try {
-        //送信するデータ
-        // Uint8List senddata = _jsonToUint8List({
-        //   'uid': "Hxva1aGnNMcwg8s7esKDNmNll6u1",
-        //   "name": "谷岡 義貴",
-        //   "read_name": "Tanioka Yoshitaka",
-        //   "gender": "男",
-        //   "age": '2004',
-        //   "comment": "ドラムが好きです",
-        //   "events": "HACK U",
-        //   "belong": "ECCコンピュータ専門学校",
-        //   "skill": "0",
-        //   "interest": "0",
-        //   "hoby": "カラオケ",
-        //   "background": "基本情報技術者試験取得、Hack U NAGOYA優秀賞",
-        //   "bairth": "12/26",
-        //   "serviceUuid": "forBLE",
-        //   "charactaristicuuid": "forBLE"
-        // });
-
-        Uint8List senddata = _jsonToUint8List({
-          'uid': profileList[myuid]["uid"],
-          "name": profileList[myuid]["name"],
-          "read_name": profileList[myuid]["read_name"],
-          "gender": profileList[myuid]["gender"],
-          "age": profileList[myuid]["age"],
-          "comment": profileList[myuid]["comment"],
-          "events": profileList[myuid]["events"],
-          "belong": profileList[myuid]["belong"],
-          "skill": profileList[myuid]["skill"],
-          "interest": profileList[myuid]["interest"],
-          "hoby": profileList[myuid]["hoby"],
-          "background": profileList[myuid]["background"],
-          "bairth": profileList[myuid]["bairth"],
-          "serviceUuid": profileList[myuid]["serviceUuid"],
-          "charactaristicuuid": profileList[myuid]["charactaristicuuid"]
-        });
+        Uint8List senddata = _jsonToUint8List({'u_id': myuid});
 
         //データが大きい場合を考慮し、offsetを使用して分割読み出しを行う
         Uint8List partialData = senddata.sublist(offset);
@@ -345,13 +323,14 @@ class _ExchangeState extends State<ExchangePage>
       }
 
       try {
-        setState(() {
+        setState(() async {
           //受け取ったデータをデコード
           String received = utf8.decode(value);
           print("Received raw data: $received");
 
           // JSON形式に変換して取得
-          receivedData = Map<String, String>.from(jsonDecode(received));
+          decodereceived = Map<String, String>.from(jsonDecode(received));
+          receivedData = await getProfile(decodereceived['u_id']!);
           print("Decoded JSON: $receivedData");
           isReceived.add(true);
         });
@@ -395,7 +374,7 @@ class _ExchangeState extends State<ExchangePage>
   }
 
   //宣伝開始
-  strtAdvertise() async {
+  startAdvertise() async {
     await ble_peripheral.BlePeripheral.startAdvertising(
         services: [serviceUuid], localName: "Cacalia"); //開始
     print("開始");
@@ -422,7 +401,9 @@ class _ExchangeState extends State<ExchangePage>
   //以下セントラル側の処理
   //接続できる端末を探すメソッド
   void startScan() async {
-    await stopAdvertise();
+    await startAdvertise();
+
+    ///
     //処理中にメソッドが呼び出された場合
     if (_isScanning) return;
 
@@ -470,7 +451,9 @@ class _ExchangeState extends State<ExchangePage>
 
       //スキャンが終わりデバイスが見つからなかった場合
       await Future.delayed(const Duration(seconds: 3), () {
-        strtAdvertise();
+        stopAdvertise();
+
+        ///
       });
     } catch (e) {
       setState(() {
@@ -496,9 +479,11 @@ class _ExchangeState extends State<ExchangePage>
       await readCharacteristic(); //ReadWrighメソッド
       disconnectDevaice(device);
     } catch (e) {
-      print('エラーでちゃった。。。');
+      print('エラーでちゃった。。。:$e');
       _isConnected = false;
-      strtAdvertise();
+      stopAdvertise();
+
+      ///
     }
   }
 
@@ -525,21 +510,27 @@ class _ExchangeState extends State<ExchangePage>
           // 通知を有効化
           characteristic.setNotifyValue(true);
           //値を読み込む
-          await characteristic.read().then((value) {
-            setState(() {
-              // 受信データを文字列に変換
-              var received = utf8.decode(value);
-              print(received);
-              receivedData = Map<String, String>.from(jsonDecode(received));
-              print("Caractaristic:${characteristic.uuid}");
-              print("Received: $receivedData");
-              isReceived.add(true);
-              _isConnected = true;
-              disconnectDevaice(selectdevaice!);
-              strtAdvertise();
-            });
-            _showProfilePopup();
+          final value = await characteristic.read();
+          // 受信データを文字列に変換
+          final received = utf8.decode(value);
+          print("received:$received");
+          Map<String, String> decodereceived =
+              Map<String, String>.from(jsonDecode(received));
+          receivedData = await getProfile(decodereceived['u_id']!);
+          print("Caractaristic:${characteristic.uuid}");
+          print("Received: $receivedData");
+
+          setState(() {
+            isReceived.add(true);
+            _isConnected = true;
           });
+          disconnectDevaice(selectdevaice!);
+          stopAdvertise();
+
+          ///
+
+          _showProfilePopup();
+
           writeCaracteristic(characteristic);
           break;
         }
@@ -549,41 +540,37 @@ class _ExchangeState extends State<ExchangePage>
 
   void writeCaracteristic(BluetoothCharacteristic characteristic) async {
     await characteristic.write(_jsonToUint8List({
-      'uid': "Hxva1aGnNMcwg8s7esKDNmNll6u1",
-      "name": "文元 沙弥",
-      "read_name": " Fumimoto Saya",
-      "gender": "女",
-      "age": "2004",
-      "comment": "ダーツ友達ください",
-      "events": "HACK U",
-      "belong": "ECCコンピュータ専門学校",
-      "skill": "0",
-      "interest": "0",
-      "hoby": "カラオケ",
-      "background": "Geekハッカソン企業賞、基本情報技術者試験取得",
-      "bairth": "05/14",
-      "serviceUuid": "forBLE",
-      "charactaristicuuid": "forBLE"
+      "u_id": myuid,
     }));
     disconnectDevaice(selectdevaice!);
+    stopAdvertise(); ///
   }
   //ここまで
 
+  //AI提案をするメソッド
   _showProfilePopup() async {
-    List<String> keys = ["events", "comment", "hoby","background"];
-    List<String> receivevalue = keys.map((key) => receivedData[key] ?? "N/A").toList();
-    List<String> myvevalue = keys.map((key) => myprofiles[key] ?? "N/A").toList();
+    //比較する項目を設定
+    List<String> keys = ["events", "comment", "hoby", "background"];
+
+    //受け取ったデータと自分のデータの中で、keysで指定した値で初期化
+    List<dynamic> receivevalue =
+        keys.map((key) => receivedData[key] ?? "N/A").toList();
+    List<String> myvevalue =
+        keys.map((key) => myprofiles[key] ?? "N/A").toList();
     print('受け渡す値：$myvevalue : $receivevalue');
 
+    //Geminiのmodelとapiキー
     final model = GenerativeModel(
       model: 'gemini-1.5-flash-latest',
       apiKey: 'AIzaSyDvlwupnHlUINeIAt5yBGP1KASRGNqlwVA',
     );
 
+    //Geminiにプロンプト送信
     final prompt =
         'I`ll send 2 sentences. compare and find common points. then create any topic and only say like this ["Topic u generated"という話題でお話してみませんか？] no need other explain. 1.$receivevalue 2.$myvevalue}';
     final content = [Content.text(prompt)];
 
+    //送られてきたメッセージを代入
     try {
       final response = await model.generateContent(content);
       print(response.text); // Log response to debug
@@ -630,12 +617,12 @@ class _ExchangeState extends State<ExchangePage>
                   generatedText,
                   style: const TextStyle(fontSize: 16),
                 ),
-                // ElevatedButton(
-                //   onPressed: updateFriend('uid',receivedData['uid']), 
-                //   child:  const Text(
-                //     'フレンドに追加',
-                //     style: TextStyle(fontSize: 16),
-                //     ))
+                ElevatedButton(
+                    onPressed: updateFriend('u_id', receivedData['u_id']!),
+                    child: const Text(
+                      'フレンドに追加',
+                      style: TextStyle(fontSize: 16),
+                    ))
               ],
             ),
           ),
@@ -674,3 +661,36 @@ class StarsPainter extends CustomPainter {
   @override
   bool shouldRepaint(StarsPainter oldDelegate) => false;
 }
+
+//テストデータ
+  //   'uid': "Hxva1aGnNMcwg8s7esKDNmNll6u1",
+  //   "name": "谷岡 義貴",
+  //   "read_name": "Tanioka Yoshitaka",
+  //   "gender": "男",
+  //   "age": '2004',
+  //   "comment": "ドラムが好きです",
+  //   "events": "HACK U",
+  //   "belong": "ECCコンピュータ専門学校",
+  //   "skill": "0",
+  //   "interest": "0",
+  //   "hoby": "カラオケ",
+  //   "background": "基本情報技術者試験取得、Hack U NAGOYA優秀賞",
+  //   "bairth": "12/26",
+  //   "serviceUuid": "forBLE",
+  //   "charactaristicuuid": "forBLE"
+
+  // 'uid': "Hxva1aGnNMcwg8s7esKDNmNll6u1",
+  // "name": "文元 沙弥",
+  // "read_name": " Fumimoto Saya",
+  // "gender": "女",
+  // "age": "2004",
+  // "comment": "ダーツ友達ください",
+  // "events": "HACK U",
+  // "belong": "ECCコンピュータ専門学校",
+  // "skill": "0",
+  // "interest": "0",
+  // "hoby": "カラオケ",
+  // "background": "Geekハッカソン企業賞、基本情報技術者試験取得",
+  // "bairth": "05/14",
+  // "serviceUuid": "forBLE",
+  // "charactaristicuuid": "forBLE"
