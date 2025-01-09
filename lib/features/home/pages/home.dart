@@ -32,6 +32,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
+    getProfile(uid);
     fetchCardData(); // 非同期データを初期化時に取得
   }
 

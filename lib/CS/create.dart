@@ -2,6 +2,9 @@ import 'package:cacalia/store.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+//UUIDを作成するライブラリ
+import 'package:uuid/uuid.dart';
+
 /// import 'package:firebase_auth/firebase_auth.dart';
 String friend = "friends"; // コレクション、ドキュメント指定用 /users/friends/friends
 String profile = "profile";
@@ -9,6 +12,9 @@ String users = "users"; // コレクション指定用 /users
 String ini = ""; // 本番用 profileの初期値
 String g_doc = ""; // テスト用　将来的にはuid
 String g_colle = ""; // テスト用
+
+//Uuidを生成
+var uuid = Uuid();
 
 /// db定義
 final db = FirebaseFirestore.instance;
@@ -19,7 +25,7 @@ final mycollection = db // コレクション名、usersは固定にしてuser�
     .doc(uid);
 final myfriends = mycollection.collection(friend).doc(friend);
 
-final createuser = db.collection(users).doc("aVhf5tTSWNRAmFAaikon0hyl08C3");
+// final createuser = db.collection(users).doc(g_doc);
 
 /// 質問、投稿、募集は未作成
 // final createuser = db.collection(users).doc("aVhf5tTSWNRAmFAaikon0hyl08C3");
@@ -69,7 +75,7 @@ Map<String, dynamic> profiles = <String, dynamic>{
   "background": "",
   "bairth": "",
   "serviceUuid": "",
-  "charactaristicuuid": ""
+  "charactaristicuuid": "",
 };
 
 // uid 格納していくスタイル
@@ -78,8 +84,8 @@ Map<String, dynamic> friends = <String, dynamic>{"friend_uid": []};
 /// ---------------------------------------
 
 /// コレクションprofile作成(サインインアップ後一度だけ呼び出される)
-void setUser() {
-  createuser
+void setUser(String uid) {
+  db.collection(users).doc(uid)
       // 第二引数なくてもいい
       // 　同じドキュメントにset()メソッドを呼び出した際に
       // 　false -> 既存のデータを消して上書きするか
@@ -150,6 +156,9 @@ Future<Map<String, dynamic>> getProfile(String uid) async {
 
     // ドキュメントが存在しない場合
     if (!doc.exists || doc.data() == null) {
+      setUser(uid);
+      setFriend();
+      _generateUuids();
       throw Exception('Document does not exist or has no data');
     }
     return doc.data()!;
@@ -158,6 +167,17 @@ Future<Map<String, dynamic>> getProfile(String uid) async {
     return Map();
   }
 }
+
+//ユーザのUUIDを生成
+_generateUuids() {
+    String serviceUuid = uuid.v4();
+    String charactaristicuuid = uuid.v4();
+    print(serviceUuid);
+    print(charactaristicuuid);
+    updateProfile("serviceUuid", serviceUuid);
+    updateProfile("charactaristicuuid", charactaristicuuid);
+    print('UUIDを作成しました');
+  }
 
 /// フレンドのuid一覧を取得
 /// フィールドから値を取得

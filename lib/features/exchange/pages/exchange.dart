@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:cacalia/features/home/pages/home.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,8 +17,7 @@ import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:shake_gesture/shake_gesture.dart';
 //BLEペリフェラル側のライブラリ
 import 'package:ble_peripheral/ble_peripheral.dart' as ble_peripheral;
-//UUIDを作成するライブラリ
-import 'package:uuid/uuid.dart';
+
 
 class ExchangePage extends StatefulWidget {
   const ExchangePage({super.key});
@@ -55,6 +55,7 @@ class _ExchangeState extends State<ExchangePage>
   bool setAI = false;
 
   Map<String, String> myprofiles = <String, String>{
+    'uid': "Hxva1aGnNMcwg8s7esKDNmNll6u1",
     "name": "谷岡 義貴",
     "read_name": "Tanioka Yoshitaka",
     "gender": "男",
@@ -69,6 +70,7 @@ class _ExchangeState extends State<ExchangePage>
     "bairth": "12/26",
     "serviceUuid": "forBLE",
     "charactaristicuuid": "forBLE"
+        
   };
 
   String generatedText = 'Loading...';
@@ -104,14 +106,14 @@ class _ExchangeState extends State<ExchangePage>
   bool _isScanning = false;
 
   //Uuidを生成
-  var uuid = Uuid();
+  // var uuid = Uuid();
 
   //BLEの通信処理に使う変数
   // String serviceUuid = '8365a53a-b88e-eaf6-bd57-8ade564e01a7'; // UUID
-  String serviceUuid = ""; // UUID
+  String serviceUuid = profileList[myuid]["serviceUuid"]; // UUID
   // String charactaristicuuid =
   //     '50961b6a-a603-42b8-a2a7-a4fadbe94fa5'; // キャラクタリスティックUUID
-  String charactaristicuuid = "";
+  String charactaristicuuid = profileList[myuid]["charactaristicuuid"];
 
   @override
   void initState() {
@@ -126,7 +128,7 @@ class _ExchangeState extends State<ExchangePage>
     // ストリームリスナーの設定
     _setupStreamListener();
 
-    _generateUuids();
+    // print(profileList[myuid]["uid"]);
 
     Future.delayed(Duration.zero, () {
       start();
@@ -158,12 +160,6 @@ class _ExchangeState extends State<ExchangePage>
       },
       cancelOnError: false,
     );
-  }
-
-  _generateUuids() {
-    // Stateの更新を最適化
-    serviceUuid = uuid.v4();
-    charactaristicuuid = uuid.v4();
   }
 
   Future<void> generateText() async {
@@ -287,22 +283,40 @@ class _ExchangeState extends State<ExchangePage>
         (device, characteristic, offset, value) {
       try {
         //送信するデータ
+        // Uint8List senddata = _jsonToUint8List({
+        //   'uid': "Hxva1aGnNMcwg8s7esKDNmNll6u1",
+        //   "name": "谷岡 義貴",
+        //   "read_name": "Tanioka Yoshitaka",
+        //   "gender": "男",
+        //   "age": '2004',
+        //   "comment": "ドラムが好きです",
+        //   "events": "HACK U",
+        //   "belong": "ECCコンピュータ専門学校",
+        //   "skill": "0",
+        //   "interest": "0",
+        //   "hoby": "カラオケ",
+        //   "background": "基本情報技術者試験取得、Hack U NAGOYA優秀賞",
+        //   "bairth": "12/26",
+        //   "serviceUuid": "forBLE",
+        //   "charactaristicuuid": "forBLE"
+        // });
+
         Uint8List senddata = _jsonToUint8List({
-          'uid': "Hxva1aGnNMcwg8s7esKDNmNll6u1",
-          "name": "谷岡 義貴",
-          "read_name": "Tanioka Yoshitaka",
-          "gender": "男",
-          "age": '2004',
-          "comment": "ドラムが好きです",
-          "events": "HACK U",
-          "belong": "ECCコンピュータ専門学校",
-          "skill": "0",
-          "interest": "0",
-          "hoby": "カラオケ",
-          "background": "基本情報技術者試験取得、Hack U NAGOYA優秀賞",
-          "bairth": "12/26",
-          "serviceUuid": "forBLE",
-          "charactaristicuuid": "forBLE"
+          'uid': profileList[myuid]["uid"],
+          "name": profileList[myuid]["name"],
+          "read_name": profileList[myuid]["read_name"],
+          "gender": profileList[myuid]["gender"],
+          "age": profileList[myuid]["age"],
+          "comment": profileList[myuid]["comment"],
+          "events": profileList[myuid]["events"],
+          "belong": profileList[myuid]["belong"],
+          "skill": profileList[myuid]["skill"],
+          "interest": profileList[myuid]["interest"],
+          "hoby": profileList[myuid]["hoby"],
+          "background": profileList[myuid]["background"],
+          "bairth": profileList[myuid]["bairth"],
+          "serviceUuid": profileList[myuid]["serviceUuid"],
+          "charactaristicuuid": profileList[myuid]["charactaristicuuid"]
         });
 
         //データが大きい場合を考慮し、offsetを使用して分割読み出しを行う
