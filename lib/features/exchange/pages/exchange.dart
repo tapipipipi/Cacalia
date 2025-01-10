@@ -115,7 +115,7 @@ class _ExchangeState extends State<ExchangePage>
   String charactaristicuuid = "";
 
   //受け取った値をデコードする変数
-  Map<String, String> decodereceived = {};
+  Map<String, dynamic> decodereceived = {};
 
   @override
   void initState() {
@@ -514,7 +514,7 @@ class _ExchangeState extends State<ExchangePage>
           // 受信データを文字列に変換
           final received = utf8.decode(value);
           print("received:$received");
-          Map<String, String> decodereceived =
+          decodereceived =
               Map<String, String>.from(jsonDecode(received));
           receivedData = await getProfile(decodereceived['u_id']!);
           print("Caractaristic:${characteristic.uuid}");
@@ -618,7 +618,7 @@ class _ExchangeState extends State<ExchangePage>
                   style: const TextStyle(fontSize: 16),
                 ),
                 ElevatedButton(
-                    onPressed: updateFriend('u_id', receivedData['u_id']!),
+                    onPressed: updateFriend('friend_uid', decodereceived['u_id']),
                     child: const Text(
                       'フレンドに追加',
                       style: TextStyle(fontSize: 16),
