@@ -32,6 +32,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
+    print(uid);
     getProfile(uid);
     fetchCardData(); // 非同期データを初期化時に取得
   }
@@ -43,20 +44,24 @@ class _HomeState extends State<Home> {
 
   // cardListにフレンドごとの名前と読みを追加していく
   Future<void> getcard() async {
+    print("getcard()");
     cardList = []; // リフレッシュ
     profileList = {}; // リフレッシュ
     friends = await getFriends();
 
-    for (int i = 0; i < friends.length; i++) {
-      fid = friends[i];
-      profileList[fid] = await getProfile(fid);
+    if (friends != null) {
+      print("get cards.");
+      for (int i = 0; i < friends.length; i++) {
+        fid = friends[i];
+        profileList[fid] = await getProfile(fid);
 
-      // 毎回新しいリストを作成して追加(リフレッシュ)
-      List<Object> addList = [
-        profileList[fid]["name"],
-        profileList[fid]["read_name"],
-      ];
-      cardList.add(addList);
+        // 毎回新しいリストを作成して追加(リフレッシュ)
+        List<Object> addList = [
+          profileList[fid]["name"],
+          profileList[fid]["read_name"],
+        ];
+        cardList.add(addList);
+      }
     }
 
     // 最終的にできるcardlistの最後尾を代入

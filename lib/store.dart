@@ -94,7 +94,7 @@ class _MyFirestorePageState extends State<MyFirestorePage> {
             ElevatedButton(
               child: Text('ドキュメント作成，追加'),
               onPressed: () async {
-                // setUser();
+                setUser();
                 setFriend();
               },
             ),

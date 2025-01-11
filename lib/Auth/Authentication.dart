@@ -26,7 +26,7 @@ class Authentication {
     await FirebaseAuth.instance.signOut();  // キャッシュユーザー強制ログアウト
 
     // ---------------なんか悪さしてる----------------------
-    User? user = await FirebaseAuth.instance.currentUser;
+   // User? user = await FirebaseAuth.instance.currentUser;
 
     // // 自動ログイン.
     // if (user != null) {
