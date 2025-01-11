@@ -514,8 +514,7 @@ class _ExchangeState extends State<ExchangePage>
           // 受信データを文字列に変換
           final received = utf8.decode(value);
           print("received:$received");
-          decodereceived =
-              Map<String, String>.from(jsonDecode(received));
+          decodereceived = Map<String, String>.from(jsonDecode(received));
           receivedData = await getProfile(decodereceived['u_id']!);
           print("Caractaristic:${characteristic.uuid}");
           print("Received: $receivedData");
@@ -524,14 +523,15 @@ class _ExchangeState extends State<ExchangePage>
             isReceived.add(true);
             _isConnected = true;
           });
-          disconnectDevaice(selectdevaice!);
-          stopAdvertise();
 
           ///
 
-          _showProfilePopup();
+          //_showProfilePopup();
 
           writeCaracteristic(characteristic);
+
+          disconnectDevaice(selectdevaice!);
+          stopAdvertise();
           break;
         }
       }
@@ -542,8 +542,8 @@ class _ExchangeState extends State<ExchangePage>
     await characteristic.write(_jsonToUint8List({
       "u_id": myuid,
     }));
-    disconnectDevaice(selectdevaice!);
-    stopAdvertise(); ///
+    // disconnectDevaice(selectdevaice!);
+    // stopAdvertise(); ///
   }
   //ここまで
 
@@ -617,8 +617,12 @@ class _ExchangeState extends State<ExchangePage>
                   generatedText,
                   style: const TextStyle(fontSize: 16),
                 ),
-                ElevatedButton(
-                    onPressed: updateFriend('friend_uid', decodereceived['u_id']),
+                TextButton(
+                    onPressed: () {
+                      updateFriend('friend_uid', decodereceived['u_id']);
+                      context.go('/home');
+                      print('ホームに移動');
+                    },
                     child: const Text(
                       'フレンドに追加',
                       style: TextStyle(fontSize: 16),
