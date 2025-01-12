@@ -5,7 +5,7 @@ import 'dart:typed_data';
 import 'package:cacalia/features/home/pages/home.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+// import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
@@ -108,14 +108,28 @@ class _ExchangeState extends State<ExchangePage>
   var uuid = Uuid();
 
   //BLEの通信処理に使う変数
-  // String serviceUuid = '8365a53a-b88e-eaf6-bd57-8ade564e01a7'; // UUID
-  String serviceUuid = ""; // UUID
-  // String charactaristicuuid =
-  //     '50961b6a-a603-42b8-a2a7-a4fadbe94fa5'; // キャラクタリスティックUUID
-  String charactaristicuuid = "";
+  String serviceUuid = ""; // サービスUUID
+
+  String charactaristicuuid = ""; // キャラクタリスティックUUID
+
+  //使用するASCIIバイト列（Cacalia）
+  final List<int> manucacaria = [0x43, 0x61, 0x63, 0x61, 0x6C, 0x69, 0x61];
 
   //受け取った値をデコードする変数
   Map<String, dynamic> decodereceived = {};
+
+  DateTime? _lastShakeTime;
+
+  void handleShake() {
+    final now = DateTime.now();
+    // 前回のシェイクから500ミリ秒以上経過している場合のみ処理を実行
+    if (_lastShakeTime == null || 
+        now.difference(_lastShakeTime!) > const Duration(milliseconds: 500)) {
+    
+      _lastShakeTime = now;
+      startScan();
+    }
+  }
 
   @override
   void initState() {
@@ -248,7 +262,10 @@ class _ExchangeState extends State<ExchangePage>
                       );
                     },
                   ),
-                  ShakeGesture(onShake: startScan, child: const Text("")),
+                  ShakeGesture(
+                    onShake: handleShake,
+                    child: Text(''),
+                  ),
                 ],
               ),
             ),
@@ -373,10 +390,20 @@ class _ExchangeState extends State<ExchangePage>
     ));
   }
 
-  //宣伝開始
+  //アドバタイズ（宣伝）をスタートするメソッド
   startAdvertise() async {
+    // //宣伝する際に使用するマニュファクチャリングデータを作成
+
+    // //Uint8List形式にキャスト
+    // final Uint8List manucacalia8List = Uint8List.fromList(manucacaria);
+
+    // //ManufacturerDataを宣言
+    // ble_peripheral.ManufacturerData manuData = ble_peripheral.ManufacturerData(
+    //     manufacturerId: 0xA705, data: manucacalia8List);
+
+    //宣伝開始
     await ble_peripheral.BlePeripheral.startAdvertising(
-        services: [serviceUuid], localName: "Cacalia"); //開始
+        services: [serviceUuid], localName: 'Cacalia'); //開始
     print("開始");
 
     //状態更新
