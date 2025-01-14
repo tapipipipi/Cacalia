@@ -125,9 +125,8 @@ class _ExchangeState extends State<ExchangePage>
   void handleShake() {
     final now = DateTime.now();
     // 前回のシェイクから500ミリ秒以上経過している場合のみ処理を実行
-    if (_lastShakeTime == null || 
+    if (_lastShakeTime == null ||
         now.difference(_lastShakeTime!) > const Duration(milliseconds: 500)) {
-    
       _lastShakeTime = now;
       startScan();
     }
@@ -226,49 +225,36 @@ class _ExchangeState extends State<ExchangePage>
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFF0B1930), // 深い青
-              Color(0xFF1B3366), // ミッドナイトブルー
-              Color(0xFF2C4999), // 青紫
-            ],
+          image: DecorationImage(
+            image: AssetImage('assets/images/ExchangeBack.png'),
+            fit: BoxFit.cover,
           ),
         ),
         child: Stack(
           children: [
-            // 星のエフェクト
-            Positioned.fill(
-              child: CustomPaint(
-                painter: StarsPainter(),
-              ),
-            ),
-            // メインコンテンツ
             Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  AnimatedBuilder(
-                    animation: _controller,
-                    builder: (context, child) {
-                      return Transform.rotate(
-                        angle: _controller.value * 2.0 * 3.14159,
-                        child: Icon(
-                          Icons.bluetooth_searching,
-                          size: 100,
-                          color: _isConnected
-                              ? Colors.green
-                              : Colors.white, // 色を白に変更
-                        ),
-                      );
-                    },
+                  const Text(
+                    "交換する相手と端末を振ってください",
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.white,
+                    ),
                   ),
-                  ShakeGesture(
-                    onShake: handleShake,
-                    child: Text(''),
-                  ),
+                  ShakeGesture(onShake: startScan, child: const Text("")),
                 ],
+              ),
+            ),
+            // アイコンを画面下部に配置
+            Positioned(
+              bottom: 60, // 画面下部からの距離
+              left: MediaQuery.of(context).size.width / 2 - 100, // 中央に配置
+              child: Icon(
+                Icons.vibration,
+                size: 200,
+                color: _isConnected ? Colors.green : Colors.white, // 色を白に変更
               ),
             ),
             // ホームアイコンを追加
@@ -292,6 +278,78 @@ class _ExchangeState extends State<ExchangePage>
       ),
     );
   }
+
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Scaffold(
+  //     body: Container(
+  //       decoration: const BoxDecoration(
+  //         gradient: LinearGradient(
+  //           begin: Alignment.topCenter,
+  //           end: Alignment.bottomCenter,
+  //           colors: [
+  //             Color(0xFF0B1930), // 深い青
+  //             Color(0xFF1B3366), // ミッドナイトブルー
+  //             Color(0xFF2C4999), // 青紫
+  //           ],
+  //         ),
+  //       ),
+  //       child: Stack(
+  //         children: [
+  //           // 星のエフェクト
+  //           Positioned.fill(
+  //             child: CustomPaint(
+  //               painter: StarsPainter(),
+  //             ),
+  //           ),
+  //           // メインコンテンツ
+  //           Center(
+  //             child: Column(
+  //               mainAxisAlignment: MainAxisAlignment.center,
+  //               children: [
+  //                 AnimatedBuilder(
+  //                   animation: _controller,
+  //                   builder: (context, child) {
+  //                     return Transform.rotate(
+  //                       angle: _controller.value * 2.0 * 3.14159,
+  //                       child: Icon(
+  //                         Icons.bluetooth_searching,
+  //                         size: 100,
+  //                         color: _isConnected
+  //                             ? Colors.green
+  //                             : Colors.white, // 色を白に変更
+  //                       ),
+  //                     );
+  //                   },
+  //                 ),
+  //                 ShakeGesture(
+  //                   onShake: handleShake,
+  //                   child: Text(''),
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //           // ホームアイコンを追加
+  //           Positioned(
+  //             top: 60,
+  //             left: 16,
+  //             child: GestureDetector(
+  //               onTap: () {
+  //                 context.go('/home'); // GoRouterを使用してホーム画面に遷移
+  //               },
+  //               child: const Icon(
+  //                 // Image.assetをIconに変更
+  //                 Icons.home,
+  //                 size: 64,
+  //                 color: Colors.white,
+  //               ),
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 
   // JSONデータをUint8Listに変換
   Uint8List _jsonToUint8List(Map<String, dynamic> uidData) {
@@ -584,9 +642,8 @@ class _ExchangeState extends State<ExchangePage>
     //受け取ったデータと自分のデータの中で、keysで指定した値で初期化
     List<dynamic> receivevalue =
         keys.map((key) => receivedData[key] ?? "N/A").toList();
-    List<String> myvevalue =
-        keys.map((key) => myprofiles[key] ?? "N/A").toList();
-    print('受け渡す値：$myvevalue : $receivevalue');
+    List<String> myvalue = keys.map((key) => myprofiles[key] ?? "N/A").toList();
+    print('受け渡す値：$myvalue : $receivevalue');
 
     //Geminiのmodelとapiキー
     final model = GenerativeModel(
@@ -596,7 +653,7 @@ class _ExchangeState extends State<ExchangePage>
 
     //Geminiにプロンプト送信
     final prompt =
-        'I`ll send 2 sentences. compare and find common points. then create any topic and only say like this ["Topic u generated"という話題でお話してみませんか？] no need other explain. 1.$receivevalue 2.$myvevalue}';
+        '[$receivevalue , $myvalue] three simple bulleted topics that two people can talk about in Japanese.no need any other sentences.When displaying, you do not need to show the details of the topics.';
     final content = [Content.text(prompt)];
 
     //送られてきたメッセージを代入
@@ -632,18 +689,34 @@ class _ExchangeState extends State<ExchangePage>
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'ユーザ：${receivedData['name']}',
+                  'ユーザ：${receivedData['name']}\n',
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Text(
-                  'コメント：${receivedData['comment']}',
-                  style: const TextStyle(fontSize: 16),
+                const Text(
+                  'コメント',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 Text(
-                  generatedText,
+                  '${receivedData['comment']}\n',
+                  style: const TextStyle(fontSize: 16),
+                ),
+                const Text(
+                  'この話題で話してみませんか？',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  '$generatedText\n',
                   style: const TextStyle(fontSize: 16),
                 ),
                 TextButton(
