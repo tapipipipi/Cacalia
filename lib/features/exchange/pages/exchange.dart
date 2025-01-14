@@ -2,9 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:cacalia/features/home/pages/home.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+// import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
@@ -18,13 +19,14 @@ import 'package:shake_gesture/shake_gesture.dart';
 import 'package:ble_peripheral/ble_peripheral.dart' as ble_peripheral;
 //UUIDを作成するライブラリ
 import 'package:uuid/uuid.dart';
+//APIキーを隠すライブラリ
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ExchangePage extends StatefulWidget {
   const ExchangePage({super.key});
 
   @override
   State<ExchangePage> createState() => _ExchangeState();
-  
 }
 
 ///必要な権限を許可するメソッド
@@ -55,20 +57,21 @@ class _ExchangeState extends State<ExchangePage>
   bool setAI = false;
 
   Map<String, String> myprofiles = <String, String>{
-    "name": "谷岡 義貴",
-    "read_name": "Tanioka Yoshitaka",
-    "gender": "男",
-    "age": '2004',
-    "comment": "ドラムが好きです",
-    "events": "HACK U",
-    "belong": "ECCコンピュータ専門学校",
-    "skill": "0",
-    "interest": "0",
-    "hoby": "カラオケ",
-    "background": "基本情報技術者試験取得、Hack U NAGOYA優秀賞",
-    "bairth": "12/26",
-    "serviceUuid": "forBLE",
-    "charactaristicuuid": "forBLE"
+    'u_id': profileList[myuid]["u_id"],
+    "name": profileList[myuid]["name"],
+    "read_name": profileList[myuid]["read_name"],
+    "gender": profileList[myuid]["gender"],
+    "age": profileList[myuid]["age"],
+    "comment": profileList[myuid]["comment"],
+    "events": profileList[myuid]["events"],
+    "belong": profileList[myuid]["belong"],
+    "skill": profileList[myuid]["skill"],
+    "interest": profileList[myuid]["interest"],
+    "hoby": profileList[myuid]["hoby"],
+    "background": profileList[myuid]["background"],
+    "bairth": profileList[myuid]["bairth"],
+    "serviceUuid": profileList[myuid]["serviceUuid"],
+    "charactaristicuuid": profileList[myuid]["charactaristicuuid"]
   };
 
   String generatedText = 'Loading...';
@@ -77,7 +80,7 @@ class _ExchangeState extends State<ExchangePage>
   // String displayText = "近くにデバイスがありません。";
 
   //受け取ったデータ
-  Map<String, String> receivedData = {};
+  Map<String, dynamic> receivedData = {};
 
   //デバイスに接続できるボタンの状態
   bool _isfinded = false;
@@ -107,11 +110,27 @@ class _ExchangeState extends State<ExchangePage>
   var uuid = Uuid();
 
   //BLEの通信処理に使う変数
-  // String serviceUuid = '8365a53a-b88e-eaf6-bd57-8ade564e01a7'; // UUID
-  String serviceUuid = ""; // UUID
-  // String charactaristicuuid =
-  //     '50961b6a-a603-42b8-a2a7-a4fadbe94fa5'; // キャラクタリスティックUUID
-  String charactaristicuuid = "";
+  String serviceUuid = ""; // サービスUUID
+
+  String charactaristicuuid = ""; // キャラクタリスティックUUID
+
+  //使用するASCIIバイト列（Cacalia）
+  final List<int> manucacaria = [0x43, 0x61, 0x63, 0x61, 0x6C, 0x69, 0x61];
+
+  //受け取った値をデコードする変数
+  Map<String, dynamic> decodereceived = {};
+
+  DateTime? _lastShakeTime;
+
+  void handleShake() {
+    final now = DateTime.now();
+    // 前回のシェイクから500ミリ秒以上経過している場合のみ処理を実行
+    if (_lastShakeTime == null ||
+        now.difference(_lastShakeTime!) > const Duration(milliseconds: 500)) {
+      _lastShakeTime = now;
+      startScan();
+    }
+  }
 
   @override
   void initState() {
@@ -126,7 +145,9 @@ class _ExchangeState extends State<ExchangePage>
     // ストリームリスナーの設定
     _setupStreamListener();
 
-    _generateUuids();
+    generateUuids();
+
+    print(profileList);
 
     Future.delayed(Duration.zero, () {
       start();
@@ -141,7 +162,9 @@ class _ExchangeState extends State<ExchangePage>
 
     await initializePeripheral();
 
-    await strtAdvertise();
+    // await startAdvertise();
+
+    ///
   }
 
   _setupStreamListener() {
@@ -160,10 +183,11 @@ class _ExchangeState extends State<ExchangePage>
     );
   }
 
-  _generateUuids() {
-    // Stateの更新を最適化
+  //ユーザのUUIDを生成
+  generateUuids() {
     serviceUuid = uuid.v4();
     charactaristicuuid = uuid.v4();
+    print('UUIDを作成しました');
   }
 
   Future<void> generateText() async {
@@ -201,46 +225,36 @@ class _ExchangeState extends State<ExchangePage>
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFF0B1930), // 深い青
-              Color(0xFF1B3366), // ミッドナイトブルー
-              Color(0xFF2C4999), // 青紫
-            ],
+          image: DecorationImage(
+            image: AssetImage('assets/images/ExchangeBack.png'),
+            fit: BoxFit.cover,
           ),
         ),
         child: Stack(
           children: [
-            // 星のエフェクト
-            Positioned.fill(
-              child: CustomPaint(
-                painter: StarsPainter(),
-              ),
-            ),
-            // メインコンテンツ
             Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  AnimatedBuilder(
-                    animation: _controller,
-                    builder: (context, child) {
-                      return Transform.rotate(
-                        angle: _controller.value * 2.0 * 3.14159,
-                        child: Icon(
-                          Icons.bluetooth_searching,
-                          size: 100,
-                          color: _isConnected
-                              ? Colors.green
-                              : Colors.white, // 色を白に変更
-                        ),
-                      );
-                    },
+                  const Text(
+                    "交換する相手と端末を振ってください",
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.white,
+                    ),
                   ),
                   ShakeGesture(onShake: startScan, child: const Text("")),
                 ],
+              ),
+            ),
+            // アイコンを画面下部に配置
+            Positioned(
+              bottom: 60, // 画面下部からの距離
+              left: MediaQuery.of(context).size.width / 2 - 100, // 中央に配置
+              child: Icon(
+                Icons.vibration,
+                size: 200,
+                color: _isConnected ? Colors.green : Colors.white, // 色を白に変更
               ),
             ),
             // ホームアイコンを追加
@@ -265,9 +279,81 @@ class _ExchangeState extends State<ExchangePage>
     );
   }
 
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Scaffold(
+  //     body: Container(
+  //       decoration: const BoxDecoration(
+  //         gradient: LinearGradient(
+  //           begin: Alignment.topCenter,
+  //           end: Alignment.bottomCenter,
+  //           colors: [
+  //             Color(0xFF0B1930), // 深い青
+  //             Color(0xFF1B3366), // ミッドナイトブルー
+  //             Color(0xFF2C4999), // 青紫
+  //           ],
+  //         ),
+  //       ),
+  //       child: Stack(
+  //         children: [
+  //           // 星のエフェクト
+  //           Positioned.fill(
+  //             child: CustomPaint(
+  //               painter: StarsPainter(),
+  //             ),
+  //           ),
+  //           // メインコンテンツ
+  //           Center(
+  //             child: Column(
+  //               mainAxisAlignment: MainAxisAlignment.center,
+  //               children: [
+  //                 AnimatedBuilder(
+  //                   animation: _controller,
+  //                   builder: (context, child) {
+  //                     return Transform.rotate(
+  //                       angle: _controller.value * 2.0 * 3.14159,
+  //                       child: Icon(
+  //                         Icons.bluetooth_searching,
+  //                         size: 100,
+  //                         color: _isConnected
+  //                             ? Colors.green
+  //                             : Colors.white, // 色を白に変更
+  //                       ),
+  //                     );
+  //                   },
+  //                 ),
+  //                 ShakeGesture(
+  //                   onShake: handleShake,
+  //                   child: Text(''),
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //           // ホームアイコンを追加
+  //           Positioned(
+  //             top: 60,
+  //             left: 16,
+  //             child: GestureDetector(
+  //               onTap: () {
+  //                 context.go('/home'); // GoRouterを使用してホーム画面に遷移
+  //               },
+  //               child: const Icon(
+  //                 // Image.assetをIconに変更
+  //                 Icons.home,
+  //                 size: 64,
+  //                 color: Colors.white,
+  //               ),
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
+
   // JSONデータをUint8Listに変換
-  Uint8List _jsonToUint8List(Map<String, String> jsonData) {
-    return Uint8List.fromList(utf8.encode(jsonEncode(jsonData)));
+  Uint8List _jsonToUint8List(Map<String, dynamic> uidData) {
+    return Uint8List.fromList(utf8.encode(jsonEncode(uidData)));
   }
 
   //受信データからuuidのみ取り出すメソッド([uuid]のような形式で送られてくる)
@@ -286,24 +372,7 @@ class _ExchangeState extends State<ExchangePage>
     ble_peripheral.BlePeripheral.setReadRequestCallback(
         (device, characteristic, offset, value) {
       try {
-        //送信するデータ
-        Uint8List senddata = _jsonToUint8List({
-          'uid': "Hxva1aGnNMcwg8s7esKDNmNll6u1",
-          "name": "谷岡 義貴",
-          "read_name": "Tanioka Yoshitaka",
-          "gender": "男",
-          "age": '2004',
-          "comment": "ドラムが好きです",
-          "events": "HACK U",
-          "belong": "ECCコンピュータ専門学校",
-          "skill": "0",
-          "interest": "0",
-          "hoby": "カラオケ",
-          "background": "基本情報技術者試験取得、Hack U NAGOYA優秀賞",
-          "bairth": "12/26",
-          "serviceUuid": "forBLE",
-          "charactaristicuuid": "forBLE"
-        });
+        Uint8List senddata = _jsonToUint8List({'u_id': myuid});
 
         //データが大きい場合を考慮し、offsetを使用して分割読み出しを行う
         Uint8List partialData = senddata.sublist(offset);
@@ -331,13 +400,14 @@ class _ExchangeState extends State<ExchangePage>
       }
 
       try {
-        setState(() {
+        setState(() async {
           //受け取ったデータをデコード
           String received = utf8.decode(value);
           print("Received raw data: $received");
 
           // JSON形式に変換して取得
-          receivedData = Map<String, String>.from(jsonDecode(received));
+          decodereceived = Map<String, String>.from(jsonDecode(received));
+          receivedData = await getProfile(decodereceived['u_id']!);
           print("Decoded JSON: $receivedData");
           isReceived.add(true);
         });
@@ -380,10 +450,20 @@ class _ExchangeState extends State<ExchangePage>
     ));
   }
 
-  //宣伝開始
-  strtAdvertise() async {
+  //アドバタイズ（宣伝）をスタートするメソッド
+  startAdvertise() async {
+    // //宣伝する際に使用するマニュファクチャリングデータを作成
+
+    // //Uint8List形式にキャスト
+    // final Uint8List manucacalia8List = Uint8List.fromList(manucacaria);
+
+    // //ManufacturerDataを宣言
+    // ble_peripheral.ManufacturerData manuData = ble_peripheral.ManufacturerData(
+    //     manufacturerId: 0xA705, data: manucacalia8List);
+
+    //宣伝開始
     await ble_peripheral.BlePeripheral.startAdvertising(
-        services: [serviceUuid], localName: "Cacalia"); //開始
+        services: [serviceUuid], localName: 'Cacalia'); //開始
     print("開始");
 
     //状態更新
@@ -408,7 +488,9 @@ class _ExchangeState extends State<ExchangePage>
   //以下セントラル側の処理
   //接続できる端末を探すメソッド
   void startScan() async {
-    await stopAdvertise();
+    await startAdvertise();
+
+    ///
     //処理中にメソッドが呼び出された場合
     if (_isScanning) return;
 
@@ -456,7 +538,9 @@ class _ExchangeState extends State<ExchangePage>
 
       //スキャンが終わりデバイスが見つからなかった場合
       await Future.delayed(const Duration(seconds: 3), () {
-        strtAdvertise();
+        stopAdvertise();
+
+        ///
       });
     } catch (e) {
       setState(() {
@@ -482,9 +566,11 @@ class _ExchangeState extends State<ExchangePage>
       await readCharacteristic(); //ReadWrighメソッド
       disconnectDevaice(device);
     } catch (e) {
-      print('エラーでちゃった。。。');
+      print('エラーでちゃった。。。:$e');
       _isConnected = false;
-      strtAdvertise();
+      stopAdvertise();
+
+      ///
     }
   }
 
@@ -511,22 +597,28 @@ class _ExchangeState extends State<ExchangePage>
           // 通知を有効化
           characteristic.setNotifyValue(true);
           //値を読み込む
-          await characteristic.read().then((value) {
-            setState(() {
-              // 受信データを文字列に変換
-              var received = utf8.decode(value);
-              print(received);
-              receivedData = Map<String, String>.from(jsonDecode(received));
-              print("Caractaristic:${characteristic.uuid}");
-              print("Received: $receivedData");
-              isReceived.add(true);
-              _isConnected = true;
-              disconnectDevaice(selectdevaice!);
-              strtAdvertise();
-            });
-            _showProfilePopup();
+          final value = await characteristic.read();
+          // 受信データを文字列に変換
+          final received = utf8.decode(value);
+          print("received:$received");
+          decodereceived = Map<String, String>.from(jsonDecode(received));
+          receivedData = await getProfile(decodereceived['u_id']!);
+          print("Caractaristic:${characteristic.uuid}");
+          print("Received: $receivedData");
+
+          setState(() {
+            isReceived.add(true);
+            _isConnected = true;
           });
+
+          ///
+
+          //_showProfilePopup();
+
           writeCaracteristic(characteristic);
+
+          disconnectDevaice(selectdevaice!);
+          stopAdvertise();
           break;
         }
       }
@@ -535,41 +627,36 @@ class _ExchangeState extends State<ExchangePage>
 
   void writeCaracteristic(BluetoothCharacteristic characteristic) async {
     await characteristic.write(_jsonToUint8List({
-      'uid': "Hxva1aGnNMcwg8s7esKDNmNll6u1",
-      "name": "文元 沙弥",
-      "read_name": " Fumimoto Saya",
-      "gender": "女",
-      "age": "2004",
-      "comment": "ダーツ友達ください",
-      "events": "HACK U",
-      "belong": "ECCコンピュータ専門学校",
-      "skill": "0",
-      "interest": "0",
-      "hoby": "カラオケ",
-      "background": "Geekハッカソン企業賞、基本情報技術者試験取得",
-      "bairth": "05/14",
-      "serviceUuid": "forBLE",
-      "charactaristicuuid": "forBLE"
+      "u_id": myuid,
     }));
-    disconnectDevaice(selectdevaice!);
+    // disconnectDevaice(selectdevaice!);
+    // stopAdvertise(); ///
   }
   //ここまで
 
+  //AI提案をするメソッド
   _showProfilePopup() async {
-    List<String> keys = ["events", "comment", "hoby","background"];
-    List<String> receivevalue = keys.map((key) => receivedData[key] ?? "N/A").toList();
-    List<String> myvevalue = keys.map((key) => myprofiles[key] ?? "N/A").toList();
-    print('受け渡す値：$myvevalue : $receivevalue');
+    //比較する項目を設定
+    List<String> keys = ["events", "comment", "hoby", "background"];
 
+    //受け取ったデータと自分のデータの中で、keysで指定した値で初期化
+    List<dynamic> receivevalue =
+        keys.map((key) => receivedData[key] ?? "N/A").toList();
+    List<String> myvalue = keys.map((key) => myprofiles[key] ?? "N/A").toList();
+    print('受け渡す値：$myvalue : $receivevalue');
+
+    //Geminiのmodelとapiキー
     final model = GenerativeModel(
       model: 'gemini-1.5-flash-latest',
-      apiKey: 'AIzaSyDvlwupnHlUINeIAt5yBGP1KASRGNqlwVA',
+      apiKey: dotenv.env['GEMINI_API_KEY'] ?? '',
     );
 
+    //Geminiにプロンプト送信
     final prompt =
-        'I`ll send 2 sentences. compare and find common points. then create any topic and only say like this ["Topic u generated"という話題でお話してみませんか？] no need other explain. 1.$receivevalue 2.$myvevalue}';
+        '[$receivevalue , $myvalue] three simple bulleted topics that two people can talk about in Japanese.no need any other sentences.When displaying, you do not need to show the details of the topics.';
     final content = [Content.text(prompt)];
 
+    //送られてきたメッセージを代入
     try {
       final response = await model.generateContent(content);
       print(response.text); // Log response to debug
@@ -602,26 +689,46 @@ class _ExchangeState extends State<ExchangePage>
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'ユーザ：${receivedData['name']}',
+                  'ユーザ：${receivedData['name']}\n',
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Text(
-                  'コメント：${receivedData['comment']}',
-                  style: const TextStyle(fontSize: 16),
+                const Text(
+                  'コメント',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 Text(
-                  generatedText,
+                  '${receivedData['comment']}\n',
                   style: const TextStyle(fontSize: 16),
                 ),
-                // ElevatedButton(
-                //   onPressed: updateFriend('uid',receivedData['uid']), 
-                //   child:  const Text(
-                //     'フレンドに追加',
-                //     style: TextStyle(fontSize: 16),
-                //     ))
+                const Text(
+                  'この話題で話してみませんか？',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  '$generatedText\n',
+                  style: const TextStyle(fontSize: 16),
+                ),
+                TextButton(
+                    onPressed: () {
+                      updateFriend('friend_uid', decodereceived['u_id']);
+                      context.go('/home');
+                      print('ホームに移動');
+                    },
+                    child: const Text(
+                      'フレンドに追加',
+                      style: TextStyle(fontSize: 16),
+                    ))
               ],
             ),
           ),
