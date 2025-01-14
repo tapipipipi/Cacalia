@@ -19,6 +19,8 @@ import 'package:shake_gesture/shake_gesture.dart';
 import 'package:ble_peripheral/ble_peripheral.dart' as ble_peripheral;
 //UUIDを作成するライブラリ
 import 'package:uuid/uuid.dart';
+//APIキーを隠すライブラリ
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ExchangePage extends StatefulWidget {
   const ExchangePage({super.key});
@@ -589,7 +591,7 @@ class _ExchangeState extends State<ExchangePage>
     //Geminiのmodelとapiキー
     final model = GenerativeModel(
       model: 'gemini-1.5-flash-latest',
-      apiKey: 'AIzaSyDvlwupnHlUINeIAt5yBGP1KASRGNqlwVA',
+      apiKey: dotenv.env['GEMINI_API_KEY'] ?? '',
     );
 
     //Geminiにプロンプト送信
