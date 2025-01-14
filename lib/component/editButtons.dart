@@ -82,13 +82,27 @@ class EditPen extends Container {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      onPressed: () {
-        EditModal(context);
-      },
+      onPressed: () => showThemeEditor(context),
       icon: Icon(
         Icons.edit_square,
         color: Colors.grey[800],
       ),
     );
+  }
+}
+
+void showThemeEditor(BuildContext context) async {
+  // モーダルを呼び出して、結果を受け取る
+  final result = await EditModal(context);
+
+  if (result != null) {
+    // タプルを分解して各値を取得
+    final (selectBg, selectedFont) = result;
+    print('Selected Background: $selectBg');
+    print('Selected Font: $selectedFont');
+
+    // 必要に応じて状態を更新するなどの処理を行う
+  } else {
+    print('No selection made.');
   }
 }

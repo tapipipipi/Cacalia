@@ -211,17 +211,17 @@ class AIAdvice extends Container {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 370,
-      height: 150,
-      padding: EdgeInsets.only(bottom: 20),
+      width: 320,
       decoration: BoxDecoration(
           color: Colors.white, borderRadius: BorderRadius.circular(10)),
       child: Container(
         width: 350,
+        padding: const EdgeInsets.only(bottom: 10),
         decoration: BoxDecoration(
           color: Color.fromRGBO(36, 43, 46, 1),
         ),
         child: Column(
+          mainAxisSize: MainAxisSize.min, // 子要素に合わせて縦の高さを調整
           children: [
             DefaultTextStyle(
               style: const TextStyle(
@@ -229,10 +229,11 @@ class AIAdvice extends Container {
                 fontSize: 16, // フォントサイズ
               ),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Container(
                     height: 16,
-                    width: 370,
+                    width: 350,
                     padding: EdgeInsets.only(bottom: 20),
                     color: Colors.grey,
                     child: Row(),
