@@ -10,7 +10,7 @@ class ProfEdit extends StatelessWidget {
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
-          image: AssetImage('assets/images/design1.png'),
+          image: AssetImage('images/designs/design1.png'),
           fit: BoxFit.cover,
         ),
       ),

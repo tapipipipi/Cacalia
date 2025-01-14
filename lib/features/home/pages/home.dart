@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cacalia/component/card.dart';
 import 'package:cacalia/component/footer.dart';
@@ -140,10 +139,10 @@ class _HomeState extends State<Home> {
                       ),
                     ],
                   ),
-                  //名刺一覧
+                  // child: //名刺一覧
                   Expanded(
                     child: ListView.builder(
-                      padding: const EdgeInsets.only(top: 20, right: 30),
+                      padding: const EdgeInsets.only(top: 20),
                       itemCount: 5, // サンプルとして5枚の名刺を表示
                       itemBuilder: (context, index) {
                         return Transform.translate(
@@ -151,7 +150,9 @@ class _HomeState extends State<Home> {
                             child: InkWell(
                               child: UserCard(userId: index, state: true),
                               onTap: () {
+                                print('押したよん');
                                 Profilemodal(context);
+                                print('開いたよん');
                               },
                             ));
                       },

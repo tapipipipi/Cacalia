@@ -62,6 +62,7 @@ class UserCard extends StatelessWidget {
             ?
             // 影の部分
             Container(
+                margin: EdgeInsets.only(left: 210),
                 height: 159,
                 width: 60,
                 decoration: BoxDecoration(

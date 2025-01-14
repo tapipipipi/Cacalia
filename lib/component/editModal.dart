@@ -1,41 +1,122 @@
-//テーマ編集
+// テーマ編集
 import 'package:flutter/material.dart';
 
+// モーダルの大枠
+// ignore: non_constant_identifier_names
 void EditModal(BuildContext context) {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
     builder: (BuildContext context) {
-      return Container(
-        height: MediaQuery.of(context).size.height * 0.9, // 高さを動的に設定
-        width: double.infinity,
-        child: Column(
-          children: [
-            // 閉じるためのバー
-            Container(
-              height: 11,
-              width: 93,
-              margin: const EdgeInsets.only(top: 20, bottom: 20),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade300,
-                borderRadius: BorderRadius.circular(20.0),
-              ),
-            ),
-            Column(
-              children: [
-                Text('背景テーマの選択'),
-                Container(
-                  child: Row(
-                    children: [
-                      // ElevatedButton(onPressed: onPressed, child: child)
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      );
+      return const ThemeEditor();
     },
   );
+}
+
+// モーダルの中身
+class ThemeEditor extends StatefulWidget {
+  const ThemeEditor({super.key});
+  @override
+  _ThemeEditorState createState() => _ThemeEditorState();
+}
+
+class _ThemeEditorState extends State<ThemeEditor> {
+  List<bool> _bgtheme = [true, false, false, false];
+  List<bool> _fonttheme = [true, false, false, false, false];
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.9, // 高さを動的に設定
+      width: double.infinity,
+      child: Column(
+        children: [
+          // 閉じるためのバー
+          Container(
+            height: 11,
+            width: 93,
+            margin: const EdgeInsets.only(top: 20, bottom: 20),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade300,
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                '背景テーマの選択',
+                style: TextStyle(fontSize: 16),
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 10),
+                child: ToggleButtons(
+                  splashColor: Colors.blue[500],
+                  fillColor: Colors.blue[100],
+                  onPressed: (int selectedIndex) {
+                    final list = List.generate(
+                            _bgtheme.length, (index) => index == selectedIndex)
+                        .toList();
+                    setState(() {
+                      _bgtheme = list;
+                    });
+                  },
+                  isSelected: _bgtheme,
+                  children: <Widget>[
+                    Image.asset('assets/images/designCircles/circle01.png'),
+                    Image.asset('assets/images/designCircles/circle02.png'),
+                    Image.asset('assets/images/designCircles/circle03.png'),
+                    Image.asset('assets/images/designCircles/circle04.png'),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 30),
+              const Text(
+                '文字テーマの選択',
+                style: TextStyle(fontSize: 16),
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 10),
+                child: ToggleButtons(
+                  splashColor: Colors.blue[500],
+                  fillColor: Colors.blue[100],
+                  onPressed: (int selectedIndex) {
+                    final list = List.generate(_fonttheme.length,
+                        (index) => index == selectedIndex).toList();
+                    setState(() {
+                      _fonttheme = list;
+                    });
+                  },
+                  isSelected: _fonttheme,
+                  children: const <Widget>[
+                    Text(
+                      'Aa',
+                      style: TextStyle(fontSize: 40),
+                    ),
+                    Text(
+                      'Aa',
+                      style: TextStyle(
+                          fontSize: 40, fontFamily: 'ArchitectsDaughter'),
+                    ),
+                    Text(
+                      'Aa',
+                      style: TextStyle(fontSize: 40, fontFamily: 'Anton'),
+                    ),
+                    Text(
+                      'Aa',
+                      style: TextStyle(fontSize: 40, fontFamily: 'Lobster'),
+                    ),
+                    Text(
+                      'Aa',
+                      style: TextStyle(fontSize: 40, fontFamily: 'PirataOne'),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
 }

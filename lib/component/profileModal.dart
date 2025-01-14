@@ -15,7 +15,7 @@ void Profilemodal(BuildContext context) {
           width: double.infinity,
           decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage("assets/images/design1.png"),
+                image: AssetImage('assets/images/designs/design1.png'),
                 fit: BoxFit.cover,
               ),
               borderRadius: BorderRadius.only(
@@ -211,27 +211,32 @@ class AIAdvice extends Container {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 200,
       width: 370,
+      height: 150,
+      padding: EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(
           color: Colors.white, borderRadius: BorderRadius.circular(10)),
       child: Container(
-        height: 150,
         width: 350,
         decoration: BoxDecoration(
           color: Color.fromRGBO(36, 43, 46, 1),
         ),
         child: Column(
           children: [
-            Container(),
             DefaultTextStyle(
               style: const TextStyle(
                 fontFamily: 'DotGothic16', // フォントファミリを指定
                 fontSize: 16, // フォントサイズ
               ),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
+                  Container(
+                    height: 16,
+                    width: 370,
+                    padding: EdgeInsets.only(bottom: 20),
+                    color: Colors.grey,
+                    child: Row(),
+                  ),
                   const Text(
                     'こんな話題で話してみませんか？',
                     style: TextStyle(
