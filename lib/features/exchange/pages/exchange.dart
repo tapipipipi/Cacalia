@@ -694,36 +694,3 @@ class StarsPainter extends CustomPainter {
   @override
   bool shouldRepaint(StarsPainter oldDelegate) => false;
 }
-
-//テストデータ
-  //   'uid': "Hxva1aGnNMcwg8s7esKDNmNll6u1",
-  //   "name": "谷岡 義貴",
-  //   "read_name": "Tanioka Yoshitaka",
-  //   "gender": "男",
-  //   "age": '2004',
-  //   "comment": "ドラムが好きです",
-  //   "events": "HACK U",
-  //   "belong": "ECCコンピュータ専門学校",
-  //   "skill": "0",
-  //   "interest": "0",
-  //   "hoby": "カラオケ",
-  //   "background": "基本情報技術者試験取得、Hack U NAGOYA優秀賞",
-  //   "bairth": "12/26",
-  //   "serviceUuid": "forBLE",
-  //   "charactaristicuuid": "forBLE"
-
-  // 'uid': "Hxva1aGnNMcwg8s7esKDNmNll6u1",
-  // "name": "文元 沙弥",
-  // "read_name": " Fumimoto Saya",
-  // "gender": "女",
-  // "age": "2004",
-  // "comment": "ダーツ友達ください",
-  // "events": "HACK U",
-  // "belong": "ECCコンピュータ専門学校",
-  // "skill": "0",
-  // "interest": "0",
-  // "hoby": "カラオケ",
-  // "background": "Geekハッカソン企業賞、基本情報技術者試験取得",
-  // "bairth": "05/14",
-  // "serviceUuid": "forBLE",
-  // "charactaristicuuid": "forBLE"
