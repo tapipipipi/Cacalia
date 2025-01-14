@@ -3,6 +3,10 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  ble_peripheral
+  cloud_firestore
+  firebase_auth
+  firebase_core
   permission_handler_windows
 )
 

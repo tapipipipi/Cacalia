@@ -1,3 +1,14 @@
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        // classpath 'com.android.tools.build:gradle:8.1.2' // 必要なビルドツール
+        classpath 'com.google.gms:google-services:4.4.0' // Firebase用プラグイン
+    }
+}
+
 allprojects {
     repositories {
         google()
@@ -16,3 +27,23 @@ subprojects {
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }
+
+//　追加
+// apply plugin: 'com.android.application'
+// apply plugin: 'com.google.gms.google-services' // Firebase用
+
+
+// dependencies {
+//     //classpath 'com.google.gms:google-services:4.4.0' // Firebase用
+//     // Import the BoM for the Firebase platform
+//     // implementation platform('com.google.firebase:firebase-bom:33.6.0')
+//     implementation(platform("com.google.firebase:firebase-bom:33.6.0"))
+
+//     // Declare the dependency for the Cloud Firestore library
+//     // When using the BoM, you don't specify versions in Firebase library dependencies
+//     // implementation("com.google.firebase:firebase-firestore")
+
+//     // auth
+//     //implementation 'com.firebaseui:firebase-ui-auth:7.2.0'
+
+// }

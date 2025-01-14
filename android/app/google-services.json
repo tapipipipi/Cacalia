@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "313812641302",
+    "project_id": "cacalia-sys",
+    "storage_bucket": "cacalia-sys.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:313812641302:android:5c99460eba096fc6cbf737",
+        "android_client_info": {
+          "package_name": "com.Cacalia"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBURR7SlTYuWuQIV-SONNVx1xEz0x-t0b4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

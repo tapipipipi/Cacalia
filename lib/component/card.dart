@@ -1,4 +1,6 @@
+import 'package:cacalia/features/home/pages/home.dart';
 import 'package:flutter/material.dart';
+import '../CS/create.dart';
 
 class UserCard extends StatelessWidget {
   // 変数を宣言
@@ -14,8 +16,6 @@ class UserCard extends StatelessWidget {
     [4, '馬場 周友', 'Banba Syuyu'],
   ];
 
-  final String bgImg = 'assets/images/noImage.png';
-
   // super.keyと引数の指定
   const UserCard({
     super.key,
@@ -23,8 +23,13 @@ class UserCard extends StatelessWidget {
     required this.state, // required 修飾子を付ける(非null制約を解除)
   });
 
+  final String bgImg = 'assets/images/noImage.png';
+
   @override
   Widget build(BuildContext context) {
+    //cardListでフレンドの名前と読み仮名を取得している
+    // print(cardList);
+
     return Stack(
       alignment: Alignment.center,
       children: [
@@ -46,12 +51,12 @@ class UserCard extends StatelessWidget {
                 const Padding(padding: EdgeInsets.only(top: 15)),
                 // 読み仮名
                 Text(
-                  userList[userId][2] as String, // '文元沙弥' のような名前を取得
+                  cardList[userId][1] as String,
                   style: const TextStyle(fontSize: 14),
                 ),
                 // 名前
                 Text(
-                  userList[userId][1] as String,
+                  cardList[userId][0] as String,
                   style: const TextStyle(fontSize: 24),
                 )
               ],

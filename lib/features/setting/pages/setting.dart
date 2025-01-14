@@ -1,8 +1,11 @@
 // アプリ設定画面
+import 'package:cacalia/features/home/pages/home.dart';
+import 'package:cacalia/store.dart';
 import 'package:flutter/material.dart';
 import 'package:cacalia/component/footer.dart';
 import 'package:cacalia/component/card.dart';
 import 'package:go_router/go_router.dart';
+import '../../../Auth/Authentication.dart';
 
 class Setting extends StatelessWidget {
   const Setting({super.key});
@@ -43,10 +46,10 @@ class Setting extends StatelessWidget {
                     ),
                   ]),
                 ),
-                // 名刺
+                // 名刺----------------------------------------
                 Container(
                   margin: const EdgeInsets.only(top: 50, bottom: 70),
-                  child: const UserCard(userId: 1, state: false),
+                  child: UserCard(userId: mycard, state: false), // ユーザーの番号
                 ),
                 // 編集の項目
                 Container(
@@ -54,18 +57,22 @@ class Setting extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min, // サイズを必要最小限に
                     children: [
                       InkWell(
+                        // ----------------名刺編集-------------------------
                         onTap: () {
                           context.go('/cardEdit');
                         },
+                        // -----------------------------------------------
                         child: const CustomListTile(
                           icon: Icons.badge_outlined,
                           text: '名刺の編集',
                         ),
                       ),
                       InkWell(
+                        // ---------------プロフィール編集------------------
                         onTap: () {
                           context.go('/profEdit');
                         },
+                        // ------------------------------------------------
                         child: const CustomListTile(
                           icon: Icons.person,
                           text: 'プロフィールの編集',

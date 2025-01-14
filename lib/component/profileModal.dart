@@ -1,8 +1,37 @@
+import 'package:cacalia/CS/create.dart';
 import 'package:flutter/material.dart';
 
+// フレンドのプロフィールを取得し表示させる
+List<String> keys = ["コメント", "イベント", "所属", "得意", "興味のあること", "趣味", "経歴"];
+List<String> feildnames = [
+  "comment",
+  "events",
+  "belong",
+  "skill",
+  "interest",
+  "hoby",
+  "background"
+];
+List<String> values = [];
+
 // ignore: non_constant_identifier_names
-void Profilemodal(BuildContext context) {
-  bool isVisible = true; // 初期値
+void Profilemodal(
+    BuildContext context, Map<String, dynamic> profileList) async {
+  bool isVisible = false; // 初期値
+
+  print(profileList);
+  List<String> values = []; // リフレッシュ
+
+  // フレンドの該当するプロフィールを取得しvaluesに格納
+  for (int i = 0; i < feildnames.length; i++) {
+    int currentValue = i;
+    String field =
+        await getProfileField(profileList["u_id"], feildnames[currentValue]);
+    values.add(field);
+  }
+
+  String name = profileList["name"];
+  String readname = profileList["read_name"];
 
   showModalBottomSheet(
     context: context,
@@ -156,8 +185,9 @@ void Profilemodal(BuildContext context) {
 // ignore: must_be_immutable
 class Category extends Container {
   String categoryName;
+  String value;
 
-  Category(this.categoryName);
+  Category(this.categoryName, this.value);
 
   @override
   Widget build(BuildContext context) {
@@ -189,6 +219,10 @@ class Category extends Container {
         Container(
           height: 100,
           width: 240,
+          child: Text(
+            value,
+            style: TextStyle(fontSize: 20),
+          ),
         )
       ],
     );
