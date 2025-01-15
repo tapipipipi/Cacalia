@@ -121,8 +121,39 @@ class _LoginPageState extends State<LoginPage> {
                     },
                   ),
                 ),
+                const SizedBox(height: 16),
+                // 追加: 「────または────」のテキスト
+                const Text('────または────'),
+                const SizedBox(height: 16),
+                // Googleログインボタンの位置を移動
+                FutureBuilder(
+                  future: Authentication.initializeFirebase(context: context),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator(); // データがまだ取得されていない場合のローディング表示
+                    } else if (snapshot.hasError) {
+                      return Text('Error initializing Firebase');
+                    } else {
+                      // データが取得された場合
+                      return GoogleSignInButton();
+                    }
+                  },
+                ),
+                const SizedBox(height: 16),
+                TextButton(
+                  onPressed: () {
+                    context.go('/signUpName');
+                  },
+                  child: const Text('サインアップはこちら'),
+                ),
                 const SizedBox(height: 24),
                 ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue, // ボタンの背景色を青に設定
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10), // 角を丸くする
+                    ),
+                  ),
                   onPressed: () async {
                     print(_email);
                     print(_pass);
@@ -162,44 +193,6 @@ class _LoginPageState extends State<LoginPage> {
                     }
                   },
                   child: const Text('ログイン'),
-                ),
-                const SizedBox(height: 16),
-                // ElevatedButton(
-                //   onPressed: () {
-                //     context.go('/home');
-                //   },
-                //   style: ElevatedButton.styleFrom(
-                //     backgroundColor: Colors.grey,
-                //   ),
-                //   child: const Text('デバッグ用：ホーム画面へ'),
-                // ),
-                const SizedBox(height: 16),
-                // ElevatedButton(
-                //   onPressed: () async {
-                //     // Googleログインの処理を追加
-                //     // TODO: Googleログインの実装
-                //   },
-                //   child: const Text('Googleでログイン'),
-                // ),
-                FutureBuilder(
-                  future: Authentication.initializeFirebase(context: context),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator(); // データがまだ取得されていない場合のローディング表示
-                    } else if (snapshot.hasError) {
-                      return Text('Error initializing Firebase');
-                    } else {
-                      // データが取得された場合
-                      return GoogleSignInButton();
-                    }
-                  },
-                ),
-                const SizedBox(height: 16),
-                TextButton(
-                  onPressed: () {
-                    context.go('/signUpName');
-                  },
-                  child: const Text('サインアップはこちら'),
                 ),
               ],
             ),
