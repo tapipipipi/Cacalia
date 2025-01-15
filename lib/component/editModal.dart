@@ -3,14 +3,17 @@ import 'package:flutter/material.dart';
 
 // モーダルの大枠
 // ignore: non_constant_identifier_names
-Future<(int, int)?> EditModal(BuildContext context) async {
-  return await showModalBottomSheet<(int, int)>(
+Future<(int, int)> EditModal(BuildContext context) async {
+  final result = await showModalBottomSheet<(int, int)?>(
     context: context,
     isScrollControlled: true,
     builder: (BuildContext context) {
       return const ThemeEditor();
     },
   );
+
+  // nullの場合にデフォルト値を返す
+  return result ?? (0, 0); // 必要に応じて適切なデフォルト値を指定
 }
 
 // モーダルの中身

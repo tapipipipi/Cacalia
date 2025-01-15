@@ -1,4 +1,5 @@
 //編集画面で使うボタン
+import 'package:cacalia/CS/create.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:cacalia/component/editModal.dart';
@@ -8,7 +9,7 @@ class EditButtons extends StatelessWidget {
   //プロフィールと名刺の編集を入れ替えるボタン部分に使う変数
   //true：名刺編集へ　false：プロフィール編集へ
   bool editType;
-  final VoidCallback onSave;  // 変更を保存する
+  final VoidCallback onSave; // 変更を保存する
 
   EditButtons({super.key, required this.editType, required this.onSave});
 
@@ -87,7 +88,10 @@ class EditPen extends Container {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      onPressed: () => showThemeEditor(context),
+      onPressed: () => {
+        EditModal(context),
+        showAboutDialog(context: context),
+      },
       icon: Icon(
         Icons.edit_square,
         color: Colors.grey[800],
@@ -99,13 +103,15 @@ class EditPen extends Container {
 void showThemeEditor(BuildContext context) async {
   // モーダルを呼び出して、結果を受け取る
   final result = await EditModal(context);
+  var selectBg = 0;
+  var selectFont = 0;
 
   if (result != null) {
     // タプルを分解して各値を取得
-    final (selectBg, selectedFont) = result;
-    print('Selected Background: $selectBg');
-    print('Selected Font: $selectedFont');
-
+    final targetBg = selectBg;
+    final targetFont = selectFont;
+    print('Selected Background: $targetFont');
+    print('Selected Font: $targetFont');
     // 必要に応じて状態を更新するなどの処理を行う
   } else {
     print('No selection made.');
