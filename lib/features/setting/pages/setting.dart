@@ -12,7 +12,6 @@ class Setting extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       backgroundColor: const Color.fromRGBO(215, 230, 239, 1),
       body: Center(
@@ -50,7 +49,7 @@ class Setting extends StatelessWidget {
                 // 名刺----------------------------------------
                 Container(
                   margin: const EdgeInsets.only(top: 50, bottom: 70),
-                  child:  UserCard(userId: mycard), // ユーザーの番号
+                  child: UserCard(userId: mycard, state: false), // ユーザーの番号
                 ),
                 // 編集の項目
                 Container(

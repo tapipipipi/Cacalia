@@ -1,8 +1,14 @@
 // プロフィール編集画面
 import 'package:cacalia/CS/create.dart';
+// ignore_for_file: unnecessary_string_interpolations
+
+import 'dart:collection';
+
+// import 'package:cacalia/component/editModal.dart';
 import 'package:flutter/material.dart';
 import 'package:cacalia/component/editButtons.dart';
 import '../../home/pages/home.dart';
+import 'package:cacalia/datas/designData.dart';
 
 // 自身のプロフィールを取得し表示させる
 List<String> keys = ["コメント", "イベント", "所属", "得意", "興味のあること", "趣味", "経歴"];
@@ -15,6 +21,9 @@ List<String> feildnames = [
   "hoby",
   "background"
 ];
+
+var targetBg = 0;
+var targetFont = 0;
 
 class ProfEdit extends StatelessWidget {
   ProfEdit({super.key});
@@ -58,7 +67,7 @@ class ProfEdit extends StatelessWidget {
       }
     }
 
-    // 自身のプロフィールを取得するため、描画する前に通信する処理
+// 自身のプロフィールを取得するため、描画する前に通信する処理
     return FutureBuilder(
         future: setprofileList(),
         builder: (context, snapshot) {
@@ -70,9 +79,17 @@ class ProfEdit extends StatelessWidget {
             // 非同期処理が完了したら描画
 
             return Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage('assets/images/design1.png'),
+                  image: AssetImage(bgImg.design0
+                      //   switch (targetBg) {
+                      //   0 => bgImg.design0,
+                      //   1 => bgImg.design1,
+                      //   2 => bgImg.design2,
+                      //   3 => bgImg.design3,
+                      //   int() => throw UnimplementedError(),
+                      // }
+                      ),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -89,11 +106,22 @@ class ProfEdit extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Container(
-                              child: const Text(
-                                'about me',
-                                style: TextStyle(fontSize: 40),
-                              ),
                               margin: EdgeInsets.only(top: 20),
+                              child: Text(
+                                'about me',
+                                style: TextStyle(
+                                  fontSize: 40,
+                                  // fontFamily: switch (targetFont) {
+                                  //   0 => Fonts.font0,
+                                  //   1 => Fonts.font1,
+                                  //   2 => Fonts.font2,
+                                  //   3 => Fonts.font3,
+                                  //   4 => Fonts.font4,
+                                  //   // TODO: Handle this case.
+                                  //   int() => throw UnimplementedError(),
+                                  // }
+                                ),
+                              ),
                             ),
                             EditPen(),
                           ],
@@ -216,8 +244,6 @@ class Category extends Container {
 
   @override
   Widget build(BuildContext context) {
-
-
     return Column(
       children: [
         Container(
@@ -262,5 +288,140 @@ class Category extends Container {
         ),
       ],
     );
+  }
+}
+
+class ThemeEditor extends StatefulWidget {
+  const ThemeEditor({super.key});
+
+  @override
+  _ThemeEditorState createState() => _ThemeEditorState();
+}
+
+class _ThemeEditorState extends State<ThemeEditor> {
+  List<bool> _bgtheme = [true, false, false, false];
+  List<bool> _fonttheme = [true, false, false, false, false];
+  int selectBg = 0;
+  int selectFont = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.9,
+      width: double.infinity,
+      child: Column(
+        children: [
+          Container(
+            height: 11,
+            width: 93,
+            margin: const EdgeInsets.only(top: 20, bottom: 20),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade300,
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('背景テーマの選択', style: TextStyle(fontSize: 16)),
+              ToggleButtons(
+                splashColor: Colors.blue[500],
+                fillColor: Colors.blue[100],
+                onPressed: (int selectedIndex) {
+                  setState(() {
+                    _bgtheme = List.generate(
+                      _bgtheme.length,
+                      (index) => index == selectedIndex,
+                    );
+                    selectBg = selectedIndex; // 背景テーマの選択
+                  });
+                },
+                isSelected: _bgtheme,
+                children: List.generate(4, (index) => Text('Bg $index')),
+              ),
+              const SizedBox(height: 30),
+              const Text('文字テーマの選択', style: TextStyle(fontSize: 16)),
+              ToggleButtons(
+                splashColor: Colors.blue[500],
+                fillColor: Colors.blue[100],
+                onPressed: (int selectedIndex) {
+                  setState(() {
+                    _fonttheme = List.generate(
+                      _fonttheme.length,
+                      (index) => index == selectedIndex,
+                    );
+                    selectFont = selectedIndex; // 文字テーマの選択
+                  });
+                },
+                isSelected: _fonttheme,
+                children: List.generate(5, (index) => Text('Font $index')),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+    // return WillPopScope(
+    //   onWillPop: () async {
+    //     // モーダルを閉じる際に値を返す
+    //     Navigator.of(context).pop((selectBg, selectFont));
+    //     return false;
+    //   },
+    //   child: Container(
+    //     height: MediaQuery.of(context).size.height * 0.9,
+    //     width: double.infinity,
+    //     child: Column(
+    //       children: [
+    //         Container(
+    //           height: 11,
+    //           width: 93,
+    //           margin: const EdgeInsets.only(top: 20, bottom: 20),
+    //           decoration: BoxDecoration(
+    //             color: Colors.grey.shade300,
+    //             borderRadius: BorderRadius.circular(20.0),
+    //           ),
+    //         ),
+    //         Column(
+    //           crossAxisAlignment: CrossAxisAlignment.start,
+    //           children: [
+    //             const Text('背景テーマの選択', style: TextStyle(fontSize: 16)),
+    //             ToggleButtons(
+    //               splashColor: Colors.blue[500],
+    //               fillColor: Colors.blue[100],
+    //               onPressed: (int selectedIndex) {
+    //                 setState(() {
+    //                   _bgtheme = List.generate(
+    //                     _bgtheme.length,
+    //                     (index) => index == selectedIndex,
+    //                   );
+    //                   selectBg = selectedIndex; // 背景テーマの選択
+    //                 });
+    //               },
+    //               isSelected: _bgtheme,
+    //               children: List.generate(4, (index) => Text('Bg $index')),
+    //             ),
+    //             const SizedBox(height: 30),
+    //             const Text('文字テーマの選択', style: TextStyle(fontSize: 16)),
+    //             ToggleButtons(
+    //               splashColor: Colors.blue[500],
+    //               fillColor: Colors.blue[100],
+    //               onPressed: (int selectedIndex) {
+    //                 setState(() {
+    //                   _fonttheme = List.generate(
+    //                     _fonttheme.length,
+    //                     (index) => index == selectedIndex,
+    //                   );
+    //                   selectFont = selectedIndex; // 文字テーマの選択
+    //                 });
+    //               },
+    //               isSelected: _fonttheme,
+    //               children: List.generate(5, (index) => Text('Font $index')),
+    //             ),
+    //           ],
+    //         ),
+    //       ],
+    //     ),
+    //   ),
+    // );
   }
 }

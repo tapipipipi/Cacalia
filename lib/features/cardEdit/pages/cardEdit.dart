@@ -10,9 +10,7 @@ class CardEdit extends StatelessWidget {
   /*
     名詞の編集を保存する処理
   */
-  Future<void> saveCards() async {
-
-  }
+  Future<void> saveCards() async {}
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +18,16 @@ class CardEdit extends StatelessWidget {
       body: Stack(
         alignment: Alignment.center,
         children: [
-          UserCard(userId: mycard),
+          UserCard(userId: mycard, state: false),
           EditButtons(editType: false, onSave: saveCards),
+          Container(
+            margin: EdgeInsets.only(top: 120, left: 220),
+            child: IconButton(
+              onPressed: () => (print('フォルダ開いて画像選択させてくれい')),
+              icon: const Icon(Icons.camera_alt),
+              color: const Color.fromRGBO(153, 153, 153, 1),
+            ),
+          ),
         ],
       ),
     );

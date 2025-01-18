@@ -10,7 +10,7 @@ import cloud_firestore
 import firebase_analytics
 import firebase_auth
 import firebase_core
-import flutter_blue_plus
+import flutter_blue_plus_macos
 import google_sign_in_ios
 import location
 
