@@ -42,7 +42,7 @@ class UserCard extends StatelessWidget {
             alignment: const Alignment(-0.8, 0),
             decoration: const BoxDecoration(
                 image: DecorationImage(
-              image: AssetImage('assets/images/noImage.png'),
+              image: AssetImage('assets/images/Rectangle_75.png'),
               fit: BoxFit.cover,
             )),
             child: Column(
