@@ -81,13 +81,15 @@ class ProfEdit extends StatelessWidget {
             return Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage(switch (targetBg) {
-                    0 => bgImg.design0,
-                    1 => bgImg.design1,
-                    2 => bgImg.design2,
-                    3 => bgImg.design3,
-                    int() => throw UnimplementedError(),
-                  }),
+                  image: AssetImage(bgImg.design0
+                      //   switch (targetBg) {
+                      //   0 => bgImg.design0,
+                      //   1 => bgImg.design1,
+                      //   2 => bgImg.design2,
+                      //   3 => bgImg.design3,
+                      //   int() => throw UnimplementedError(),
+                      // }
+                      ),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -108,16 +110,17 @@ class ProfEdit extends StatelessWidget {
                               child: Text(
                                 'about me',
                                 style: TextStyle(
-                                    fontSize: 40,
-                                    fontFamily: switch (targetFont) {
-                                      0 => Fonts.font0,
-                                      1 => Fonts.font1,
-                                      2 => Fonts.font2,
-                                      3 => Fonts.font3,
-                                      4 => Fonts.font4,
-                                      // TODO: Handle this case.
-                                      int() => throw UnimplementedError(),
-                                    }),
+                                  fontSize: 40,
+                                  // fontFamily: switch (targetFont) {
+                                  //   0 => Fonts.font0,
+                                  //   1 => Fonts.font1,
+                                  //   2 => Fonts.font2,
+                                  //   3 => Fonts.font3,
+                                  //   4 => Fonts.font4,
+                                  //   // TODO: Handle this case.
+                                  //   int() => throw UnimplementedError(),
+                                  // }
+                                ),
                               ),
                             ),
                             EditPen(),
@@ -303,67 +306,122 @@ class _ThemeEditorState extends State<ThemeEditor> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        // モーダルを閉じる際に値を返す
-        Navigator.of(context).pop((selectBg, selectFont));
-        return false;
-      },
-      child: Container(
-        height: MediaQuery.of(context).size.height * 0.9,
-        width: double.infinity,
-        child: Column(
-          children: [
-            Container(
-              height: 11,
-              width: 93,
-              margin: const EdgeInsets.only(top: 20, bottom: 20),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade300,
-                borderRadius: BorderRadius.circular(20.0),
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.9,
+      width: double.infinity,
+      child: Column(
+        children: [
+          Container(
+            height: 11,
+            width: 93,
+            margin: const EdgeInsets.only(top: 20, bottom: 20),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade300,
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('背景テーマの選択', style: TextStyle(fontSize: 16)),
+              ToggleButtons(
+                splashColor: Colors.blue[500],
+                fillColor: Colors.blue[100],
+                onPressed: (int selectedIndex) {
+                  setState(() {
+                    _bgtheme = List.generate(
+                      _bgtheme.length,
+                      (index) => index == selectedIndex,
+                    );
+                    selectBg = selectedIndex; // 背景テーマの選択
+                  });
+                },
+                isSelected: _bgtheme,
+                children: List.generate(4, (index) => Text('Bg $index')),
               ),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text('背景テーマの選択', style: TextStyle(fontSize: 16)),
-                ToggleButtons(
-                  splashColor: Colors.blue[500],
-                  fillColor: Colors.blue[100],
-                  onPressed: (int selectedIndex) {
-                    setState(() {
-                      _bgtheme = List.generate(
-                        _bgtheme.length,
-                        (index) => index == selectedIndex,
-                      );
-                      selectBg = selectedIndex; // 背景テーマの選択
-                    });
-                  },
-                  isSelected: _bgtheme,
-                  children: List.generate(4, (index) => Text('Bg $index')),
-                ),
-                const SizedBox(height: 30),
-                const Text('文字テーマの選択', style: TextStyle(fontSize: 16)),
-                ToggleButtons(
-                  splashColor: Colors.blue[500],
-                  fillColor: Colors.blue[100],
-                  onPressed: (int selectedIndex) {
-                    setState(() {
-                      _fonttheme = List.generate(
-                        _fonttheme.length,
-                        (index) => index == selectedIndex,
-                      );
-                      selectFont = selectedIndex; // 文字テーマの選択
-                    });
-                  },
-                  isSelected: _fonttheme,
-                  children: List.generate(5, (index) => Text('Font $index')),
-                ),
-              ],
-            ),
-          ],
-        ),
+              const SizedBox(height: 30),
+              const Text('文字テーマの選択', style: TextStyle(fontSize: 16)),
+              ToggleButtons(
+                splashColor: Colors.blue[500],
+                fillColor: Colors.blue[100],
+                onPressed: (int selectedIndex) {
+                  setState(() {
+                    _fonttheme = List.generate(
+                      _fonttheme.length,
+                      (index) => index == selectedIndex,
+                    );
+                    selectFont = selectedIndex; // 文字テーマの選択
+                  });
+                },
+                isSelected: _fonttheme,
+                children: List.generate(5, (index) => Text('Font $index')),
+              ),
+            ],
+          ),
+        ],
       ),
     );
+    // return WillPopScope(
+    //   onWillPop: () async {
+    //     // モーダルを閉じる際に値を返す
+    //     Navigator.of(context).pop((selectBg, selectFont));
+    //     return false;
+    //   },
+    //   child: Container(
+    //     height: MediaQuery.of(context).size.height * 0.9,
+    //     width: double.infinity,
+    //     child: Column(
+    //       children: [
+    //         Container(
+    //           height: 11,
+    //           width: 93,
+    //           margin: const EdgeInsets.only(top: 20, bottom: 20),
+    //           decoration: BoxDecoration(
+    //             color: Colors.grey.shade300,
+    //             borderRadius: BorderRadius.circular(20.0),
+    //           ),
+    //         ),
+    //         Column(
+    //           crossAxisAlignment: CrossAxisAlignment.start,
+    //           children: [
+    //             const Text('背景テーマの選択', style: TextStyle(fontSize: 16)),
+    //             ToggleButtons(
+    //               splashColor: Colors.blue[500],
+    //               fillColor: Colors.blue[100],
+    //               onPressed: (int selectedIndex) {
+    //                 setState(() {
+    //                   _bgtheme = List.generate(
+    //                     _bgtheme.length,
+    //                     (index) => index == selectedIndex,
+    //                   );
+    //                   selectBg = selectedIndex; // 背景テーマの選択
+    //                 });
+    //               },
+    //               isSelected: _bgtheme,
+    //               children: List.generate(4, (index) => Text('Bg $index')),
+    //             ),
+    //             const SizedBox(height: 30),
+    //             const Text('文字テーマの選択', style: TextStyle(fontSize: 16)),
+    //             ToggleButtons(
+    //               splashColor: Colors.blue[500],
+    //               fillColor: Colors.blue[100],
+    //               onPressed: (int selectedIndex) {
+    //                 setState(() {
+    //                   _fonttheme = List.generate(
+    //                     _fonttheme.length,
+    //                     (index) => index == selectedIndex,
+    //                   );
+    //                   selectFont = selectedIndex; // 文字テーマの選択
+    //                 });
+    //               },
+    //               isSelected: _fonttheme,
+    //               children: List.generate(5, (index) => Text('Font $index')),
+    //             ),
+    //           ],
+    //         ),
+    //       ],
+    //     ),
+    //   ),
+    // );
   }
 }
