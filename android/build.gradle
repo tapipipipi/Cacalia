@@ -4,7 +4,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        // classpath 'com.android.tools.build:gradle:8.1.2' // 必要なビルドツール
+        classpath 'com.android.tools.build:gradle:8.1.2' // 必要なビルドツール
         classpath 'com.google.gms:google-services:4.4.0' // Firebase用プラグイン
     }
 }

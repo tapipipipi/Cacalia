@@ -100,20 +100,20 @@ class EditPen extends Container {
   }
 }
 
-void showThemeEditor(BuildContext context) async {
-  // モーダルを呼び出して、結果を受け取る
-  final result = await EditModal(context);
-  var selectBg = 0;
-  var selectFont = 0;
+// void showThemeEditor(BuildContext context) async {
+//   // モーダルを呼び出して、結果を受け取る
+//   final result = await EditModal(context);
+//   var selectBg = 0;
+//   var selectFont = 0;
 
-  if (result != null) {
-    // タプルを分解して各値を取得
-    final targetBg = selectBg;
-    final targetFont = selectFont;
-    print('Selected Background: $targetFont');
-    print('Selected Font: $targetFont');
-    // 必要に応じて状態を更新するなどの処理を行う
-  } else {
-    print('No selection made.');
-  }
-}
+//   if (result != null) {
+//     // タプルを分解して各値を取得
+//     final targetBg = selectBg;
+//     final targetFont = selectFont;
+//     print('Selected Background: $targetFont');
+//     print('Selected Font: $targetFont');
+//     // 必要に応じて状態を更新するなどの処理を行う
+//   } else {
+//     print('No selection made.');
+//   }
+// }

@@ -85,18 +85,22 @@ void Profilemodal(
                               child: Column(
                                 children: [
                                   const SizedBox(height: 50),
-                                  const Text(
-                                    '苗字　名前',
+                                  Text(
+                                    name,
                                     style: TextStyle(fontSize: 24),
                                   ),
-                                  const Text(
-                                    'myoji namae',
+                                  Text(
+                                    readname,
                                     style: TextStyle(fontSize: 16),
                                   ),
                                   const SizedBox(height: 10), // 余白
-                                  for (int i = 10; i >= 0; i--)
-                                    Category('カテゴリー'),
-                                  const SizedBox(height: 70), // 余白(ボタンで隠れないように)
+                                  // ---------------プロフィールを一覧表示------------------
+                                  for (int i = 0; i < keys.length; i++)
+                                    Category(keys[i], values[i]),
+                                  const SizedBox(
+                                    height: 70,
+                                  ), // 余白(ボタンで隠れないように)
+                                  // ----------------------------------------------------------
                                 ],
                               ),
                             ),
@@ -251,7 +255,7 @@ class AIAdvice extends Container {
       child: Container(
         width: 350,
         padding: const EdgeInsets.only(bottom: 10),
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Color.fromRGBO(36, 43, 46, 1),
         ),
         child: Column(
