@@ -2,6 +2,9 @@ import 'package:cacalia/store.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+//UUIDを作成するライブラリ
+import 'package:uuid/uuid.dart';
+
 /// import 'package:firebase_auth/firebase_auth.dart';
 String friend = "friends"; // コレクション、ドキュメント指定用 /users/friends/friends
 String profile = "profile";
@@ -9,6 +12,9 @@ String users = "users"; // コレクション指定用 /users
 String ini = ""; // 本番用 profileの初期値
 String g_doc = ""; // テスト用　将来的にはuid
 String g_colle = ""; // テスト用
+
+//Uuidを生成
+var uuid = Uuid();
 
 /// db定義
 final db = FirebaseFirestore.instance;
@@ -169,6 +175,17 @@ Future<Map<String, dynamic>> getProfile(String uid) async {
     return Map();
   }
 }
+
+//ユーザのUUIDを生成
+_generateUuids() {
+    String serviceUuid = uuid.v4();
+    String charactaristicuuid = uuid.v4();
+    print(serviceUuid);
+    print(charactaristicuuid);
+    updateProfile("serviceUuid", serviceUuid);
+    updateProfile("charactaristicuuid", charactaristicuuid);
+    print('UUIDを作成しました');
+  }
 
 /// フレンドのuid一覧を取得
 /// フィールドから値を取得

@@ -23,7 +23,7 @@ class UserCard extends StatelessWidget {
     required this.state, // required 修飾子を付ける(非null制約を解除)
   });
 
-  final String bgImg = 'assets/images/noImage.png';
+  final String bgImg = 'assets/images/default_avatar.png';
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +42,7 @@ class UserCard extends StatelessWidget {
             alignment: const Alignment(-0.8, 0),
             decoration: const BoxDecoration(
                 image: DecorationImage(
-              image: AssetImage('assets/images/Rectangle_75.png'),
+              image: AssetImage('assets/images/card_def.png'),
               fit: BoxFit.cover,
             )),
             child: Column(

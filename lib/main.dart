@@ -3,17 +3,22 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'package:cacalia/config/router/route.dart';  // routerをインポート
+import 'package:cacalia/config/router/route.dart'; // routerをインポート
 import 'store.dart';
+//APIキーを隠すライブラリ
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();   
+  WidgetsFlutterBinding.ensureInitialized();
   // // Firebase初期化処理　ここから
   // await Firebase.initializeApp(
   //   options: DefaultFirebaseOptions.currentPlatform,
-  // );                                           
+  // );
   // // Firebase初期化処理　ここまで
   // await FirebaseAuth.instance.signOut();
+
+  await dotenv.load(fileName: ".env"); // .envをロード
+
   runApp(const MyApp());
 }
 

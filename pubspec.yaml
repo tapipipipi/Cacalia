@@ -39,6 +39,7 @@ dependencies:
   ble_peripheral: ^2.3.3
   uuid: ^4.5.1
   google_generative_ai: ^0.4.6
+  flutter_dotenv: ^5.1.0
 
 
 
@@ -62,6 +63,7 @@ flutter:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
   assets:
+    - .env
     - assets/ # fire
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
