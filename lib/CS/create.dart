@@ -70,7 +70,10 @@ Map<String, dynamic> profiles = <String, dynamic>{
   "background": "ハッカソン企業賞獲得しました！",
   "bairth": "1/1",
   "serviceUuid": "forble",
-  "charactaristicuuid": "forble"
+  "charactaristicuuid": "forble",
+  "ai_suggestion": "val",
+  "img_path":"path",
+  "img_url": "url"
 };
 
 // uid 格納していくスタイル
@@ -155,7 +158,7 @@ Future<Map<String, dynamic>> getProfile(String uid) async {
     DocumentSnapshot<Map<String, dynamic>> doc =
         await db.collection(users).doc(uid).get();
 
-    // ドキュメントが存在しない場合、ドキュメントを作成
+    // ドキュメントが存在しない場合、ドキュメントを作成(ログインしているユーザーのuid)
     if (!doc.exists || doc.data() == null) {
       print(uid);
       setUser(uid); // userprofike作成
