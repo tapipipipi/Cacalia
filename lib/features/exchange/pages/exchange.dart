@@ -634,6 +634,49 @@ class _ExchangeState extends State<ExchangePage>
   }
   //ここまで
 
+  Future<void> _showProfileDialog() async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          content: SizedBox(
+            width: MediaQuery.of(context).size.width * 0.8,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  'この話題で話してみませんか？',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  '$generatedText\n',
+                  style: const TextStyle(fontSize: 16),
+                ),
+                TextButton(
+                    onPressed: () {
+                      updateFriend('friend_uid', decodereceived['u_id']);
+                      context.go('/home');
+                      print('ホームに移動');
+                    },
+                    child: const Text(
+                      'ホームへ',
+                      style: TextStyle(fontSize: 16),
+                    ))
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   //AI提案をするメソッド
   _showProfilePopup() async {
     //比較する項目を設定
@@ -703,30 +746,12 @@ class _ExchangeState extends State<ExchangePage>
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Text(
-                  '${receivedData['comment']}\n',
-                  style: const TextStyle(fontSize: 16),
-                ),
-                const Text(
-                  'この話題で話してみませんか？',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  '$generatedText\n',
-                  style: const TextStyle(fontSize: 16),
-                ),
                 TextButton(
                     onPressed: () {
-                      updateFriend('friend_uid', decodereceived['u_id']);
-                      context.go('/home');
-                      print('ホームに移動');
+                      _showProfileDialog();
                     },
                     child: const Text(
-                      'フレンドに追加',
+                      '追加',
                       style: TextStyle(fontSize: 16),
                     ))
               ],
