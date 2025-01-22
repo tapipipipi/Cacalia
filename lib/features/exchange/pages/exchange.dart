@@ -190,29 +190,29 @@ class _ExchangeState extends State<ExchangePage>
     print('UUIDを作成しました');
   }
 
-  Future<void> generateText() async {
-    final model = GenerativeModel(
-      model: 'gemini-1.5-flash-latest',
-      apiKey: 'AIzaSyDvlwupnHlUINeIAt5yBGP1KASRGNqlwVA',
-    );
+  // Future<void> generateText() async {
+  //   final model = GenerativeModel(
+  //     model: 'gemini-1.5-flash-latest',
+  //     apiKey: 'AIzaSyDvlwupnHlUINeIAt5yBGP1KASRGNqlwVA',
+  //   );
 
-    const prompt =
-        'I`ll send 2 sentences. compare and find common points. then create any topic and say like this ["Topic u generated"という話題でお話してみませんか？] no need other explain. 1.I hate u 2.I dont like u';
-    final content = [Content.text(prompt)];
+  //   const prompt =
+  //       'I`ll send 2 sentences. compare and find common points. then create any topic and say like this ["Topic u generated"という話題でお話してみませんか？] no need other explain. 1.I hate u 2.I dont like u';
+  //   final content = [Content.text(prompt)];
 
-    try {
-      final response = await model.generateContent(content);
-      print(response.text); // Log response to debug
-      setState(() {
-        generatedText = response.text ?? 'No response text';
-      });
-    } catch (e) {
-      print("Error: $e");
-      setState(() {
-        generatedText = '生成エラー: $e';
-      });
-    }
-  }
+  //   try {
+  //     final response = await model.generateContent(content);
+  //     print(response.text); // Log response to debug
+  //     setState(() {
+  //       generatedText = response.text ?? 'No response text';
+  //     });
+  //   } catch (e) {
+  //     print("Error: $e");
+  //     setState(() {
+  //       generatedText = '生成エラー: $e';
+  //     });
+  //   }
+  // }
 
   @override
   void dispose() {
@@ -243,7 +243,12 @@ class _ExchangeState extends State<ExchangePage>
                       color: Colors.white,
                     ),
                   ),
+                  //振る処理
                   ShakeGesture(onShake: startScan, child: const Text("")),
+                  //デバッグ用
+                  ElevatedButton(
+                      onPressed: _showProfilePopup,
+                      child: const Text("交換後画面表示")),
                 ],
               ),
             ),
@@ -278,78 +283,6 @@ class _ExchangeState extends State<ExchangePage>
       ),
     );
   }
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     body: Container(
-  //       decoration: const BoxDecoration(
-  //         gradient: LinearGradient(
-  //           begin: Alignment.topCenter,
-  //           end: Alignment.bottomCenter,
-  //           colors: [
-  //             Color(0xFF0B1930), // 深い青
-  //             Color(0xFF1B3366), // ミッドナイトブルー
-  //             Color(0xFF2C4999), // 青紫
-  //           ],
-  //         ),
-  //       ),
-  //       child: Stack(
-  //         children: [
-  //           // 星のエフェクト
-  //           Positioned.fill(
-  //             child: CustomPaint(
-  //               painter: StarsPainter(),
-  //             ),
-  //           ),
-  //           // メインコンテンツ
-  //           Center(
-  //             child: Column(
-  //               mainAxisAlignment: MainAxisAlignment.center,
-  //               children: [
-  //                 AnimatedBuilder(
-  //                   animation: _controller,
-  //                   builder: (context, child) {
-  //                     return Transform.rotate(
-  //                       angle: _controller.value * 2.0 * 3.14159,
-  //                       child: Icon(
-  //                         Icons.bluetooth_searching,
-  //                         size: 100,
-  //                         color: _isConnected
-  //                             ? Colors.green
-  //                             : Colors.white, // 色を白に変更
-  //                       ),
-  //                     );
-  //                   },
-  //                 ),
-  //                 ShakeGesture(
-  //                   onShake: handleShake,
-  //                   child: Text(''),
-  //                 ),
-  //               ],
-  //             ),
-  //           ),
-  //           // ホームアイコンを追加
-  //           Positioned(
-  //             top: 60,
-  //             left: 16,
-  //             child: GestureDetector(
-  //               onTap: () {
-  //                 context.go('/home'); // GoRouterを使用してホーム画面に遷移
-  //               },
-  //               child: const Icon(
-  //                 // Image.assetをIconに変更
-  //                 Icons.home,
-  //                 size: 64,
-  //                 color: Colors.white,
-  //               ),
-  //             ),
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
 
   // JSONデータをUint8Listに変換
   Uint8List _jsonToUint8List(Map<String, dynamic> uidData) {
@@ -613,8 +546,6 @@ class _ExchangeState extends State<ExchangePage>
 
           ///
 
-          //_showProfilePopup();
-
           writeCaracteristic(characteristic);
 
           disconnectDevaice(selectdevaice!);
@@ -634,6 +565,7 @@ class _ExchangeState extends State<ExchangePage>
   }
   //ここまで
 
+  //AI提案を表示するメソッド
   Future<void> _showProfileDialog() async {
     showDialog(
       context: context,
@@ -677,7 +609,7 @@ class _ExchangeState extends State<ExchangePage>
     );
   }
 
-  //AI提案をするメソッド
+  //AIのプロンプト生成と、交換相手の情報を表示するメソッド
   _showProfilePopup() async {
     //比較する項目を設定
     List<String> keys = ["events", "comment", "hoby", "background"];
@@ -713,49 +645,79 @@ class _ExchangeState extends State<ExchangePage>
       });
     }
 
+    //非同期処理でのエラー対策
+    if (!mounted) return;
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-          ),
-          content: SizedBox(
-            width: MediaQuery.of(context).size.width * 0.8,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const CircleAvatar(
-                  radius: 40,
-                  backgroundImage:
-                      AssetImage('assets/images/default_avatar.png'),
+        //ダイアログ表示
+        return Dialog(
+          //ダイアログの角を丸くしないようにする
+          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+          child: Column(
+            //ダイアログを最小の大きさに変更する
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                //位置調整
+                padding: const EdgeInsets.only(top: 30, left: 30),
+                alignment: Alignment.topLeft,
+                child: const Text(
+                  'Connected with...',
+                  style: TextStyle(fontSize: 20),
                 ),
-                const SizedBox(height: 16),
-                Text(
-                  'ユーザ：${receivedData['name']}\n',
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+              ),
+              Row(
+                children: [
+                  //横幅調整
+                  const SizedBox(
+                    width: 30,
                   ),
-                ),
-                const Text(
-                  'コメント',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                  //円形でプロフィール画像を表示
+                  const CircleAvatar(
+                    radius: 30,
+                    backgroundImage:
+                        AssetImage('assets/images/default_avatar.png'),
                   ),
+                  //間隔開け
+                  const SizedBox(
+                    width: 16,
+                  ),
+                  //その他のRowの領域を全て使用
+                  Expanded(
+                    child: Padding(
+                      //テキストの位置調整
+                      padding: const EdgeInsets.only(top: 30),
+                      child: Text(
+                        '${receivedData['name']}\n',
+                        style: const TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                'コメント',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
                 ),
-                TextButton(
-                    onPressed: () {
-                      _showProfileDialog();
-                    },
-                    child: const Text(
-                      '追加',
-                      style: TextStyle(fontSize: 16),
-                    ))
-              ],
-            ),
+              ),
+              TextButton(
+                  onPressed: () {
+                    _showProfileDialog();
+                  },
+                  child: const Text(
+                    '追加',
+                    style: TextStyle(fontSize: 16),
+                  ))
+            ],
           ),
         );
       },

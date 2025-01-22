@@ -18,8 +18,10 @@ class _LoginPageState extends State<LoginPage> {
   final _passwordController = TextEditingController();
 
   // 入力したメールアドレス・パスワード
-  String _email = 'ゲスト';
-  String _pass = '123qwecc';
+  String _email = '';
+  String _pass = '';
+  String defmail = '2230360@ecc.ac.com';
+  String defpass = '123qwecc';
 
   @override
   Widget build(BuildContext context) {
@@ -139,6 +141,10 @@ class _LoginPageState extends State<LoginPage> {
                         print('User already signed in: ${nowuser.email}');
                         context.go('/home'); //これよくない
                       } else {
+                        if (_email == "") {
+                          _email = defmail;
+                          _pass = defpass;
+                        }
                         // Sign-in logic
                         // メール/パスワードでログイン
                         final User? user = (await FirebaseAuth.instance
