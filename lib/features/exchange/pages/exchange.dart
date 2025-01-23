@@ -21,6 +21,7 @@ import 'package:ble_peripheral/ble_peripheral.dart' as ble_peripheral;
 import 'package:uuid/uuid.dart';
 //APIキーを隠すライブラリ
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:spring_button/spring_button.dart';
 
 class ExchangePage extends StatefulWidget {
   const ExchangePage({super.key});
@@ -80,7 +81,23 @@ class _ExchangeState extends State<ExchangePage>
   // String displayText = "近くにデバイスがありません。";
 
   //受け取ったデータ
-  Map<String, dynamic> receivedData = {};
+  Map<String, dynamic> receivedData = {
+    'uid': "Hxva1aGnNMcwg8s7esKDNmNll6u1",
+    "name": "谷岡 義貴",
+    "read_name": "Tanioka Yoshitaka",
+    "gender": "男",
+    "age": '2004',
+    "comment": "ドラムが好きです",
+    "events": "HACK U",
+    "belong": "ECCコンピュータ専門学校",
+    "skill": "0",
+    "interest": "0",
+    "hoby": "カラオケ",
+    "background": "基本情報技術者試験取得、Hack U NAGOYA優秀賞",
+    "bairth": "12/26",
+    "serviceUuid": "forBLE",
+    "charactaristicuuid": "forBLE"
+  };
 
   //デバイスに接続できるボタンの状態
   bool _isfinded = false;
@@ -189,30 +206,6 @@ class _ExchangeState extends State<ExchangePage>
     charactaristicuuid = uuid.v4();
     print('UUIDを作成しました');
   }
-
-  // Future<void> generateText() async {
-  //   final model = GenerativeModel(
-  //     model: 'gemini-1.5-flash-latest',
-  //     apiKey: 'AIzaSyDvlwupnHlUINeIAt5yBGP1KASRGNqlwVA',
-  //   );
-
-  //   const prompt =
-  //       'I`ll send 2 sentences. compare and find common points. then create any topic and say like this ["Topic u generated"という話題でお話してみませんか？] no need other explain. 1.I hate u 2.I dont like u';
-  //   final content = [Content.text(prompt)];
-
-  //   try {
-  //     final response = await model.generateContent(content);
-  //     print(response.text); // Log response to debug
-  //     setState(() {
-  //       generatedText = response.text ?? 'No response text';
-  //     });
-  //   } catch (e) {
-  //     print("Error: $e");
-  //     setState(() {
-  //       generatedText = '生成エラー: $e';
-  //     });
-  //   }
-  // }
 
   @override
   void dispose() {
@@ -567,6 +560,8 @@ class _ExchangeState extends State<ExchangePage>
 
   //AI提案を表示するメソッド
   Future<void> _showProfileDialog() async {
+    generateText(); //提案文生成メソッド
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -609,8 +604,8 @@ class _ExchangeState extends State<ExchangePage>
     );
   }
 
-  //AIのプロンプト生成と、交換相手の情報を表示するメソッド
-  _showProfilePopup() async {
+  //AIのプロンプトを生成するメソッド
+  Future<void> generateText() async {
     //比較する項目を設定
     List<String> keys = ["events", "comment", "hoby", "background"];
 
@@ -644,7 +639,10 @@ class _ExchangeState extends State<ExchangePage>
         generatedText = '生成エラー: $e';
       });
     }
+  }
 
+  //交換相手の情報を表示するメソッド
+  _showProfilePopup() async {
     //非同期処理でのエラー対策
     if (!mounted) return;
 
@@ -653,27 +651,45 @@ class _ExchangeState extends State<ExchangePage>
       builder: (BuildContext context) {
         //ダイアログ表示
         return Dialog(
+          //背景色指定
+          backgroundColor: const Color(0xFF242B2E),
           //ダイアログの角を丸くしないようにする
           shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
           child: Column(
             //ダイアログを最小の大きさに変更する
             mainAxisSize: MainAxisSize.min,
             children: [
+              //上のバー
+              Container(
+                height: 20,
+                color: const Color(0xFFD9D9D9),
+                child: const Row(
+                  //Mac風のボタンっぽいやつ
+                  children: [
+                    SizedBox(width: 10),
+                    CircleAvatar(radius: 5, backgroundColor: Color(0xFFFF5F57)),
+                    SizedBox(width: 8),
+                    CircleAvatar(radius: 5, backgroundColor: Color(0xFFFEBB2E)),
+                    SizedBox(width: 8),
+                    CircleAvatar(radius: 5, backgroundColor: Color(0xFF28C840)),
+                  ],
+                ),
+              ),
               Container(
                 //位置調整
                 padding: const EdgeInsets.only(top: 30, left: 30),
                 alignment: Alignment.topLeft,
                 child: const Text(
                   'Connected with...',
-                  style: TextStyle(fontSize: 20),
+                  style: TextStyle(fontSize: 20, color: Colors.white),
                 ),
               ),
+              const SizedBox(height: 15),
+              //アカウント名と画像
               Row(
                 children: [
-                  //横幅調整
-                  const SizedBox(
-                    width: 30,
-                  ),
+                  //幅調整
+                  const Padding(padding: EdgeInsets.only(left: 30)),
                   //円形でプロフィール画像を表示
                   const CircleAvatar(
                     radius: 30,
@@ -681,42 +697,96 @@ class _ExchangeState extends State<ExchangePage>
                         AssetImage('assets/images/default_avatar.png'),
                   ),
                   //間隔開け
-                  const SizedBox(
-                    width: 16,
-                  ),
+                  const SizedBox(width: 16),
                   //その他のRowの領域を全て使用
                   Expanded(
                     child: Padding(
                       //テキストの位置調整
-                      padding: const EdgeInsets.only(top: 30),
+                      padding: const EdgeInsets.only(bottom: 10),
                       child: Text(
-                        '${receivedData['name']}\n',
+                        receivedData['name'],
                         style: const TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
+                          fontSize: 25,
+                          color: Colors.white,
                         ),
                       ),
                     ),
                   )
                 ],
               ),
-              const SizedBox(height: 16),
-              const Text(
-                'コメント',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+              const SizedBox(height: 15),
+              //カード
+              Container(
+                width: 270,
+                height: 159,
+                alignment: const Alignment(-0.8, 0),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10)),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start, // 左揃え
+                  children: [
+                    const Padding(padding: EdgeInsets.only(top: 15, left: 30)),
+                    // 読み仮名
+                    Text(
+                      receivedData['read_name'] as String,
+                      style: const TextStyle(fontSize: 14),
+                    ),
+                    // 名前
+                    Text(
+                      receivedData['name'] as String,
+                      style: const TextStyle(fontSize: 24),
+                    )
+                  ],
                 ),
               ),
-              TextButton(
-                  onPressed: () {
-                    _showProfileDialog();
+              const SizedBox(height: 16),
+              const Text(
+                '追加しますか?',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.white,
+                ),
+              ),
+              const SizedBox(height: 10),
+              //追加ボタン
+              SizedBox(
+                height: 60,
+                //ボタンにアニメーション追加
+                child: SpringButton(
+                  SpringButtonType.WithOpacity,
+                  scaleCoefficient: 0.95,
+                  duration: 500,
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: Container(
+                      width: 120,
+                      height: 30,
+                      decoration: const BoxDecoration(
+                        color: Color(0xFF115A84),
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          '追加する',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  //ボタンを押した時の処理
+                  onTapDown: (_) {
+                    _showProfileDialog(); //AI提案表示
                   },
-                  child: const Text(
-                    '追加',
-                    style: TextStyle(fontSize: 16),
-                  ))
+                  onLongPress: null,
+                  onLongPressEnd: null,
+                ),
+              ),
             ],
           ),
         );
