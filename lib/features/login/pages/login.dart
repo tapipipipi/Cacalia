@@ -24,6 +24,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFD7E6EF), // 背景色を#F5F5F5に設定
       body: ListView(
         padding: EdgeInsets.zero, // 追加: paddingをゼロに設定
         children: [
@@ -37,10 +38,12 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                const SizedBox(height: 64),
                 Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 24.0), // 左右にスペースを追加
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(30), // 端を真円に設定
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.1),
@@ -55,7 +58,7 @@ class _LoginPageState extends State<LoginPage> {
                     decoration: const InputDecoration(
                       labelText: 'メールアドレス',
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        borderRadius: BorderRadius.all(Radius.circular(30)), // 端を真円に設定
                         borderSide: BorderSide.none,
                       ),
                       filled: true,
@@ -80,9 +83,10 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 16),
                 Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 24.0), // 左右にスペースを追加
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(30), // 端を真円に設定
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.1),
@@ -97,7 +101,7 @@ class _LoginPageState extends State<LoginPage> {
                     decoration: const InputDecoration(
                       labelText: 'パスワード',
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        borderRadius: BorderRadius.all(Radius.circular(30)), // 端を真円に設定
                         borderSide: BorderSide.none,
                       ),
                       filled: true,
@@ -122,7 +126,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                const Text('─────────または─────────'),
+                const Text('────────────または────────────'),
                 const SizedBox(height: 24),
                 FutureBuilder(
                   future: Authentication.initializeFirebase(context: context),
@@ -213,7 +217,7 @@ class _LoginPageState extends State<LoginPage> {
                   onPressed: () {
                     context.go('/signUpName');
                   },
-                  child: const Text('サインアップはこちら'),
+                  child: const Text('新規登録'),
                 ),
               ],
             ),
