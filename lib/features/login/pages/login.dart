@@ -122,7 +122,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                const Text('───または───'),
+                const Text('─────────または─────────'),
                 const SizedBox(height: 24),
                 FutureBuilder(
                   future: Authentication.initializeFirebase(context: context),
@@ -133,12 +133,17 @@ class _LoginPageState extends State<LoginPage> {
                       return Text('Error initializing Firebase');
                     } else {
                       // データが取得された場合
-                      return GoogleSignInButton();
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.center, // 中央に配置
+                        children: [
+                          GoogleSignInButton(),
+                          const SizedBox(height: 16), // Googleログインボタンの下にスペースを追加
+                        ],
+                      );
                     }
                   },
                 ),
                 const SizedBox(height: 16),
-                // ログインボタンをGoogleログインの下に移動し、デザインを変更
                 ElevatedButton(
                   onPressed: () async {
                     print(_email);
@@ -173,12 +178,18 @@ class _LoginPageState extends State<LoginPage> {
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.blue, // ボタンの色を青に設定
+                    backgroundColor: Colors.blue, // ボタンの色を青に設定
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10), // 角丸に設定
                     ),
                   ),
-                  child: const Text('ログイン'),
+                  child: const Text(
+                    'ログイン',
+                    style: TextStyle(
+                      color: Colors.white, // 文字色を白に設定
+                      fontSize: 18, // フォントサイズを大きく設定
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 16),
                 // ElevatedButton(
