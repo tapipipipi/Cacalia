@@ -16,6 +16,9 @@ import 'package:flutter/material.dart';
 //   return result ?? (0, 0); // 必要に応じて適切なデフォルト値を指定
 // }
 
+int selectBg = 0;
+int selectFont = 0;
+
 // ignore: non_constant_identifier_names
 void EditModal(BuildContext context) async {
   return showModalBottomSheet(
@@ -35,8 +38,6 @@ class ThemeEditor extends StatefulWidget {
 class _ThemeEditorState extends State<ThemeEditor> {
   List<bool> _bgtheme = [true, false, false, false];
   List<bool> _fonttheme = [true, false, false, false, false];
-  int selectBg = 0;
-  int selectFont = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -131,6 +132,33 @@ class _ThemeEditorState extends State<ThemeEditor> {
                 ),
               ),
             ],
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              print('--------------------[EditPen保存]--------------------');
+              print('\\\\\\\\\\\\\\');
+              print('\\\\\\\\\\\\\\');
+              print('\\\\\\\\\\\\\\');
+              print(selectBg);
+              print(selectFont);
+              print('\\\\\\\\\\\\\\');
+              print('\\\\\\\\\\\\\\');
+              print('\\\\\\\\\\\\\\');
+              Navigator.of(context).pop({selectBg, selectFont});
+            },
+            style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10) //こちらを適用
+                  ),
+              backgroundColor: Colors.black,
+            ),
+            child: const Text(
+              '保存',
+              style: TextStyle(
+                fontSize: 24,
+                color: Colors.white,
+              ),
+            ),
           ),
         ],
       ),
@@ -235,4 +263,9 @@ class _ThemeEditorState extends State<ThemeEditor> {
     //   ),
     // );
   }
+}
+
+void getter(bgStyle, fontStyle) {
+  bgStyle = selectBg;
+  fontStyle = selectBg;
 }

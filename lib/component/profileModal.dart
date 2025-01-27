@@ -17,7 +17,7 @@ List<String> values = [];
 // ignore: non_constant_identifier_names
 void Profilemodal(
     BuildContext context, Map<String, dynamic> profileList) async {
-  bool isVisible = false; // 初期値
+  bool isVisible = true; // 初期値
 
   print(profileList);
   List<String> values = []; // リフレッシュ

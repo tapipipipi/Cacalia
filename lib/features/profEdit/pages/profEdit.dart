@@ -1,5 +1,6 @@
 // プロフィール編集画面
 import 'package:cacalia/CS/create.dart';
+import 'package:cacalia/component/editModal.dart';
 // ignore_for_file: unnecessary_string_interpolations
 
 import 'dart:collection';
@@ -22,11 +23,10 @@ List<String> feildnames = [
   "background"
 ];
 
-var targetBg = 0;
-var targetFont = 0;
-
 class ProfEdit extends StatelessWidget {
   ProfEdit({super.key});
+  var targetBg = '0';
+  var targetFont = '0';
 
   // 自身の名前と読み仮名
   String name = profileList[myuid]["name"];
@@ -81,15 +81,8 @@ class ProfEdit extends StatelessWidget {
             return Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage(bgImg.design0
-                      //   switch (targetBg) {
-                      //   0 => bgImg.design0,
-                      //   1 => bgImg.design1,
-                      //   2 => bgImg.design2,
-                      //   3 => bgImg.design3,
-                      //   int() => throw UnimplementedError(),
-                      // }
-                      ),
+                  // image: AssetImage('${bgImg.design1}'),
+                  image: AssetImage('${setBg(targetBg)}'),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -111,6 +104,7 @@ class ProfEdit extends StatelessWidget {
                                 'about me',
                                 style: TextStyle(
                                   fontSize: 40,
+
                                   // fontFamily: switch (targetFont) {
                                   //   0 => Fonts.font0,
                                   //   1 => Fonts.font1,
@@ -123,7 +117,7 @@ class ProfEdit extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            EditPen(),
+                            EditPen(bgStyle: targetBg, fontStyle: targetFont),
                           ],
                         ),
                         Column(
@@ -150,7 +144,9 @@ class ProfEdit extends StatelessWidget {
                                             name,
                                             style: TextStyle(fontSize: 24),
                                           ),
-                                          EditPen(),
+                                          EditPen(
+                                              bgStyle: targetBg,
+                                              fontStyle: targetFont),
                                         ],
                                       ),
                                       Text(
@@ -288,140 +284,5 @@ class Category extends Container {
         ),
       ],
     );
-  }
-}
-
-class ThemeEditor extends StatefulWidget {
-  const ThemeEditor({super.key});
-
-  @override
-  _ThemeEditorState createState() => _ThemeEditorState();
-}
-
-class _ThemeEditorState extends State<ThemeEditor> {
-  List<bool> _bgtheme = [true, false, false, false];
-  List<bool> _fonttheme = [true, false, false, false, false];
-  int selectBg = 0;
-  int selectFont = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.9,
-      width: double.infinity,
-      child: Column(
-        children: [
-          Container(
-            height: 11,
-            width: 93,
-            margin: const EdgeInsets.only(top: 20, bottom: 20),
-            decoration: BoxDecoration(
-              color: Colors.grey.shade300,
-              borderRadius: BorderRadius.circular(20.0),
-            ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text('背景テーマの選択', style: TextStyle(fontSize: 16)),
-              ToggleButtons(
-                splashColor: Colors.blue[500],
-                fillColor: Colors.blue[100],
-                onPressed: (int selectedIndex) {
-                  setState(() {
-                    _bgtheme = List.generate(
-                      _bgtheme.length,
-                      (index) => index == selectedIndex,
-                    );
-                    selectBg = selectedIndex; // 背景テーマの選択
-                  });
-                },
-                isSelected: _bgtheme,
-                children: List.generate(4, (index) => Text('Bg $index')),
-              ),
-              const SizedBox(height: 30),
-              const Text('文字テーマの選択', style: TextStyle(fontSize: 16)),
-              ToggleButtons(
-                splashColor: Colors.blue[500],
-                fillColor: Colors.blue[100],
-                onPressed: (int selectedIndex) {
-                  setState(() {
-                    _fonttheme = List.generate(
-                      _fonttheme.length,
-                      (index) => index == selectedIndex,
-                    );
-                    selectFont = selectedIndex; // 文字テーマの選択
-                  });
-                },
-                isSelected: _fonttheme,
-                children: List.generate(5, (index) => Text('Font $index')),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-    // return WillPopScope(
-    //   onWillPop: () async {
-    //     // モーダルを閉じる際に値を返す
-    //     Navigator.of(context).pop((selectBg, selectFont));
-    //     return false;
-    //   },
-    //   child: Container(
-    //     height: MediaQuery.of(context).size.height * 0.9,
-    //     width: double.infinity,
-    //     child: Column(
-    //       children: [
-    //         Container(
-    //           height: 11,
-    //           width: 93,
-    //           margin: const EdgeInsets.only(top: 20, bottom: 20),
-    //           decoration: BoxDecoration(
-    //             color: Colors.grey.shade300,
-    //             borderRadius: BorderRadius.circular(20.0),
-    //           ),
-    //         ),
-    //         Column(
-    //           crossAxisAlignment: CrossAxisAlignment.start,
-    //           children: [
-    //             const Text('背景テーマの選択', style: TextStyle(fontSize: 16)),
-    //             ToggleButtons(
-    //               splashColor: Colors.blue[500],
-    //               fillColor: Colors.blue[100],
-    //               onPressed: (int selectedIndex) {
-    //                 setState(() {
-    //                   _bgtheme = List.generate(
-    //                     _bgtheme.length,
-    //                     (index) => index == selectedIndex,
-    //                   );
-    //                   selectBg = selectedIndex; // 背景テーマの選択
-    //                 });
-    //               },
-    //               isSelected: _bgtheme,
-    //               children: List.generate(4, (index) => Text('Bg $index')),
-    //             ),
-    //             const SizedBox(height: 30),
-    //             const Text('文字テーマの選択', style: TextStyle(fontSize: 16)),
-    //             ToggleButtons(
-    //               splashColor: Colors.blue[500],
-    //               fillColor: Colors.blue[100],
-    //               onPressed: (int selectedIndex) {
-    //                 setState(() {
-    //                   _fonttheme = List.generate(
-    //                     _fonttheme.length,
-    //                     (index) => index == selectedIndex,
-    //                   );
-    //                   selectFont = selectedIndex; // 文字テーマの選択
-    //                 });
-    //               },
-    //               isSelected: _fonttheme,
-    //               children: List.generate(5, (index) => Text('Font $index')),
-    //             ),
-    //           ],
-    //         ),
-    //       ],
-    //     ),
-    //   ),
-    // );
   }
 }
