@@ -121,7 +121,24 @@ class _LoginPageState extends State<LoginPage> {
                     },
                   ),
                 ),
+                const SizedBox(height: 16),
+                const Text('───または───'),
                 const SizedBox(height: 24),
+                FutureBuilder(
+                  future: Authentication.initializeFirebase(context: context),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator(); // データがまだ取得されていない場合のローディング表示
+                    } else if (snapshot.hasError) {
+                      return Text('Error initializing Firebase');
+                    } else {
+                      // データが取得された場合
+                      return GoogleSignInButton();
+                    }
+                  },
+                ),
+                const SizedBox(height: 16),
+                // ログインボタンをGoogleログインの下に移動し、デザインを変更
                 ElevatedButton(
                   onPressed: () async {
                     print(_email);
@@ -131,7 +148,6 @@ class _LoginPageState extends State<LoginPage> {
                     //   // TODO: ログイン処理を
                     // }
                     // ------------------------------------
-
                     // TODO: ログイン処理
                     try {
                       final nowuser = FirebaseAuth.instance.currentUser;
@@ -150,17 +166,18 @@ class _LoginPageState extends State<LoginPage> {
                           print("ログインしました ${user.email} , ${user.uid}");
                           // ignore: use_build_context_synchronously
                           context.go('/home');
-                          // Navigator.push( //uidを渡して遷移
-                          //   context,
-                          //   MaterialPageRoute(
-                          //       builder: (context) => Home(user.uid)),
-                          // );
                         }
                       }
                     } catch (e) {
                       print(e);
                     }
                   },
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.blue, // ボタンの色を青に設定
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10), // 角丸に設定
+                    ),
+                  ),
                   child: const Text('ログイン'),
                 ),
                 const SizedBox(height: 16),
@@ -181,20 +198,6 @@ class _LoginPageState extends State<LoginPage> {
                 //   },
                 //   child: const Text('Googleでログイン'),
                 // ),
-                FutureBuilder(
-                  future: Authentication.initializeFirebase(context: context),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator(); // データがまだ取得されていない場合のローディング表示
-                    } else if (snapshot.hasError) {
-                      return Text('Error initializing Firebase');
-                    } else {
-                      // データが取得された場合
-                      return GoogleSignInButton();
-                    }
-                  },
-                ),
-                const SizedBox(height: 16),
                 TextButton(
                   onPressed: () {
                     context.go('/signUpName');
