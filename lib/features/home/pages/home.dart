@@ -114,7 +114,10 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     if (mounted) {
-      if (cardList.isEmpty) {
+
+
+      if (friends.isEmpty || cardList.isEmpty) {
+
         return Center(child: CircularProgressIndicator()); // ローディング中
       }
       return Scaffold(
@@ -141,6 +144,7 @@ class _HomeState extends State<Home> {
                 ],
                 borderRadius: BorderRadius.circular(50),
               ),
+              // 交換ボタン
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color.fromRGBO(17, 90, 132, 1),
@@ -164,6 +168,7 @@ class _HomeState extends State<Home> {
               Container(
                 width: 337,
                 height: 669,
+                alignment: Alignment.center,
                 decoration: BoxDecoration(
                   color: const Color.fromRGBO(69, 76, 80, 1),
                   borderRadius: BorderRadius.circular(10),
@@ -184,6 +189,7 @@ class _HomeState extends State<Home> {
                               color: const Color.fromRGBO(161, 161, 161, 1),
                             ),
                           ),
+                          // 検索バー
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -194,6 +200,8 @@ class _HomeState extends State<Home> {
                                 child: TextField(
                                   decoration: InputDecoration(
                                     hintText: '検索',
+                                    hintStyle: const TextStyle(
+                                        fontFamily: 'DotGothic16'),
                                     prefixIcon: const Icon(Icons.search),
                                     contentPadding: const EdgeInsets.symmetric(
                                       horizontal: 16,
@@ -238,13 +246,13 @@ class _HomeState extends State<Home> {
                     //名刺一覧
                     Expanded(
                       child: ListView.builder(
-                        padding: const EdgeInsets.all(20),
+                        padding: const EdgeInsets.only(top: 20),
                         itemCount: mycard, // フレンドの数だけ表示
                         itemBuilder: (context, index) {
                           return Transform.translate(
                               offset: Offset(0, -index * 30.0), // カードを重ねて表示
                               child: InkWell(
-                                child: UserCard(userId: index),
+                                child: UserCard(userId: index, state: true),
                                 onTap: () {
                                   // friends[index] をキーに profileList から該当データを取得
                                   var selectedProfile =

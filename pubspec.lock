@@ -261,7 +261,18 @@ packages:
       sha256: "79e0c23480ff85dc68de79e2cd6334add97e48f7f4865d17686dd6ea81a47e8c"
       url: "https://pub.dev"
     source: hosted
-    version: "0.7.11"
+
+
+    version: "2.3.7"
+  dbus:
+    dependency: transitive
+    description:
+      name: dbus
+      sha256: "365c771ac3b0e58845f39ec6deebc76e3276aa9922b0cc60840712094d9047ac"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.7.10"
+
   fake_async:
     dependency: transitive
     description:
@@ -400,6 +411,7 @@ packages:
     description:
       name: flutter_blue_plus_linux
       sha256: d36a9890498dc0e49ce2d5b6625cf94fa6dc6257fa1a6e8b2010bfab4e381b33
+
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
@@ -419,6 +431,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
+
   flutter_blue_plus_web:
     dependency: transitive
     description:
@@ -427,6 +440,16 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
+
+  flutter_dotenv:
+    dependency: "direct main"
+    description:
+      name: flutter_dotenv
+      sha256: b7c7be5cd9f6ef7a78429cabd2774d3c4af50e79cb2b7593e3d5d763ef95c61b
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.2.1"
+
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -825,10 +848,12 @@ packages:
     dependency: transitive
     description:
       name: pubspec_parse
-      sha256: "0560ba233314abbed0a48a2956f7f022cce7c3e1e73df540277da7544cad4082"
+
+      sha256: "81876843eb50dc2e1e5b151792c9a985c5ed2536914115ed04e9c8528f6647b0"
       url: "https://pub.dev"
     source: hosted
-    version: "1.5.0"
+    version: "1.4.0"
+
   riverpod:
     dependency: transitive
     description:
@@ -860,7 +885,9 @@ packages:
       sha256: "120d3310f687f43e7011bb213b90a436f1bbc300f0e4b251a72c39bccb017a4f"
       url: "https://pub.dev"
     source: hosted
-    version: "2.6.4"
+
+    version: "2.6.3"
+
   rxdart:
     dependency: transitive
     description:
