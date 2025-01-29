@@ -1,5 +1,7 @@
+import 'package:cacalia/component/editButtons.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:go_router/go_router.dart';
 import 'Authentication.dart';
 import 'user_info_screen.dart';
 
@@ -35,9 +37,10 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
 
                 // TODO: Add a method call to the Google Sign-In authentication
 
-                User? user = await Authentication.signInWithGoogle(context: context);
+                User? user =
+                    await Authentication.signInWithGoogle(context: context);
                 print('throw1');
-                
+
                 setState(() {
                   _isSigningIn = false;
                 });
@@ -46,13 +49,14 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
 
                 if (user != null) {
                   // ignore: use_build_context_synchronously
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                      builder: (context) => UserInfoScreen(
-                        user: user,
-                      ),
-                    ),
-                  );
+                  // Navigator.of(context).pushReplacement(
+                  //   MaterialPageRoute(
+                  //     builder: (context) => UserInfoScreen(
+                  //       user: user,
+                  //     ),
+                  //   ),
+                  // );
+                  context.go('/home');
                 }
               },
               child: Padding(

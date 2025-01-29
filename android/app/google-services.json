@@ -7,12 +7,25 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:313812641302:android:5c99460eba096fc6cbf737",
+        "mobilesdk_app_id": "1:313812641302:android:d133bc5e227cc5b3cbf737",
         "android_client_info": {
           "package_name": "com.Cacalia"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "313812641302-3gtd9iih4fm2ovjq006a3k5ufevfj5av.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.Cacalia",
+            "certificate_hash": "629c5238ded4b037e44b09f44bec6379cfef55b8"
+          }
+        },
+        {
+          "client_id": "313812641302-eoohdmks6h8jnjeh8vghb0ch2f6q58fi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBURR7SlTYuWuQIV-SONNVx1xEz0x-t0b4"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "313812641302-eoohdmks6h8jnjeh8vghb0ch2f6q58fi.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "313812641302-rn18u3jr447qpp59dtf829aoj914o9og.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.cacalia"
+              }
+            }
+          ]
         }
       }
     }
