@@ -23,9 +23,6 @@ Map<String, dynamic> profileList = {}; // fidに対応するプロフィール�
 List<List<Object>> cardList = []; // card使用するデータをfriendの数だけ用意
 List<Object> addList = []; // cardList追加時に使用
 
-Map<String, dynamic> tweetList = {};
-List<List<Object>> postList = []; // post使用するデータをfriendの数だけ用意
-
 String fid = "";
 //uid取得
 String myuid = Authentication().getuid();
@@ -42,7 +39,6 @@ class _HomeState extends State<Home> {
 
   Future<void> fetchCardData() async {
     await getcard();
-    await gettweet();
     setState(() {}); // データ取得後にUIを更新
   }
 
@@ -54,6 +50,7 @@ class _HomeState extends State<Home> {
     friends = await getFriends();
 
     if (friends != null) {
+      print("get cards.");
       for (int i = 0; i < friends.length; i++) {
         fid = friends[i];
         profileList[fid] = await getProfile(fid);
@@ -82,42 +79,13 @@ class _HomeState extends State<Home> {
     setState(() {});
   }
 
-  Future<void> gettweet() async {
-    print("home:gettweet()");
-    tweetList = {}; // リフレッシュ
-    friends = await getFriends();
-
-    if (friends != null) {
-      for (int i = 0; i < friends.length; i++) {
-        fid = friends[i];
-        tweetList[fid] = await getTweets(fid);
-        print("tweetlist");
-        print(tweetList);
-
-        // 毎回新しいリストを作成して追加(リフレッシュ)
-        List<Object> addList = [
-          tweetList[fid]["tweet"],
-          tweetList[fid]["timestamp"],
-        ];
-        postList.add(addList);
-      }
-    }
-
-    print(postList);
-
-
-  }
-
   final ScrollController _controller = ScrollController();
   bool isVisible = false; // 初期値
 
   @override
   Widget build(BuildContext context) {
     if (mounted) {
-
-
       if (friends.isEmpty || cardList.isEmpty) {
-
         return Center(child: CircularProgressIndicator()); // ローディング中
       }
       return Scaffold(

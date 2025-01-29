@@ -176,22 +176,30 @@ class _SignUpNamePageState extends State<SignUpNamePage> {
                     try {
                       // TODO: 認証用メールを飛ばして確認次第遷移する処理
 
-                      // final FirebaseAuth auth = FirebaseAuth.instance;
-                      // final UserCredential result =
-                      //     await auth.createUserWithEmailAndPassword(
-                      //   email: _email,
-                      //   password: _pass,
-                      // );
-                      // // 登録したユーザー情報
-                      // User? user = result.user;
-                      // //print("ユーザ登録しました ${result.email} , ${.uid}");
-
-                      final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                      final FirebaseAuth auth = FirebaseAuth.instance;
+                      final UserCredential result =
+                          await auth.createUserWithEmailAndPassword(
                         email: _email,
                         password: _pass,
                       );
-                      
-                      context.go('/');
+                      print("seccess");
+                      // // 登録したユーザー情報
+                      // User? user = await result.user!;
+                      // print("ユーザ登録しました ${user.email} , ${user.uid}");
+
+                      // メール/パスワードでログイン
+                      final User? loginuser = (await FirebaseAuth.instance
+                              .signInWithEmailAndPassword(
+                                  email: _email, password: _pass))
+                          .user;
+                      // final String? uid = user?.uid;
+                      if (loginuser != null) {
+                        print("ログインしました ${loginuser.email} , ${loginuser.uid}");
+                        //setUser();
+                        // ignore: use_build_context_synchronously
+                        context.go('/home');
+                      }
+                      // context.go('/');
                     } catch (e) {
                       print("失敗");
                       print(e);
