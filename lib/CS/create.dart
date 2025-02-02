@@ -171,7 +171,7 @@ Future<Map<String, dynamic>> getProfile(String uid) async {
     return doc.data()!;
   } catch (e) {
     print('Error getting profile: $e'); // エラーをキャッチ
-    return <String, >{};
+    return <String, dynamic>{};
   }
 }
 

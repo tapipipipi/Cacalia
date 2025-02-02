@@ -1,5 +1,6 @@
 import 'package:cacalia/features/home/pages/home.dart';
 import 'package:flutter/material.dart';
+import '../CS/create.dart';
 
 class Tweet extends StatelessWidget {
   // 変数を宣言
@@ -33,78 +34,48 @@ class Tweet extends StatelessWidget {
         Card(
           elevation: 5, // 影の離れ具合
           shadowColor: Colors.black, // 影の色
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
           child: Container(
             height: 159,
             width: 270,
             alignment: const Alignment(-0.8, 0),
-            decoration: const BoxDecoration(
-                image: DecorationImage(
-              image: AssetImage('assets/images/Rectangle_75.png'),
-              fit: BoxFit.cover,
-            )),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20), // ✅ 画像や背景を丸くする
+              border: Border.all( // ✅ 枠線を追加
+                color: Colors.grey, // 枠線の色
+                width: 2, // 枠線の太さ
+              ),
+            ),            
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start, // 左揃え
               children: [
                 const Padding(padding: EdgeInsets.only(top: 15)),
-                // 読み仮名
-                Text(
-                  cardList[userId][1] as String,
-                  style: const TextStyle(fontSize: 14),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16), // アイコンと名前の左側にマージンを追加
+                  child: Row(
+                    children: [
+                      Icon(Icons.person), // アイコンを追加
+                      const SizedBox(width: 8), // アイコンとテキストの間にスペースを追加
+                      Text(
+                        cardList[userId][1] as String, // 名前や読み仮名
+                        style: const TextStyle(fontSize: 14),
+                      ),
+                    ],
+                  ),
                 ),
-                // 名前
-                Text(
-                  cardList[userId][0] as String,
-                  style: const TextStyle(fontSize: 24),
-                )
+                Padding(
+                  padding: const EdgeInsets.only(left: 16), // 内容の左側にマージンを追加
+                  child: Text(
+                    cardList[userId][0] as String, // 内容
+                    style: const TextStyle(fontSize: 24),
+                  ),
+                ),
               ],
             ),
           ),
         ),
-        (tweet
-
-
-
-
-
-
-
-
-
-
-
-        
-            ?
-            // 影の部分
-            Container(
-                margin: EdgeInsets.only(left: 210),
-                height: 159,
-                width: 60,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Colors.transparent, Colors.grey.shade400],
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                  ),
-                ),
-                child: const Column(
-                  children: [
-                    Padding(padding: EdgeInsets.only(top: 10)),
-                    //Todo:tureなら黄色、falseなら白にする処理
-                    Icon(
-                      Icons.lightbulb_rounded,
-                      color: Color.fromRGBO(247, 204, 65, 1),
-                      // color: Colors.white,
-                    ),
-                    SizedBox(height: 10), // margin代わり
-                    Icon(
-                      Icons.event,
-                      // color: Color.fromRGBO(247, 204, 65, 1),
-                      color: Colors.white,
-                    ),
-                  ],
-                ),
-              )
-            : Container())
       ],
     );
   }

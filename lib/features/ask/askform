@@ -1,4 +1,4 @@
-// 掲示板画面
+// Ask画面
 import 'package:cacalia/component/tweet.dart';
 import 'package:cacalia/store.dart';
 import 'package:flutter/material.dart';
@@ -7,11 +7,11 @@ import '../../../Auth/Authentication.dart';
 import '../../../CS/create.dart';
 import 'package:go_router/go_router.dart';
 
-class Timeline extends StatefulWidget {
-  const Timeline({super.key});
+class Ask extends StatefulWidget {
+  const Ask({super.key});
 
   @override
-  _TimelineState createState() => _TimelineState();
+  _AskState createState() => _AskState();
 }
 
 List<String> friends = []; // friend一覧格納
@@ -24,7 +24,7 @@ String fid = "";
 String myuid = Authentication().getuid();
 int mycard = 0;
 
-class _TimelineState extends State<Timeline> {
+class _AskState extends State<Ask> {
   @override
   void initState() {
     super.initState();
@@ -33,13 +33,10 @@ class _TimelineState extends State<Timeline> {
     fetchCardData(); // 非同期データを初期化時に取得
   }
 
-Future<void> fetchCardData() async {
-  await getcard();
-  if (mounted) {  // mountedがtrueかどうかを確認
+  Future<void> fetchCardData() async {
+    await getcard();
     setState(() {}); // データ取得後にUIを更新
   }
-}
-
 
   // cardListにフレンドごとの名前と読みを追加していく
   Future<void> getcard() async {
@@ -60,7 +57,7 @@ Future<void> fetchCardData() async {
       ];
       cardList.add(addList);
     }
-  
+
     // 最終的にできるcardlistの最後尾を代入
     mycard = cardList.length;
 
@@ -86,98 +83,71 @@ Future<void> fetchCardData() async {
         return Center(child: CircularProgressIndicator()); // ローディング中
       }
       return Scaffold(
-      appBar: AppBar(
-        title: Image.asset(
-          'assets/images/cacalia.png',
+        appBar: AppBar(
+          title: Image.asset(
+            'assets/images/cacalia.png',
+          ),
+          toolbarHeight: 80,
+          centerTitle: true,
+          backgroundColor: const Color.fromRGBO(215, 230, 239, 1),
         ),
-        toolbarHeight: 80,
-        centerTitle: true,
-        backgroundColor: const Color.fromRGBO(215, 230, 239, 1),
-      ),
-        //自分のアイコンがうまく表示されない
-        // leading: Container(
-        //   height: 47,
-        //   padding: const EdgeInsets.only(left: 20), // アイコンとの間にスペースを追加
-        //   margin: const EdgeInsets.only(left: 45), // 左に空間を追加
-        //   child: ElevatedButton(
-        //     style: ElevatedButton.styleFrom(
-        //       backgroundColor: const Color.fromRGBO(17, 90, 132, 1),
-        //       shape: const CircleBorder(),
-        //       padding: EdgeInsets.zero,
-        //     ),
-        //     onPressed: () {
-        //       context.go('/exchange');
-        //     },
-        //     child: Image.asset(
-        //       'assets/images/exchangeBtn.png',  // 画像アイコンを指定
-        //       height: 40,  // アイコンの高さ
-        //       width: 40,   // アイコンの幅
-        //       fit: BoxFit.contain,  // 画像がつぶれないように調整
-        //     ),
-        //   ),
-        // ),
-
-
         body: Container(
           color: const Color.fromRGBO(215, 230, 239, 1),
           width: double.infinity,
           height: double.infinity,
           child: Column(
             children: [
-              // ここでRowを追加
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                
                 children: [
-                    // 1つ目のTextをInkWellでラップ
                   InkWell(
                     onTap: () {
                       context.go('/ask');
                     },
                     child: Text(
-                      '質問', // ここに表示したい文字を入れる
+                      '質問',
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xff115A84), // 文字の色を設定
+                        color: Color(0xff115A84),
                       ),
                     ),
                   ),
-                  SizedBox(width: 60), // テキスト間のスペース
+                  SizedBox(width: 60),
                   InkWell(
                     onTap: () {
+                      context.go('/timeline');
+
                     },
                     child: Text(
-                      '投稿', 
+                      '投稿',
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
-                        color:Color(0xff115A84), // 文字の色を設定
+                        color: Color(0xff115A84),
                       ),
                     ),
                   ),
-                  SizedBox(width: 60), // テキスト間のスペース
-                  // 3つ目のTextをInkWellでラップ
+                  SizedBox(width: 60),
                   InkWell(
                     onTap: () {
                       context.go('/recruitment');
                     },
                     child: Text(
-                      '募集', // ここに表示したい文字を入れる
+                      '募集',
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
-                        color:Color(0xff115A84), // 文字の色を設定
+                        color: Color(0xff115A84),
                       ),
                     ),
                   ),
                 ],
               ),
-              // Rowの下に引く線
               Container(
-                height: 1, // 線の太さ
-                color: Colors.grey, // 線の色
-                width: 250, // 幅を親コンテナに合わせる
+                height: 1,
+                color: Colors.grey,
+                width: 250,
               ),
               SizedBox(
                 height: 53,
@@ -221,7 +191,6 @@ Future<void> fetchCardData() async {
                   children: [
                     Stack(
                       children: [
-                        //sortのダイアログ
                         Visibility(
                           visible: isVisible,
                           child: Container(
@@ -238,7 +207,7 @@ Future<void> fetchCardData() async {
                     Expanded(
                       child: ListView.builder(
                         padding: const EdgeInsets.only(top: 20),
-                        itemCount: mycard, // フレンドの数だけ表示
+                        itemCount: mycard,
                         itemBuilder: (context, index) {
                           return Transform.translate(
                             offset: const Offset(0, 0),
@@ -264,7 +233,6 @@ Future<void> fetchCardData() async {
     }
   }
 
-  //sort押した時のダイアログ？表示の操作
   void toggleShowText() {
     isVisible = !isVisible;
   }
