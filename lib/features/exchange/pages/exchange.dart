@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:cacalia/features/home/pages/home.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 // import 'package:get/get.dart';
@@ -565,39 +566,104 @@ class _ExchangeState extends State<ExchangePage>
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
+        //ダイアログ表示
+        return Dialog(
+          //背景色指定
+          backgroundColor: const Color(0xFF242B2E),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
+            //ダイアログの角を丸くする
+            borderRadius: BorderRadius.all(Radius.circular(13)),
+            side: BorderSide(color: Color(0xFFD9D9D9), width: 3.0),
           ),
-          content: SizedBox(
-            width: MediaQuery.of(context).size.width * 0.8,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text(
-                  'この話題で話してみませんか？',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
+          child: Column(
+            //ダイアログを最小の大きさに変更する
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              //上のバー
+              Container(
+                height: 20,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFD9D9D9),
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(15),
+                      topRight: Radius.circular(15)),
+                ),
+                child: const Row(
+                  //Mac風のボタンっぽいやつ
+                  children: [
+                    SizedBox(width: 10),
+                    CircleAvatar(radius: 5, backgroundColor: Color(0xFFFF5F57)),
+                    SizedBox(width: 8),
+                    CircleAvatar(radius: 5, backgroundColor: Color(0xFFFEBB2E)),
+                    SizedBox(width: 8),
+                    CircleAvatar(radius: 5, backgroundColor: Color(0xFF28C840)),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                '> こんな話題で話してみませんか？',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontFamily: 'DotGothic16',
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 20),
+              Text(
+                '$generatedText\n',
+                style: const TextStyle(
                     fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                    color: Color(0XFF39E329),
+                    fontFamily: 'DotGothic16'),
+              ),
+              SizedBox(
+                height: 60,
+                //ボタンにアニメーション追加
+                child: SpringButton(
+                  SpringButtonType.WithOpacity,
+                  scaleCoefficient: 0.90,
+                  duration: 500,
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: Container(
+                      width: 120,
+                      height: 30,
+                      decoration: const BoxDecoration(
+                        color: Color(0xFF115A84),
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          'ホームへ',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            fontFamily: 'DotGothic16',
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-                Text(
-                  '$generatedText\n',
-                  style: const TextStyle(fontSize: 16),
-                ),
-                TextButton(
-                    onPressed: () {
-                      updateFriend('friend_uid', decodereceived['u_id']);
+                  //ボタンを押した時の処理
+                  onTapDown: (_) {
+                    Timer(Duration(milliseconds: 100), () {
+                      if (decodereceived['u_id'] != null) {
+                        updateFriend('friend_uid', decodereceived['u_id']);
+                      }
+                      Navigator.pop(context);
                       context.go('/home');
-                      print('ホームに移動');
-                    },
-                    child: const Text(
-                      'ホームへ',
-                      style: TextStyle(fontSize: 16),
-                    ))
-              ],
-            ),
+                    });
+                  },
+                  onLongPress: null,
+                  onLongPressEnd: null,
+                ),
+              ),
+            ],
           ),
         );
       },
@@ -653,8 +719,11 @@ class _ExchangeState extends State<ExchangePage>
         return Dialog(
           //背景色指定
           backgroundColor: const Color(0xFF242B2E),
-          //ダイアログの角を丸くしないようにする
-          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+          shape: RoundedRectangleBorder(
+            //ダイアログの角を丸くする
+            borderRadius: BorderRadius.all(Radius.circular(13)),
+            side: BorderSide(color: Color(0xFFD9D9D9), width: 3.0),
+          ),
           child: Column(
             //ダイアログを最小の大きさに変更する
             mainAxisSize: MainAxisSize.min,
@@ -662,7 +731,13 @@ class _ExchangeState extends State<ExchangePage>
               //上のバー
               Container(
                 height: 20,
-                color: const Color(0xFFD9D9D9),
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFD9D9D9),
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(15),
+                      topRight: Radius.circular(15)),
+                ),
                 child: const Row(
                   //Mac風のボタンっぽいやつ
                   children: [
@@ -681,7 +756,10 @@ class _ExchangeState extends State<ExchangePage>
                 alignment: Alignment.topLeft,
                 child: const Text(
                   'Connected with...',
-                  style: TextStyle(fontSize: 20, color: Colors.white),
+                  style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.white,
+                      fontFamily: 'DotGothic16'),
                 ),
               ),
               const SizedBox(height: 15),
@@ -706,9 +784,9 @@ class _ExchangeState extends State<ExchangePage>
                       child: Text(
                         receivedData['name'],
                         style: const TextStyle(
-                          fontSize: 25,
-                          color: Colors.white,
-                        ),
+                            fontSize: 25,
+                            color: Colors.white,
+                            fontFamily: 'DotGothic16'),
                       ),
                     ),
                   )
@@ -730,12 +808,16 @@ class _ExchangeState extends State<ExchangePage>
                     // 読み仮名
                     Text(
                       receivedData['read_name'] as String,
-                      style: const TextStyle(fontSize: 14),
+                      style: const TextStyle(
+                          fontSize: 14, fontFamily: 'DotGothic16'),
                     ),
                     // 名前
                     Text(
                       receivedData['name'] as String,
-                      style: const TextStyle(fontSize: 24),
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontFamily: 'DotGothic16',
+                      ),
                     )
                   ],
                 ),
@@ -747,6 +829,7 @@ class _ExchangeState extends State<ExchangePage>
                 style: TextStyle(
                   fontSize: 15,
                   color: Colors.white,
+                  fontFamily: 'DotGothic16',
                 ),
               ),
               const SizedBox(height: 10),
@@ -756,7 +839,7 @@ class _ExchangeState extends State<ExchangePage>
                 //ボタンにアニメーション追加
                 child: SpringButton(
                   SpringButtonType.WithOpacity,
-                  scaleCoefficient: 0.95,
+                  scaleCoefficient: 0.75,
                   duration: 500,
                   Padding(
                     padding: const EdgeInsets.only(bottom: 10),
@@ -774,6 +857,7 @@ class _ExchangeState extends State<ExchangePage>
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                             fontSize: 20,
+                            fontFamily: 'DotGothic16',
                           ),
                         ),
                       ),
@@ -781,7 +865,10 @@ class _ExchangeState extends State<ExchangePage>
                   ),
                   //ボタンを押した時の処理
                   onTapDown: (_) {
-                    _showProfileDialog(); //AI提案表示
+                    Timer(Duration(milliseconds: 100), () {
+                      Navigator.pop(context);
+                      _showProfileDialog(); //AI提案表示
+                    });
                   },
                   onLongPress: null,
                   onLongPressEnd: null,
