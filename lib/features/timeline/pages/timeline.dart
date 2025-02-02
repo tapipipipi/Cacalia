@@ -1,12 +1,8 @@
 // 掲示板画面
-import 'package:cacalia/CS/profile.dart';
 import 'package:cacalia/component/tweet.dart';
 import 'package:cacalia/store.dart';
 import 'package:flutter/material.dart';
-import 'package:cacalia/component/tweet.dart';
 import 'package:cacalia/component/footer.dart';
-import 'package:cacalia/component/profileModal.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../../Auth/Authentication.dart';
 import '../../../CS/create.dart';
 import 'package:go_router/go_router.dart';
@@ -49,21 +45,19 @@ class _TimelineState extends State<Timeline> {
     profileList = {}; // リフレッシュ
     friends = await getFriends();
 
-    if (friends != null) {
-      print("get cards.");
-      for (int i = 0; i < friends.length; i++) {
-        fid = friends[i];
-        profileList[fid] = await getProfile(fid);
+    print("get cards.");
+    for (int i = 0; i < friends.length; i++) {
+      fid = friends[i];
+      profileList[fid] = await getProfile(fid);
 
-        // 毎回新しいリストを作成して追加(リフレッシュ)
-        List<Object> addList = [
-          profileList[fid]["name"],
-          profileList[fid]["read_name"],
-        ];
-        cardList.add(addList);
-      }
+      // 毎回新しいリストを作成して追加(リフレッシュ)
+      List<Object> addList = [
+        profileList[fid]["name"],
+        profileList[fid]["read_name"],
+      ];
+      cardList.add(addList);
     }
-
+  
     // 最終的にできるcardlistの最後尾を代入
     mycard = cardList.length;
 
@@ -134,7 +128,7 @@ class _TimelineState extends State<Timeline> {
           height: double.infinity,
           child: Column(
             children: [
-              Container(
+              SizedBox(
                 height: 53,
                 width: 350,
                 // 検索バー

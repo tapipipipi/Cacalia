@@ -1,6 +1,5 @@
 import 'package:cacalia/features/home/pages/home.dart';
 import 'package:flutter/material.dart';
-import '../CS/create.dart';
 
 class Tweet extends StatelessWidget {
   // 変数を宣言

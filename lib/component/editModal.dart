@@ -41,7 +41,7 @@ class _ThemeEditorState extends State<ThemeEditor> {
   @override
   Widget build(BuildContext context) {
     // ignore: deprecated_member_use
-    return Container(
+    return SizedBox(
       height: MediaQuery.of(context).size.height * 0.9, // 高さを動的に設定
       width: double.infinity,
       child: Column(
