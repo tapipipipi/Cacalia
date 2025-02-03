@@ -18,8 +18,10 @@ class _LoginPageState extends State<LoginPage> {
   final _passwordController = TextEditingController();
 
   // 入力したメールアドレス・パスワード
-  String _email = 'ゲスト';
+  String _email = '2230360@ecc.ac.com';
   String _pass = '123qwecc';
+
+  
 
   @override
   Widget build(BuildContext context) {
