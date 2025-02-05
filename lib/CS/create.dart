@@ -80,6 +80,8 @@ Map<String, dynamic> profiles = <String, dynamic>{
 
 // uid 格納していくスタイル
 Map<String, dynamic> friends = <String, dynamic>{"friend_uid": []};
+Map<String, dynamic> tweets = <String, dynamic>{"tweets": []};
+
 
 /// ---------------------------------------
 
