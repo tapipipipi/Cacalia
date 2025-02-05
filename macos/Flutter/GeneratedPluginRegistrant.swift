@@ -12,6 +12,7 @@ import firebase_auth
 import firebase_core
 import firebase_storage
 import flutter_blue_plus_macos
+import flutter_blue_plus_darwin
 import google_sign_in_ios
 import location
 

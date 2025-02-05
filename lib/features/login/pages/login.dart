@@ -17,10 +17,12 @@ class _LoginPageState extends State<LoginPage> {
   final _passwordController = TextEditingController();
 
   // 入力したメールアドレス・パスワード
+
   String _email = '2230360@ecc.ac.com';
   String _pass = '123qwecc';
   String def = "2230360@ecc.ac.com";
   String pas = "123qwecc";
+
 
   @override
   Widget build(BuildContext context) {
@@ -165,6 +167,10 @@ class _LoginPageState extends State<LoginPage> {
                         print('User already signed in: ${nowuser.email}');
                         context.go('/home'); //これよくない
                       } else {
+                        if (_email == "") {
+                          _email = defmail;
+                          _pass = defpass;
+                        }
                         // Sign-in logic
                         // メール/パスワードでログイン
                         if (_email == "") {
