@@ -168,8 +168,8 @@ class _LoginPageState extends State<LoginPage> {
                         context.go('/home'); //これよくない
                       } else {
                         if (_email == "") {
-                          _email = defmail;
-                          _pass = defpass;
+                          _email = def;
+                          _pass = def;
                         }
                         // Sign-in logic
                         // メール/パスワードでログイン

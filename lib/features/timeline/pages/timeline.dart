@@ -33,13 +33,13 @@ class _TimelineState extends State<Timeline> {
     fetchCardData(); // 非同期データを初期化時に取得
   }
 
-Future<void> fetchCardData() async {
-  await getcard();
-  if (mounted) {  // mountedがtrueかどうかを確認
-    setState(() {}); // データ取得後にUIを更新
+  Future<void> fetchCardData() async {
+    await getcard();
+    if (mounted) {
+      // mountedがtrueかどうかを確認
+      setState(() {}); // データ取得後にUIを更新
+    }
   }
-}
-
 
   // cardListにフレンドごとの名前と読みを追加していく
   Future<void> getcard() async {
@@ -60,7 +60,7 @@ Future<void> fetchCardData() async {
       ];
       cardList.add(addList);
     }
-  
+
     // 最終的にできるcardlistの最後尾を代入
     mycard = cardList.length;
 
@@ -86,14 +86,14 @@ Future<void> fetchCardData() async {
         return Center(child: CircularProgressIndicator()); // ローディング中
       }
       return Scaffold(
-      appBar: AppBar(
-        title: Image.asset(
-          'assets/images/cacalia.png',
+        appBar: AppBar(
+          title: Image.asset(
+            'assets/images/cacalia.png',
+          ),
+          toolbarHeight: 80,
+          centerTitle: true,
+          backgroundColor: const Color.fromRGBO(215, 230, 239, 1),
         ),
-        toolbarHeight: 80,
-        centerTitle: true,
-        backgroundColor: const Color.fromRGBO(215, 230, 239, 1),
-      ),
         //自分のアイコンがうまく表示されない
         // leading: Container(
         //   height: 47,
@@ -117,7 +117,6 @@ Future<void> fetchCardData() async {
         //   ),
         // ),
 
-
         body: Container(
           color: const Color.fromRGBO(215, 230, 239, 1),
           width: double.infinity,
@@ -127,9 +126,8 @@ Future<void> fetchCardData() async {
               // ここでRowを追加
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                
                 children: [
-                    // 1つ目のTextをInkWellでラップ
+                  // 1つ目のTextをInkWellでラップ
                   InkWell(
                     onTap: () {
                       context.go('/ask');
@@ -145,14 +143,13 @@ Future<void> fetchCardData() async {
                   ),
                   SizedBox(width: 60), // テキスト間のスペース
                   InkWell(
-                    onTap: () {
-                    },
+                    onTap: () {},
                     child: Text(
-                      '投稿', 
+                      '投稿',
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
-                        color:Color(0xff115A84), // 文字の色を設定
+                        color: Color(0xff115A84), // 文字の色を設定
                       ),
                     ),
                   ),
@@ -167,7 +164,7 @@ Future<void> fetchCardData() async {
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
-                        color:Color(0xff115A84), // 文字の色を設定
+                        color: Color(0xff115A84), // 文字の色を設定
                       ),
                     ),
                   ),
@@ -194,12 +191,14 @@ Future<void> fetchCardData() async {
                           hintText: '検索',
                           hintStyle: const TextStyle(fontFamily: 'DotGothic16'),
                           prefixIcon: const Icon(Icons.search),
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                          contentPadding:
+                              const EdgeInsets.symmetric(horizontal: 16),
                           filled: true,
                           fillColor: const Color.fromRGBO(161, 161, 161, 1),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5),
-                            borderSide: const BorderSide(color: Color.fromRGBO(161, 161, 161, 1)),
+                            borderSide: const BorderSide(
+                                color: Color.fromRGBO(161, 161, 161, 1)),
                           ),
                         ),
                       ),

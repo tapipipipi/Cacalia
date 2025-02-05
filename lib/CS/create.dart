@@ -222,7 +222,7 @@ Future<List<String>> getFriends() async {
     Map<String, dynamic>? data = doc.data();
 
     // 配列フィールドを取り出す
-    if (data != null && data[fieldName] != null) {
+    if (data![fieldName] != null) {
       return (data[fieldName] as List<dynamic>).cast<String>();
     } else {
       throw Exception("Field $fieldName does not exist or is null");
