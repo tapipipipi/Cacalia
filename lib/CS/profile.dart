@@ -8,7 +8,7 @@ import './create.dart';
 // このページではdbの操作を行う。ボタンを押すとそれぞれの処理が実行される
 
 class Profile extends StatelessWidget {
-  const Profile({Key? key}) : super(key: key);
+  const Profile({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class Profile extends StatelessWidget {
 }
 
 class editProfilePage extends StatefulWidget {
-  const editProfilePage({Key? key}) : super(key: key);
+  const editProfilePage({super.key});
 
   @override
   // ignore: library_private_types_in_public_api

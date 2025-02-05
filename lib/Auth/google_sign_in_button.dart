@@ -4,6 +4,8 @@ import 'Authentication.dart';
 import 'user_info_screen.dart';
 
 class GoogleSignInButton extends StatefulWidget {
+  const GoogleSignInButton({super.key});
+
   @override
   _GoogleSignInButtonState createState() => _GoogleSignInButtonState();
 }
@@ -21,8 +23,8 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
             )
           : OutlinedButton(
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.white),
-                shape: MaterialStateProperty.all(
+                backgroundColor: WidgetStateProperty.all(Colors.white),
+                shape: WidgetStateProperty.all(
                   RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(40),
                   ),

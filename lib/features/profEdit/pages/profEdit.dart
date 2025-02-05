@@ -2,7 +2,6 @@
 import 'package:cacalia/CS/create.dart';
 // ignore_for_file: unnecessary_string_interpolations
 
-import 'dart:collection';
 
 // import 'package:cacalia/component/editModal.dart';
 import 'package:flutter/material.dart';
@@ -49,9 +48,9 @@ class ProfEdit extends StatelessWidget {
     for (int i = 0; i < controllers.length; i++) {
       controllers[i].text = values[i];
     }
-    controllers.forEach((controller) {
+    for (var controller in controllers) {
       print('Controller text: ${controller.text}');
-    });
+    }
   }
 
   @override
@@ -240,7 +239,7 @@ class Category extends Container {
   String categoryName; // key
   String value; // value
   final TextEditingController feildcontroller;
-  Category(this.categoryName, this.value, this.feildcontroller);
+  Category(this.categoryName, this.value, this.feildcontroller, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -306,7 +305,7 @@ class _ThemeEditorState extends State<ThemeEditor> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: MediaQuery.of(context).size.height * 0.9,
       width: double.infinity,
       child: Column(

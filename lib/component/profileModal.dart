@@ -191,7 +191,7 @@ class Category extends Container {
   String categoryName;
   String value;
 
-  Category(this.categoryName, this.value);
+  Category(this.categoryName, this.value, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -220,7 +220,7 @@ class Category extends Container {
             ),
           ),
         ),
-        Container(
+        SizedBox(
           height: 100,
           width: 240,
           child: Text(
