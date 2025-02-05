@@ -1,6 +1,5 @@
 import 'package:cacalia/store.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 
 //UUIDを作成するライブラリ
 import 'package:uuid/uuid.dart';
@@ -174,7 +173,7 @@ Future<Map<String, dynamic>> getProfile(String uid) async {
     return doc.data()!;
   } catch (e) {
     print('Error getting profile: $e'); // エラーをキャッチ
-    return Map();
+    return <String, dynamic>{};
   }
 }
 
@@ -225,7 +224,7 @@ Future<List<String>> getFriends() async {
     Map<String, dynamic>? data = doc.data();
 
     // 配列フィールドを取り出す
-    if (data != null && data[fieldName] != null) {
+    if (data![fieldName] != null) {
       return (data[fieldName] as List<dynamic>).cast<String>();
     } else {
       throw Exception("Field $fieldName does not exist or is null");

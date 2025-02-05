@@ -1,4 +1,3 @@
-import 'package:cacalia/features/home/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../Auth/Authentication.dart';
@@ -18,8 +17,12 @@ class _LoginPageState extends State<LoginPage> {
   final _passwordController = TextEditingController();
 
   // 入力したメールアドレス・パスワード
+
   String _email = '2230360@ecc.ac.com';
   String _pass = '123qwecc';
+  String def = "2230360@ecc.ac.com";
+  String pas = "123qwecc";
+
 
   
 
@@ -166,8 +169,17 @@ class _LoginPageState extends State<LoginPage> {
                         print('User already signed in: ${nowuser.email}');
                         context.go('/home'); //これよくない
                       } else {
+                        if (_email == "") {
+                          _email = def;
+                          _pass = def;
+                        }
                         // Sign-in logic
                         // メール/パスワードでログイン
+                        if (_email == "") {
+                          _email = def;
+                          _pass = pas;
+                        }
+
                         final User? user = (await FirebaseAuth.instance
                                 .signInWithEmailAndPassword(
                                     email: _email, password: _pass))
