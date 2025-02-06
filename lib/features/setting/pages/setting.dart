@@ -1,11 +1,9 @@
 // アプリ設定画面
 import 'package:cacalia/features/home/pages/home.dart';
-import 'package:cacalia/store.dart';
 import 'package:flutter/material.dart';
 import 'package:cacalia/component/footer.dart';
 import 'package:cacalia/component/card.dart';
 import 'package:go_router/go_router.dart';
-import '../../../Auth/Authentication.dart';
 
 class Setting extends StatelessWidget {
   const Setting({super.key});
