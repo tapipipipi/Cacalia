@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../../../CS/create.dart';
+import '../../../Auth/Authentication.dart';
 
 // Future shinUp() async {
 //   try {
@@ -61,7 +63,6 @@ class _SignUpNamePageState extends State<SignUpNamePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFD7E6EF),
       body: ListView(
         padding: EdgeInsets.zero, // 追加: paddingをゼロに設定
         children: [
@@ -75,12 +76,10 @@ class _SignUpNamePageState extends State<SignUpNamePage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const SizedBox(height: 64), // 高さを調整して全体を下げる
                 Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 24.0),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(30),
+                    borderRadius: BorderRadius.circular(10),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.1),
@@ -95,7 +94,7 @@ class _SignUpNamePageState extends State<SignUpNamePage> {
                     decoration: const InputDecoration(
                       labelText: 'メールアドレス',
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(30)),
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
                         borderSide: BorderSide.none,
                       ),
                       filled: true,
@@ -120,10 +119,9 @@ class _SignUpNamePageState extends State<SignUpNamePage> {
                 ),
                 const SizedBox(height: 16),
                 Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 24.0), // 左右にスペースを追加
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                    borderRadius: BorderRadius.circular(10),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.1),
@@ -139,7 +137,7 @@ class _SignUpNamePageState extends State<SignUpNamePage> {
                       // labelText: 'ユーザー名',
                       labelText: 'パスワード',
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(30)),
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
                         borderSide: BorderSide.none,
                       ),
                       filled: true,
