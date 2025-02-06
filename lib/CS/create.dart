@@ -84,7 +84,7 @@ Map<String, dynamic> profiles = <String, dynamic>{
 
 // uid 格納していくスタイル
 Map<String, dynamic> friends = <String, dynamic>{"friend_uid": []};
-Map<String, dynamic> tweets = <String, dynamic>{"tweets": []};
+Map<String, dynamic> tweets = <String, dynamic>{"ここからはじめよう": Timestamp.now()};
 
 /// ---------------------------------------
 
@@ -134,10 +134,10 @@ updateFriend(String key, String val) {
 }
 
 //投稿後に呼び出される
-updateTweet(String key, String val) {
+updateTweet(String tweet, Timestamp time) {
   print("upTweet");
   mytweets.update({
-    key: FieldValue.arrayUnion([val])
+  tweet: time
   }).then((value) => print("update sucessed"),
       onError: (e) => print("Error updating document $e"));
 }
@@ -229,7 +229,7 @@ Future<String> getProfileField(String uid, String field) async {
   }
 }
 
-// １人分のユーザーの投稿を全取得 (配列で管理しているため。投稿が増えるにつれデータの構造変えないとこのままではまずいが一旦保留)
+// １人分のユーザーの投稿を全取得 (投稿が増えるにつれデータの構造変えないとこのままではまずいが一旦保留)
 Future<Map<String, dynamic>> getTweets(String uid) async {
   print("getTweet");
   try {
