@@ -1,3 +1,4 @@
+import 'package:cacalia/features/home/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../Auth/Authentication.dart';
@@ -17,19 +18,12 @@ class _LoginPageState extends State<LoginPage> {
   final _passwordController = TextEditingController();
 
   // 入力したメールアドレス・パスワード
-
-  String _email = '2230360@ecc.ac.com';
+  String _email = 'ゲスト';
   String _pass = '123qwecc';
-  String def = "2230360@ecc.ac.com";
-  String pas = "123qwecc";
-
-
-  
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFD7E6EF), // 背景色を#F5F5F5に設定
       body: ListView(
         padding: EdgeInsets.zero, // 追加: paddingをゼロに設定
         children: [
@@ -43,12 +37,10 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const SizedBox(height: 64),
                 Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 24.0), // 左右にスペースを追加
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(30), // 端を真円に設定
+                    borderRadius: BorderRadius.circular(10),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.1),
@@ -63,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
                     decoration: const InputDecoration(
                       labelText: 'メールアドレス',
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(30)), // 端を真円に設定
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
                         borderSide: BorderSide.none,
                       ),
                       filled: true,
@@ -88,10 +80,9 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 16),
                 Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 24.0), // 左右にスペースを追加
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(30), // 端を真円に設定
+                    borderRadius: BorderRadius.circular(10),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.1),
@@ -106,7 +97,7 @@ class _LoginPageState extends State<LoginPage> {
                     decoration: const InputDecoration(
                       labelText: 'パスワード',
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(30)), // 端を真円に設定
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
                         borderSide: BorderSide.none,
                       ),
                       filled: true,
@@ -130,29 +121,7 @@ class _LoginPageState extends State<LoginPage> {
                     },
                   ),
                 ),
-                const SizedBox(height: 16),
-                const Text('────────────または────────────'),
                 const SizedBox(height: 24),
-                FutureBuilder(
-                  future: Authentication.initializeFirebase(context: context),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator(); // データがまだ取得されていない場合のローディング表示
-                    } else if (snapshot.hasError) {
-                      return Text('Error initializing Firebase');
-                    } else {
-                      // データが取得された場合
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.center, // 中央に配置
-                        children: [
-                          GoogleSignInButton(),
-                          const SizedBox(height: 16), // Googleログインボタンの下にスペースを追加
-                        ],
-                      );
-                    }
-                  },
-                ),
-                const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () async {
                     print(_email);
@@ -162,6 +131,7 @@ class _LoginPageState extends State<LoginPage> {
                     //   // TODO: ログイン処理を
                     // }
                     // ------------------------------------
+
                     // TODO: ログイン処理
                     try {
                       final nowuser = FirebaseAuth.instance.currentUser;
@@ -169,17 +139,8 @@ class _LoginPageState extends State<LoginPage> {
                         print('User already signed in: ${nowuser.email}');
                         context.go('/home'); //これよくない
                       } else {
-                        if (_email == "") {
-                          _email = def;
-                          _pass = def;
-                        }
                         // Sign-in logic
                         // メール/パスワードでログイン
-                        if (_email == "") {
-                          _email = def;
-                          _pass = pas;
-                        }
-
                         final User? user = (await FirebaseAuth.instance
                                 .signInWithEmailAndPassword(
                                     email: _email, password: _pass))
@@ -189,25 +150,18 @@ class _LoginPageState extends State<LoginPage> {
                           print("ログインしました ${user.email} , ${user.uid}");
                           // ignore: use_build_context_synchronously
                           context.go('/home');
+                          // Navigator.push( //uidを渡して遷移
+                          //   context,
+                          //   MaterialPageRoute(
+                          //       builder: (context) => Home(user.uid)),
+                          // );
                         }
                       }
                     } catch (e) {
                       print(e);
                     }
                   },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue, // ボタンの色を青に設定
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10), // 角丸に設定
-                    ),
-                  ),
-                  child: const Text(
-                    'ログイン',
-                    style: TextStyle(
-                      color: Colors.white, // 文字色を白に設定
-                      fontSize: 18, // フォントサイズを大きく設定
-                    ),
-                  ),
+                  child: const Text('ログイン'),
                 ),
                 const SizedBox(height: 16),
                 // ElevatedButton(
@@ -227,11 +181,25 @@ class _LoginPageState extends State<LoginPage> {
                 //   },
                 //   child: const Text('Googleでログイン'),
                 // ),
+                FutureBuilder(
+                  future: Authentication.initializeFirebase(context: context),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator(); // データがまだ取得されていない場合のローディング表示
+                    } else if (snapshot.hasError) {
+                      return Text('Error initializing Firebase');
+                    } else {
+                      // データが取得された場合
+                      return GoogleSignInButton();
+                    }
+                  },
+                ),
+                const SizedBox(height: 16),
                 TextButton(
                   onPressed: () {
                     context.go('/signUpName');
                   },
-                  child: const Text('新規登録'),
+                  child: const Text('サインアップはこちら'),
                 ),
               ],
             ),

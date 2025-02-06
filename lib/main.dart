@@ -1,5 +1,10 @@
+import 'package:cacalia/features/home/pages/home.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'package:cacalia/config/router/route.dart'; // routerをインポート
+import 'store.dart';
 //APIキーを隠すライブラリ
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 

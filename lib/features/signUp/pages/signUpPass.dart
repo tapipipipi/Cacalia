@@ -17,7 +17,6 @@ class _SignUpPassPageState extends State<SignUpPassPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFD7E6EF),
       body: ListView(
         padding: EdgeInsets.zero, // 追加: paddingをゼロに設定
         children: [
@@ -30,12 +29,10 @@ class _SignUpPassPageState extends State<SignUpPassPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const SizedBox(height: 64), // 高さを調整して全体を下げる
                 Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 24.0), // 左右にスペースを追加
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(30), // 端を真円に設定
+                    borderRadius: BorderRadius.circular(10),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.1),
@@ -50,7 +47,7 @@ class _SignUpPassPageState extends State<SignUpPassPage> {
                     decoration: const InputDecoration(
                       labelText: 'パスワード',
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(30)), // 端を真円に設定
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
                         borderSide: BorderSide.none,
                       ),
                       filled: true,
@@ -70,10 +67,9 @@ class _SignUpPassPageState extends State<SignUpPassPage> {
                 ),
                 const SizedBox(height: 16),
                 Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 24.0), // 左右にスペースを追加
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(30), // 端を真円に設定
+                    borderRadius: BorderRadius.circular(10),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.1),
@@ -88,7 +84,7 @@ class _SignUpPassPageState extends State<SignUpPassPage> {
                     decoration: const InputDecoration(
                       labelText: 'パスワード：確認用',
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(30)), // 端を真円に設定
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
                         borderSide: BorderSide.none,
                       ),
                       filled: true,
