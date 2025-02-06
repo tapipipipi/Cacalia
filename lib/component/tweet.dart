@@ -1,6 +1,6 @@
 import 'package:cacalia/features/home/pages/home.dart';
 import 'package:flutter/material.dart';
-import '../CS/create.dart';
+import '../features/timeline/pages/timeline.dart';
 
 class Tweet extends StatelessWidget {
   // 変数を宣言
@@ -26,7 +26,7 @@ class Tweet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //cardListでフレンドの名前と読み仮名を取得している
-    // print(cardList);
+    print("tweet.dart");
 
     return Stack(
       alignment: Alignment.center,
@@ -43,23 +43,26 @@ class Tweet extends StatelessWidget {
             alignment: const Alignment(-0.8, 0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20), // ✅ 画像や背景を丸くする
-              border: Border.all( // ✅ 枠線を追加
+              border: Border.all(
+                // ✅ 枠線を追加
                 color: Colors.grey, // 枠線の色
                 width: 2, // 枠線の太さ
               ),
-            ),            
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start, // 左揃え
               children: [
                 const Padding(padding: EdgeInsets.only(top: 15)),
                 Padding(
-                  padding: const EdgeInsets.only(left: 16), // アイコンと名前の左側にマージンを追加
+                  padding:
+                      const EdgeInsets.only(left: 16), // アイコンと名前の左側にマージンを追加
                   child: Row(
                     children: [
                       Icon(Icons.person), // アイコンを追加
                       const SizedBox(width: 8), // アイコンとテキストの間にスペースを追加
                       Text(
-                        cardList[userId][1] as String, // 名前や読み仮名
+                        // tweets[userId][0] as String, // 名前や読み仮名
+                        tweets[userId][0] as String,
                         style: const TextStyle(fontSize: 14),
                       ),
                     ],
@@ -68,7 +71,8 @@ class Tweet extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(left: 16), // 内容の左側にマージンを追加
                   child: Text(
-                    cardList[userId][0] as String, // 内容
+                    // tweets[userId][2] as String, // 内容
+                    tweets[userId][1] as String,
                     style: const TextStyle(fontSize: 24),
                   ),
                 ),
