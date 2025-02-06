@@ -6,6 +6,7 @@ import 'package:uuid/uuid.dart';
 
 /// import 'package:firebase_auth/firebase_auth.dart';
 String friend = "friends"; // コレクション、ドキュメント指定用 /users/friends/friends
+String tweet = "tweets";
 String profile = "profile";
 String users = "users"; // コレクション指定用 /users
 String ini = ""; // 本番用 profileの初期値
@@ -23,6 +24,7 @@ final mycollection = db // コレクション名、usersは固定にしてuser�
     .collection(users)
     .doc(uid);
 final myfriends = mycollection.collection(friend).doc(friend);
+final mytweets = mycollection.collection(tweet).doc(tweet);
 
 // final createuser = db.collection(users).doc("aVhf5tTSWNRAmFAaikon0hyl08C3");
 
@@ -75,13 +77,14 @@ Map<String, dynamic> profiles = <String, dynamic>{
   "background": "ハッカソン企業賞獲得しました！",
   "bairth": "1/1",
   "serviceUuid": "forble",
-  "charactaristicuuid": "forble"
+  "charactaristicuuid": "forble",
+  "wigetteme": "1", // テーマカラー
+  "chartheme": "1" // 字体
 };
 
 // uid 格納していくスタイル
 Map<String, dynamic> friends = <String, dynamic>{"friend_uid": []};
-Map<String, dynamic> tweets = <String, dynamic>{"tweets": []};
-
+Map<String, dynamic> tweets = <String, dynamic>{"ここからはじめよう": Timestamp.now()};
 
 /// ---------------------------------------
 
@@ -108,6 +111,12 @@ void setFriend() {
       .onError((e, _) => print("Error writing document: $e")); // errMessage
 }
 
+void setTweet() {
+  mytweets
+      .set(tweets, SetOptions(merge: true))
+      .onError((e, _) => print("Error writing document: $e")); // errMessage
+}
+
 /// データ更新　プロフィール編集時に使用
 /// update( {更新したいカラム : 値} )
 /// 今回transactionを使用しない(あったほうがオシャレやけど)
@@ -120,6 +129,15 @@ void updateProfile(String key, String val) {
 updateFriend(String key, String val) {
   myfriends.update({
     key: FieldValue.arrayUnion([val])
+  }).then((value) => print("update sucessed"),
+      onError: (e) => print("Error updating document $e"));
+}
+
+//投稿後に呼び出される
+updateTweet(String tweet, Timestamp time) {
+  print("upTweet");
+  mytweets.update({
+  tweet: time
   }).then((value) => print("update sucessed"),
       onError: (e) => print("Error updating document $e"));
 }
@@ -166,7 +184,7 @@ Future<Map<String, dynamic>> getProfile(String uid) async {
     if (!doc.exists || doc.data() == null) {
       print(uid);
       setUser(uid); // userprofike作成
-      setFriend();  // freendlist作成
+      setFriend(); // freendlist作成
       print("serUser()successed");
       throw Exception('Document does not exist or has no data');
     }
@@ -179,14 +197,14 @@ Future<Map<String, dynamic>> getProfile(String uid) async {
 
 //ユーザのUUIDを生成
 _generateUuids() {
-    String serviceUuid = uuid.v4();
-    String charactaristicuuid = uuid.v4();
-    print(serviceUuid);
-    print(charactaristicuuid);
-    updateProfile("serviceUuid", serviceUuid);
-    updateProfile("charactaristicuuid", charactaristicuuid);
-    print('UUIDを作成しました');
-  }
+  String serviceUuid = uuid.v4();
+  String charactaristicuuid = uuid.v4();
+  print(serviceUuid);
+  print(charactaristicuuid);
+  updateProfile("serviceUuid", serviceUuid);
+  updateProfile("charactaristicuuid", charactaristicuuid);
+  print('UUIDを作成しました');
+}
 
 /// フレンドのuid一覧を取得
 /// フィールドから値を取得
@@ -208,6 +226,29 @@ Future<String> getProfileField(String uid, String field) async {
   } catch (e) {
     print('Error getting profile: $e'); // エラーをキャッチ
     return "err";
+  }
+}
+
+// １人分のユーザーの投稿を全取得 (投稿が増えるにつれデータの構造変えないとこのままではまずいが一旦保留)
+Future<Map<String, dynamic>> getTweets(String uid) async {
+  print("getTweet");
+  try {
+    // Firestore ドキュメントを取得
+    DocumentSnapshot<Map<String, dynamic>> doc =
+        await db.collection(users).doc(uid).collection(tweet).doc(tweet).get();
+
+    // ドキュメントが存在するか確認
+    if (doc.exists && doc.data() != null) {
+      // データを取得して指定フィールドの値を返す
+      print(doc.data());
+      Map<String, dynamic> record = doc.data()!;
+      return record;
+    } else {
+      throw Exception('Document does not exist or has no data'); // データがない場合
+    }
+  } catch (e) {
+    print('Error getting tweet: $e'); // エラーをキャッチ
+    return {};
   }
 }
 
