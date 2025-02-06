@@ -336,7 +336,7 @@ class _ExchangeState extends State<ExchangePage>
           decodereceived = Map<String, String>.from(jsonDecode(received));
           receivedData = await getProfile(decodereceived['u_id']!);
           print("Decoded JSON: $receivedData");
-          isReceived.add(true);
+          // isReceived.add(true);
         });
 
         return ble_peripheral.WriteRequestResult(status: 0); // GATT_SUCCESS
@@ -433,32 +433,37 @@ class _ExchangeState extends State<ExchangePage>
 
     //接続可能な端末をスキャンする
     await FlutterBluePlus.startScan(
-        withNames: ['Cacalia'], timeout: const Duration(seconds: 3)); //３秒間
+        withNames: ['Cacalia'],
+        timeout: const Duration(seconds: 3),
+        androidScanMode: AndroidScanMode.lowPower); //３秒間
     try {
       //結果を受け取る
       FlutterBluePlus.scanResults.listen((results) {
         for (ScanResult r in results) {
-          print(
-              //接続可能なデバイスを表示
-              '${r.advertisementData.serviceUuids}: "${r.device.advName}" found!');
+          if (r.rssi > -60) {
+            // 例: -60dBm 以上のデバイスのみ表示
+            print(
+                //接続可能なデバイスを表示
+                '${r.advertisementData.serviceUuids}: "${r.device.advName}" found!');
 
-          //任意のデバイスが見つかった場合
-          if (r.device.advName.toString().contains("Cacalia")) {
-            print("デバイス情報$r");
+            //任意のデバイスが見つかった場合
+            if (r.device.advName.toString().contains("Cacalia")) {
+              print("デバイス情報$r");
 
-            setState(() {
-              //端末のUUIDを取得
-              deviceUUID =
-                  splitdata(r.advertisementData.serviceUuids.toString());
+              setState(() {
+                //端末のUUIDを取得
+                deviceUUID =
+                    splitdata(r.advertisementData.serviceUuids.toString());
 
-              _isfinded = true;
+                _isfinded = true;
 
-              selectdevaice = r.device;
-            });
-            //スキャン終了
-            FlutterBluePlus.stopScan();
-            connectDevaice(selectdevaice!);
-            break;
+                selectdevaice = r.device;
+              });
+              //スキャン終了
+              FlutterBluePlus.stopScan();
+              connectDevaice(selectdevaice!);
+              break;
+            }
           }
         }
       });
@@ -521,27 +526,26 @@ class _ExchangeState extends State<ExchangePage>
         print('きゃらくたりすてぃっく:$characteristic');
         //ペリフェラル側で設定したキャラクタリスティックの場合
         if (characteristic.serviceUuid.toString() == deviceUUID) {
-          print('受け取りたいデータ$characteristic');
-          // 通知を有効化
-          characteristic.setNotifyValue(true);
-          //値を読み込む
-          final value = await characteristic.read();
-          // 受信データを文字列に変換
-          final received = utf8.decode(value);
-          print("received:$received");
-          decodereceived = Map<String, String>.from(jsonDecode(received));
-          receivedData = await getProfile(decodereceived['u_id']!);
-          print("Caractaristic:${characteristic.uuid}");
-          print("Received: $receivedData");
+          // print('受け取りたいデータ$characteristic');
+          // // 通知を有効化
+          // characteristic.setNotifyValue(true);
+          // //値を読み込む
+          // final value = await characteristic.read();
+          // // 受信データを文字列に変換
+          // final received = utf8.decode(value);
+          // print("received:$received");
+          // decodereceived = Map<String, String>.from(jsonDecode(received));
+          // receivedData = await getProfile(decodereceived['u_id']!);
+          // print("Caractaristic:${characteristic.uuid}");
+          // print("Received: $receivedData");
+
+          //書き込み
+          writeCaracteristic(characteristic);
 
           setState(() {
             isReceived.add(true);
             _isConnected = true;
           });
-
-          ///
-
-          writeCaracteristic(characteristic);
 
           disconnectDevaice(selectdevaice!);
           stopAdvertise();
@@ -562,7 +566,6 @@ class _ExchangeState extends State<ExchangePage>
 
   //AI提案を表示するメソッド
   Future<void> _showProfileDialog() async {
-
     showDialog(
       context: context,
       builder: (BuildContext context) {
