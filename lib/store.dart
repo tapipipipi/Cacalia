@@ -117,9 +117,9 @@ class _MyFirestorePageState extends State<MyFirestorePage> {
               },
             ),
             ElevatedButton(
-              child: Text('selectAll'),
+              child: Text('getTweet'),
               onPressed: () async {
-                selectAll();
+                getTweets("Hxva1aGnNMcwg8s7esKDNmNll6u1");
               },
             ),
             ElevatedButton(
