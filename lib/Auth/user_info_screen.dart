@@ -5,11 +5,9 @@ import 'Authentication.dart';
 
 class UserInfoScreen extends StatefulWidget {
 
-  const UserInfoScreen({Key? key, required User user})
+  const UserInfoScreen({super.key, required User user})
 
-      : _user = user,
-
-        super(key: key);
+      : _user = user;
 
 
 
@@ -251,13 +249,13 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
 
                       style: ButtonStyle(
 
-                        backgroundColor: MaterialStateProperty.all(
+                        backgroundColor: WidgetStateProperty.all(
 
                           Colors.redAccent,
 
                         ),
 
-                        shape: MaterialStateProperty.all(
+                        shape: WidgetStateProperty.all(
 
                           RoundedRectangleBorder(
 

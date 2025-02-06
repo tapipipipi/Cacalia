@@ -1,4 +1,5 @@
 import 'package:cacalia/CS/profile.dart';
+import 'package:cloud_firestore_platform_interface/src/timestamp.dart';
 import 'package:flutter/material.dart';
 import 'CS/create.dart';
 import 'Auth/Authentication.dart';
@@ -8,7 +9,7 @@ import 'Auth/Authentication.dart';
 // このページではdbの操作を行う。ボタンを押すとそれぞれの処理が実行される
 
 class Store extends StatelessWidget {
-  const Store({Key? key}) : super(key: key);
+  const Store({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,7 @@ class Store extends StatelessWidget {
 }
 
 class MyFirestorePage extends StatefulWidget {
-  const MyFirestorePage({Key? key}) : super(key: key);
+  const MyFirestorePage({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -64,11 +65,11 @@ class _MyFirestorePageState extends State<MyFirestorePage> {
             TextField(
               controller: friendController,
               decoration: InputDecoration(
-                hintText: 'add friend id',
+                hintText: '引数',
               ),
             ),
             ElevatedButton(
-              child: Text('set friendid'),
+              child: Text('set 引数'),
               onPressed: () async {
                 friendid = friendController.text;
               },
@@ -117,15 +118,15 @@ class _MyFirestorePageState extends State<MyFirestorePage> {
               },
             ),
             ElevatedButton(
-              child: Text('selectAll'),
+              child: Text('getTweet'),
               onPressed: () async {
-                selectAll();
+                getTweets("Hxva1aGnNMcwg8s7esKDNmNll6u1");
               },
             ),
             ElevatedButton(
-              child: Text('selectWhere'),
+              child: Text('uptweet'),
               onPressed: () async {
-                selectWhere();
+                updateTweet(friendid, Timestamp.now());
               },
             ),
             ElevatedButton(

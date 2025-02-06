@@ -1,4 +1,4 @@
-// 掲示板画面
+// Ask画面
 import 'package:cacalia/component/tweet.dart';
 import 'package:cacalia/store.dart';
 import 'package:flutter/material.dart';
@@ -7,11 +7,11 @@ import '../../../Auth/Authentication.dart';
 import '../../../CS/create.dart';
 import 'package:go_router/go_router.dart';
 
-class Timeline extends StatefulWidget {
-  const Timeline({super.key});
+class Ask extends StatefulWidget {
+  const Ask({super.key});
 
   @override
-  _TimelineState createState() => _TimelineState();
+  _AskState createState() => _AskState();
 }
 
 List<String> friends = []; // friend一覧格納
@@ -24,8 +24,7 @@ String fid = "";
 String myuid = Authentication().getuid();
 int mycard = 0;
 
-class _TimelineState extends State<Timeline> {
-
+class _AskState extends State<Ask> {
   bool isLoading = true;  // ローディング状態を管理する変数
 
   @override
@@ -38,12 +37,9 @@ class _TimelineState extends State<Timeline> {
 
   Future<void> fetchCardData() async {
     await getcard();
-    if (mounted) {
-      // mountedがtrueかどうかを確認
-      setState(() {
-        isLoading = false; // データ取得完了後にローディング終了
-      }); // データ取得後にUIを更新
-    }
+    setState(() {
+      isLoading = false; // データ取得完了後にローディング終了
+    }); // データ取得後にUIを更新
   }
 
   // cardListにフレンドごとの名前と読みを追加していく
@@ -86,8 +82,6 @@ class _TimelineState extends State<Timeline> {
 
   @override
   Widget build(BuildContext context) {
-
-
     if (isLoading) {
     // データ取得中はローディング画面を表示
     return Scaffold(
@@ -269,10 +263,8 @@ class _TimelineState extends State<Timeline> {
       ),
       bottomNavigationBar: Footer(),
     );
-
   }
 
-  //sort押した時のダイアログ？表示の操作
   void toggleShowText() {
     isVisible = !isVisible;
   }

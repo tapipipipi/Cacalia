@@ -1,18 +1,15 @@
 // アプリ設定画面
 import 'package:cacalia/features/home/pages/home.dart';
-import 'package:cacalia/store.dart';
 import 'package:flutter/material.dart';
 import 'package:cacalia/component/footer.dart';
 import 'package:cacalia/component/card.dart';
 import 'package:go_router/go_router.dart';
-import '../../../Auth/Authentication.dart';
 
 class Setting extends StatelessWidget {
   const Setting({super.key});
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       backgroundColor: const Color.fromRGBO(215, 230, 239, 1),
       body: Center(
@@ -50,7 +47,7 @@ class Setting extends StatelessWidget {
                 // 名刺----------------------------------------
                 Container(
                   margin: const EdgeInsets.only(top: 50, bottom: 70),
-                  child:  UserCard(userId: mycard), // ユーザーの番号
+                  child: UserCard(userId: mycard, state: false), // ユーザーの番号
                 ),
                 // 編集の項目
                 Container(
