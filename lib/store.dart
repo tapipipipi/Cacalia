@@ -8,7 +8,7 @@ import 'Auth/Authentication.dart';
 // このページではdbの操作を行う。ボタンを押すとそれぞれの処理が実行される
 
 class Store extends StatelessWidget {
-  const Store({Key? key}) : super(key: key);
+  const Store({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class Store extends StatelessWidget {
 }
 
 class MyFirestorePage extends StatefulWidget {
-  const MyFirestorePage({Key? key}) : super(key: key);
+  const MyFirestorePage({super.key});
 
   @override
   // ignore: library_private_types_in_public_api

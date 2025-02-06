@@ -239,10 +239,10 @@ class _ExchangeState extends State<ExchangePage>
                   ),
                   //振る処理
                   ShakeGesture(onShake: startScan, child: const Text("")),
-                  //デバッグ用
-                  ElevatedButton(
-                      onPressed: _showProfilePopup,
-                      child: const Text("交換後画面表示")),
+                  // //デバッグ用
+                  // ElevatedButton(
+                  //     onPressed: _showProfilePopup,
+                  //     child: const Text("交換後画面表示")),
                 ],
               ),
             ),
@@ -341,7 +341,7 @@ class _ExchangeState extends State<ExchangePage>
 
         return ble_peripheral.WriteRequestResult(status: 0); // GATT_SUCCESS
       } catch (e) {
-        print("Error: $e");
+        print("WriteRequestResultError: $e");
 
         return ble_peripheral.WriteRequestResult(status: 1); //GATT_FAILURE
       }
@@ -521,6 +521,7 @@ class _ExchangeState extends State<ExchangePage>
         print('きゃらくたりすてぃっく:$characteristic');
         //ペリフェラル側で設定したキャラクタリスティックの場合
         if (characteristic.serviceUuid.toString() == deviceUUID) {
+          print('受け取りたいデータ$characteristic');
           // 通知を有効化
           characteristic.setNotifyValue(true);
           //値を読み込む
@@ -561,7 +562,6 @@ class _ExchangeState extends State<ExchangePage>
 
   //AI提案を表示するメソッド
   Future<void> _showProfileDialog() async {
-    generateText(); //提案文生成メソッド
 
     showDialog(
       context: context,
@@ -670,8 +670,8 @@ class _ExchangeState extends State<ExchangePage>
     );
   }
 
-  //AIのプロンプトを生成するメソッド
-  Future<void> generateText() async {
+  //交換相手の情報を表示するメソッド
+  _showProfilePopup() async {
     //比較する項目を設定
     List<String> keys = ["events", "comment", "hoby", "background"];
 
@@ -705,10 +705,7 @@ class _ExchangeState extends State<ExchangePage>
         generatedText = '生成エラー: $e';
       });
     }
-  }
 
-  //交換相手の情報を表示するメソッド
-  _showProfilePopup() async {
     //非同期処理でのエラー対策
     if (!mounted) return;
 

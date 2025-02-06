@@ -1,11 +1,7 @@
-import 'package:cacalia/Auth/user_info_screen.dart';
-import 'package:cacalia/CS/create.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'signupScreen.dart';
-import '../features/home/pages/home.dart';
 /*
 flutter foundation パッケージに用意されている変数で、
 アプリケーションが Web 上で実行するようにコンパイルされているかどうかを調べるための変数です。
