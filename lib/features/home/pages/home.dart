@@ -25,16 +25,16 @@ String fid = "";
 //uid取得
 String myuid = Authentication().getuid();
 int mycard = 0;
+int posts = 0;
 
 class _HomeState extends State<Home> {
+  bool isLoading = true; // ローディング状態を管理する変数
 
-  bool isLoading = true;  // ローディング状態を管理する変数
-  
   @override
   void initState() {
     super.initState();
     print(uid);
-    
+
     getProfile(uid);
     fetchCardData(); // 非同期データを初期化時に取得
   }
@@ -65,7 +65,7 @@ class _HomeState extends State<Home> {
       ];
       cardList.add(addList);
     }
-  
+
     // 最終的にできるcardlistの最後尾を代入
     mycard = cardList.length;
 
@@ -245,7 +245,6 @@ class _HomeState extends State<Home> {
       ),
       bottomNavigationBar: Footer(),
     );
-    
   }
 
   //sort押した時のダイアログ？表示の操作

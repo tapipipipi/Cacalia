@@ -15,29 +15,35 @@ class Timeline extends StatefulWidget {
 }
 
 List<String> friends = []; // friend一覧格納
-Map<String, dynamic> profileList = {}; // fidに対応するプロフィール一覧を格納
-List<List<Object>> cardList = []; // card使用するデータをfriendの数だけ用意
-List<Object> addList = []; // cardList追加時に使用
+Map<String, dynamic> tweetList = {}; // fidに対応するツイート一覧を格納
+Map<String, dynamic> tweetList2 = {}; // fidに対応するツイート一覧を格納
+List<List<Object>> postList = []; // 並べ替えたい
+List<List<Object>> tweets = [];
+
+Map<String, dynamic> cont = {};
+
+// Map<String, dynamic> testob = {};
+// Map<String, dynamic> testadd = {};
+// List<Object> addList = []; // cardList追加時に使用
 
 String fid = "";
 //uid取得
 String myuid = Authentication().getuid();
-int mycard = 0;
+int posts = 0;
 
 class _TimelineState extends State<Timeline> {
 
-  bool isLoading = true;  // ローディング状態を管理する変数
+  bool isLoading = true; // ローディング状態を管理する変数
+
 
   @override
   void initState() {
     super.initState();
-    print(uid);
-    getProfile(uid);
     fetchCardData(); // 非同期データを初期化時に取得
   }
 
   Future<void> fetchCardData() async {
-    await getcard();
+    await gettweet();
     if (mounted) {
       // mountedがtrueかどうかを確認
       setState(() {
@@ -46,37 +52,52 @@ class _TimelineState extends State<Timeline> {
     }
   }
 
-  // cardListにフレンドごとの名前と読みを追加していく
-  Future<void> getcard() async {
-    print("getcard()");
-    cardList = []; // リフレッシュ
-    profileList = {}; // リフレッシュ
+  // postListにフレンドごとのtweetを追加していく
+  Future<void> gettweet() async {
+    print("gettweet()");
+    tweetList = {}; // リフレッシュ
+    postList = []; // リフレッシュ]
+    tweets = [];
+
     friends = await getFriends();
 
-    print("get cards.");
     for (int i = 0; i < friends.length; i++) {
       fid = friends[i];
-      profileList[fid] = await getProfile(fid);
+      tweetList[fid] = await getT_ids(fid); // fid:{tid,tid,...}
+      //tweetList = await getT_ids(fid);
+      print(tweetList);
 
       // 毎回新しいリストを作成して追加(リフレッシュ)
+
       List<Object> addList = [
-        profileList[fid]["name"],
-        profileList[fid]["read_name"],
+        fid,
+        (tweetList[fid]["t_ids"] is List)
+            ? (tweetList[fid]["t_ids"] as List).join(",") // 文字列に変換
+            : tweetList[fid]["t_ids"] // 文字列ならそのまま
       ];
-      cardList.add(addList);
+      postList.add(addList);
+      posts++;
+
+      print(postList);
+
+      //-------------------------
+      String feild = postList[i][1] as String;
+
+      print(feild);
+
+      print("ok");
+      print(fid);
+      tweetList2 = await getTweet(fid, feild);
+      print(tweetList2);
+      List<Object> add2List = [tweetList2["name"], tweetList2["tweet"]];
+      print(add2List);
+      tweets.add(add2List);
+
+      //------------------------------------------
     }
 
-    // 最終的にできるcardlistの最後尾を代入
-    mycard = cardList.length;
-
-    // 自身のプロフィールを獲得しcardlistに追加
-    profileList[myuid] = await getProfile(myuid);
-    List<Object> addList = [
-      profileList[myuid]["name"],
-      profileList[myuid]["read_name"],
-    ];
-    cardList.add(addList);
-
+    // print(postList); //ok [[], [],  ... , []]
+    print(tweets);
     // 状態を更新
     setState(() {});
   }
@@ -87,20 +108,20 @@ class _TimelineState extends State<Timeline> {
   @override
   Widget build(BuildContext context) {
 
-
     if (isLoading) {
-    // データ取得中はローディング画面を表示
-    return Scaffold(
-      body: Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
+      // データ取得中はローディング画面を表示
+      return Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
     }
     return Scaffold(
       appBar: AppBar(
         title: Image.asset(
           'assets/images/cacalia.png',
         ),
+
         toolbarHeight: 80,
         centerTitle: true,
         backgroundColor: const Color.fromRGBO(215, 230, 239, 1),
@@ -146,7 +167,9 @@ class _TimelineState extends State<Timeline> {
                   child: Text(
                     '質問', // ここに表示したい文字を入れる
                     style: TextStyle(
-                      fontSize: 14,
+
+                      fontSize: 16,
+
                       fontWeight: FontWeight.bold,
                       color: Color(0xff115A84), // 文字の色を設定
                     ),
@@ -158,7 +181,8 @@ class _TimelineState extends State<Timeline> {
                   child: Text(
                     '投稿',
                     style: TextStyle(
-                      fontSize: 14,
+
+                      fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: Color(0xff115A84), // 文字の色を設定
                     ),
@@ -173,12 +197,14 @@ class _TimelineState extends State<Timeline> {
                   child: Text(
                     '募集', // ここに表示したい文字を入れる
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 16,
+
                       fontWeight: FontWeight.bold,
                       color: Color(0xff115A84), // 文字の色を設定
                     ),
                   ),
                 ),
+
               ],
             ),
             // Rowの下に引く線
@@ -195,7 +221,9 @@ class _TimelineState extends State<Timeline> {
                 children: [
                   Container(
                     height: 25,
-                    width: 240,
+
+                    width: 300,
+
                     margin: const EdgeInsets.only(left: 15),
                     child: TextField(
                       decoration: InputDecoration(
@@ -205,9 +233,11 @@ class _TimelineState extends State<Timeline> {
                         contentPadding:
                             const EdgeInsets.symmetric(horizontal: 16),
                         filled: true,
-                        fillColor: const Color.fromRGBO(161, 161, 161, 1),
+
+                        fillColor: const Color.fromARGB(255, 255, 255, 255),
                         enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
+                          borderRadius: BorderRadius.circular(20),
+
                           borderSide: const BorderSide(
                               color: Color.fromRGBO(161, 161, 161, 1)),
                         ),
@@ -225,7 +255,9 @@ class _TimelineState extends State<Timeline> {
             ),
             Container(
               width: 337,
-              height: 619,
+
+              height: 600,
+
               alignment: Alignment.center,
               child: Column(
                 children: [
@@ -248,7 +280,9 @@ class _TimelineState extends State<Timeline> {
                   Expanded(
                     child: ListView.builder(
                       padding: const EdgeInsets.only(top: 20),
-                      itemCount: mycard, // フレンドの数だけ表示
+
+                      itemCount: tweets.length, // フレンドの数だけ表示
+
                       itemBuilder: (context, index) {
                         return Transform.translate(
                           offset: const Offset(0, 0),
