@@ -150,15 +150,15 @@ class _AskState extends State<Ask> {
                             ),
                           ),
                         );
-                      },
+                      ],
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
-        ),
-      ),
+            },
+            );
+    );
+    );
       bottomNavigationBar: Footer(),
     );
   }

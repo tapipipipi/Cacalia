@@ -170,6 +170,7 @@ updateTweet(String val) {
     "t_ids": FieldValue.arrayUnion([val])
   }).then((value) => print("update sucessed"),
       onError: (e) => print("Error updating document $e"));
+}
 
 //名刺交換時のAI提案を格納
 updateAIsuggest(String uid, String val) async {
@@ -233,7 +234,7 @@ Future<Map<String, dynamic>> getProfile(String uid) async {
       print(uid);
       setUser(uid); // userprofike作成
 
-      setFriend(); // freendlist作成
+      setColection(); // freendlist作成
       setTweets();
 
       setColection(); // サブコレクション作成
