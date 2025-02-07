@@ -7,6 +7,7 @@ import 'package:uuid/uuid.dart';
 /// import 'package:firebase_auth/firebase_auth.dart';
 String friend = "friends"; // コレクション、ドキュメント指定用 /users/friends/friends
 String suggest = "suggestion"; // コレクション、ドキュメント指定用
+String tweet = "tweets";
 String profile = "profile";
 String users = "users"; // コレクション指定用 /users
 String ini = ""; // 本番用 profileの初期値
@@ -25,6 +26,7 @@ final mycollection = db // コレクション名、usersは固定にしてuser�
     .doc(uid);
 final myfriends = mycollection.collection(friend).doc(friend);
 final AIsuggest = mycollection.collection(suggest).doc(suggest);
+final mytweets = mycollection.collection(tweet).doc(tweet);
 
 // final createuser = db.collection(users).doc("aVhf5tTSWNRAmFAaikon0hyl08C3");
 

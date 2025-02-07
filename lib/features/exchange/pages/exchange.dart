@@ -327,17 +327,17 @@ class _ExchangeState extends State<ExchangePage>
       }
 
       try {
-        setState(() async {
-          //受け取ったデータをデコード
-          String received = utf8.decode(value);
-          print("Received raw data: $received");
+        // setState(() {
+        //受け取ったデータをデコード
+        String received = utf8.decode(value);
+        print("Received raw data: $received");
 
-          // JSON形式に変換して取得
-          decodereceived = Map<String, String>.from(jsonDecode(received));
-          receivedData = await getProfile(decodereceived['u_id']!);
-          print("Decoded JSON: $receivedData");
-          // isReceived.add(true);
-        });
+        // JSON形式に変換して取得
+        decodereceived = Map<String, String>.from(jsonDecode(received));
+        // receivedData = getProfile(decodereceived['u_id']!);
+        print("Decoded JSON: $receivedData");
+        isReceived.add(true);
+        // });
 
         return ble_peripheral.WriteRequestResult(status: 0); // GATT_SUCCESS
       } catch (e) {
@@ -497,12 +497,13 @@ class _ExchangeState extends State<ExchangePage>
       services = await device.discoverServices();
       await readCharacteristic(); //ReadWrighメソッド
       disconnectDevaice(device);
+      stopAdvertise();
     } catch (e) {
       print('エラーでちゃった。。。:$e');
       _isConnected = false;
       stopAdvertise();
 
-      ///
+    ///
     }
   }
 
@@ -542,13 +543,13 @@ class _ExchangeState extends State<ExchangePage>
           //書き込み
           writeCaracteristic(characteristic);
 
-          setState(() {
-            isReceived.add(true);
-            _isConnected = true;
-          });
+          // setState(() {
+          //   isReceived.add(true);
+          //   _isConnected = true;
+          // });
 
-          disconnectDevaice(selectdevaice!);
-          stopAdvertise();
+          // disconnectDevaice(selectdevaice!);
+          // stopAdvertise();
           break;
         }
       }
@@ -710,8 +711,11 @@ class _ExchangeState extends State<ExchangePage>
       });
     }
 
+    receivedData = await getProfile(decodereceived['u_id']!);
+
     //非同期処理でのエラー対策
     if (!mounted) return;
+
 
     showDialog(
       context: context,
