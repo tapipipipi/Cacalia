@@ -1,4 +1,5 @@
 import 'package:cacalia/CS/profile.dart';
+import 'package:cloud_firestore_platform_interface/src/timestamp.dart';
 import 'package:flutter/material.dart';
 import 'CS/create.dart';
 import 'Auth/Authentication.dart';
@@ -64,11 +65,11 @@ class _MyFirestorePageState extends State<MyFirestorePage> {
             TextField(
               controller: friendController,
               decoration: InputDecoration(
-                hintText: 'add friend id',
+                hintText: '引数',
               ),
             ),
             ElevatedButton(
-              child: Text('set friendid'),
+              child: Text('set 引数'),
               onPressed: () async {
                 friendid = friendController.text;
               },
@@ -117,15 +118,15 @@ class _MyFirestorePageState extends State<MyFirestorePage> {
               },
             ),
             ElevatedButton(
-              child: Text('selectAll'),
+              child: Text('getTweet'),
               onPressed: () async {
-                selectAll();
+                getTweets("Hxva1aGnNMcwg8s7esKDNmNll6u1");
               },
             ),
             ElevatedButton(
-              child: Text('selectWhere'),
+              child: Text('uptweet'),
               onPressed: () async {
-                selectWhere();
+                updateTweet(friendid, Timestamp.now());
               },
             ),
             ElevatedButton(

@@ -77,7 +77,9 @@ Map<String, dynamic> profiles = <String, dynamic>{
   "background": "ハッカソン企業賞獲得しました！",
   "bairth": "1/1",
   "serviceUuid": "forble",
-  "charactaristicuuid": "forble"
+  "charactaristicuuid": "forble",
+  "wigetteme": "1", // テーマカラー
+  "chartheme": "1" // 字体
 };
 
 // uid 格納していくスタイル
@@ -111,6 +113,12 @@ void setColection() {
   //suggestion
   AIsuggest.set({suggest: {}}, SetOptions(merge: true))
       .onError((e, _) => print("Error writing document: $e"));
+}
+
+void setTweet() {
+  mytweets
+      .set(tweets, SetOptions(merge: true))
+      .onError((e, _) => print("Error writing document: $e")); // errMessage
 }
 
 /// データ更新　プロフィール編集時に使用
@@ -226,6 +234,29 @@ Future<String> getProfileField(String uid, String field) async {
   } catch (e) {
     print('Error getting profile: $e'); // エラーをキャッチ
     return "err";
+  }
+}
+
+// １人分のユーザーの投稿を全取得 (投稿が増えるにつれデータの構造変えないとこのままではまずいが一旦保留)
+Future<Map<String, dynamic>> getTweets(String uid) async {
+  print("getTweet");
+  try {
+    // Firestore ドキュメントを取得
+    DocumentSnapshot<Map<String, dynamic>> doc =
+        await db.collection(users).doc(uid).collection(tweet).doc(tweet).get();
+
+    // ドキュメントが存在するか確認
+    if (doc.exists && doc.data() != null) {
+      // データを取得して指定フィールドの値を返す
+      print(doc.data());
+      Map<String, dynamic> record = doc.data()!;
+      return record;
+    } else {
+      throw Exception('Document does not exist or has no data'); // データがない場合
+    }
+  } catch (e) {
+    print('Error getting tweet: $e'); // エラーをキャッチ
+    return {};
   }
 }
 
