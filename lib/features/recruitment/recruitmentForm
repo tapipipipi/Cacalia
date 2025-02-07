@@ -107,7 +107,7 @@ class _RecruitmentState extends State<Recruitment> {
                     child: Text(
                       '質問',
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: Color(0xff115A84),
                       ),
@@ -122,7 +122,7 @@ class _RecruitmentState extends State<Recruitment> {
                     child: Text(
                       '投稿',
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: Color(0xff115A84),
                       ),
@@ -136,7 +136,7 @@ class _RecruitmentState extends State<Recruitment> {
                     child: Text(
                       '募集',
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: Color(0xff115A84),
                       ),
@@ -149,43 +149,39 @@ class _RecruitmentState extends State<Recruitment> {
                 color: Colors.grey,
                 width: 250,
               ),
-              SizedBox(
-                height: 53,
-                width: 350,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      height: 25,
-                      width: 240,
-                      margin: const EdgeInsets.only(left: 15),
-                      child: TextField(
-                        decoration: InputDecoration(
-                          hintText: '検索',
-                          hintStyle: const TextStyle(fontFamily: 'DotGothic16'),
-                          prefixIcon: const Icon(Icons.search),
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-                          filled: true,
-                          fillColor: const Color.fromRGBO(161, 161, 161, 1),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide: const BorderSide(color: Color.fromRGBO(161, 161, 161, 1)),
-                          ),
+            SizedBox(
+              height: 53,
+              width: 350,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    height: 25,
+                    width: 300,
+                    margin: const EdgeInsets.only(left: 15),
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: '検索',
+                        hintStyle: const TextStyle(fontFamily: 'DotGothic16'),
+                        prefixIcon: const Icon(Icons.search),
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 16),
+                        filled: true,
+                        fillColor: const Color.fromARGB(255, 255, 255, 255),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: const BorderSide(
+                              color: Color.fromRGBO(161, 161, 161, 1)),
                         ),
                       ),
                     ),
-                    IconButton(
-                      onPressed: () {
-                        setState(toggleShowText);
-                      },
-                      icon: Image.asset('assets/images/sort.png'),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
+            ),
               Container(
                 width: 337,
-                height: 619,
+                height: 600,
                 alignment: Alignment.center,
                 child: Column(
                   children: [

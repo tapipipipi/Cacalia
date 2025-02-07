@@ -31,52 +31,53 @@ class Tweet extends StatelessWidget {
     return Stack(
       alignment: Alignment.center,
       children: [
-        Card(
-          elevation: 5, // 影の離れ具合
-          shadowColor: Colors.black, // 影の色
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Container(
-            height: 159,
-            width: 270,
-            alignment: const Alignment(-0.8, 0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20), // ✅ 画像や背景を丸くする
-              border: Border.all(
-                // ✅ 枠線を追加
-                color: Colors.grey, // 枠線の色
-                width: 2, // 枠線の太さ
-              ),
+        Container(
+          margin: const EdgeInsets.only(bottom: 8), // ✅ `Card` の下に 20px の余白を追加
+          child: Card(
+            elevation: 5, // 影の離れ具合
+            shadowColor: Colors.black, // 影の色
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start, // 左揃え
-              children: [
-                const Padding(padding: EdgeInsets.only(top: 15)),
-                Padding(
-                  padding:
-                      const EdgeInsets.only(left: 16), // アイコンと名前の左側にマージンを追加
-                  child: Row(
-                    children: [
-                      Icon(Icons.person), // アイコンを追加
-                      const SizedBox(width: 8), // アイコンとテキストの間にスペースを追加
-                      Text(
-                        // tweets[userId][0] as String, // 名前や読み仮名
-                        tweets[userId][0] as String,
-                        style: const TextStyle(fontSize: 14),
-                      ),
-                    ],
-                  ),
+            child: Container(
+              height: 159,
+              width: 315,
+              alignment: const Alignment(-0.8, 0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10), // ✅ 画像や背景を丸くする
+                border: Border.all(
+                  // ✅ 枠線を追加
+                  color: Colors.grey, // 枠線の色
+                  width: 2, // 枠線の太さ
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 16), // 内容の左側にマージンを追加
-                  child: Text(
-                    // tweets[userId][2] as String, // 内容
-                    tweets[userId][1] as String,
-                    style: const TextStyle(fontSize: 24),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start, // 左揃え
+                children: [
+                  const Padding(padding: EdgeInsets.only(top: 15)),
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(left: 16), // アイコンと名前の左側にマージンを追加
+                    child: Row(
+                      children: [
+                        Icon(Icons.person), // アイコンを追加
+                        const SizedBox(width: 8), // アイコンとテキストの間にスペースを追加
+                        Text(
+                          tweets[userId][0] as String,
+                          style: const TextStyle(fontSize: 14),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16), // 内容の左側にマージンを追加
+                    child: Text(
+                      tweets[userId][1] as String,
+                      style: const TextStyle(fontSize: 17),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

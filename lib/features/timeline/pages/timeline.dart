@@ -78,7 +78,6 @@ class _TimelineState extends State<Timeline> {
 
       print(postList);
 
-      
       //-------------------------
       String feild = postList[i][1] as String;
 
@@ -91,7 +90,6 @@ class _TimelineState extends State<Timeline> {
       List<Object> add2List = [tweetList2["name"], tweetList2["tweet"]];
       print(add2List);
       tweets.add(add2List);
-      
 
       //------------------------------------------
     }
@@ -165,7 +163,7 @@ class _TimelineState extends State<Timeline> {
                   child: Text(
                     '質問', // ここに表示したい文字を入れる
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: Color(0xff115A84), // 文字の色を設定
                     ),
@@ -177,7 +175,7 @@ class _TimelineState extends State<Timeline> {
                   child: Text(
                     '投稿',
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: Color(0xff115A84), // 文字の色を設定
                     ),
@@ -192,7 +190,7 @@ class _TimelineState extends State<Timeline> {
                   child: Text(
                     '募集', // ここに表示したい文字を入れる
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: Color(0xff115A84), // 文字の色を設定
                     ),
@@ -214,7 +212,7 @@ class _TimelineState extends State<Timeline> {
                 children: [
                   Container(
                     height: 25,
-                    width: 240,
+                    width: 300,
                     margin: const EdgeInsets.only(left: 15),
                     child: TextField(
                       decoration: InputDecoration(
@@ -224,27 +222,21 @@ class _TimelineState extends State<Timeline> {
                         contentPadding:
                             const EdgeInsets.symmetric(horizontal: 16),
                         filled: true,
-                        fillColor: const Color.fromRGBO(161, 161, 161, 1),
+                        fillColor: const Color.fromARGB(255, 255, 255, 255),
                         enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
+                          borderRadius: BorderRadius.circular(20),
                           borderSide: const BorderSide(
                               color: Color.fromRGBO(161, 161, 161, 1)),
                         ),
                       ),
                     ),
                   ),
-                  IconButton(
-                    onPressed: () {
-                      setState(toggleShowText);
-                    },
-                    icon: Image.asset('assets/images/sort.png'),
-                  ),
                 ],
               ),
             ),
             Container(
               width: 337,
-              height: 619,
+              height: 600,
               alignment: Alignment.center,
               child: Column(
                 children: [
