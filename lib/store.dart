@@ -96,7 +96,7 @@ class _MyFirestorePageState extends State<MyFirestorePage> {
               child: Text('ドキュメント作成，追加'),
               onPressed: () async {
                 // setUser();
-                setFriend();
+                setColection();
               },
             ),
             ElevatedButton(
@@ -123,12 +123,14 @@ class _MyFirestorePageState extends State<MyFirestorePage> {
                 // getTweets("Hxva1aGnNMcwg8s7esKDNmNll6u1");
               },
             ),
-            ElevatedButton(
-              child: Text('posttweet'),
-              onPressed: () async {
-                postTweet(friendid);
-              },
-            ),
+
+            // ElevatedButton(
+            //   child: Text('uptweet'),
+            //   onPressed: () async {
+            //     updateTweet(friendid, Timestamp.now());
+            //   },
+            // ),
+
             ElevatedButton(
               child: Text('mode pro'),
               onPressed: () async {

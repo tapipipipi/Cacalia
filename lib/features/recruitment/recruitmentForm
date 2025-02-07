@@ -25,6 +25,9 @@ String myuid = Authentication().getuid();
 int mycard = 0;
 
 class _RecruitmentState extends State<Recruitment> {
+
+  bool isLoading = true;  // ローディング状態を管理する変数
+
   @override
   void initState() {
     super.initState();
@@ -35,7 +38,9 @@ class _RecruitmentState extends State<Recruitment> {
 
   Future<void> fetchCardData() async {
     await getcard();
-    setState(() {}); // データ取得後にUIを更新
+    setState(() {
+      isLoading = false; // データ取得完了後にローディング終了
+    }); // データ取得後にUIを更新
   }
 
   // cardListにフレンドごとの名前と読みを追加していく
@@ -78,18 +83,18 @@ class _RecruitmentState extends State<Recruitment> {
 
   @override
   Widget build(BuildContext context) {
-    if (mounted) {
-      if (friends.isEmpty || cardList.isEmpty) {
-        return Center(child: CircularProgressIndicator()); // ローディング中
-      }
-      return Scaffold(
-        appBar: AppBar(
-          title: Image.asset(
-            'assets/images/cacalia.png',
-          ),
-          toolbarHeight: 80,
-          centerTitle: true,
-          backgroundColor: const Color.fromRGBO(215, 230, 239, 1),
+        if (isLoading) {
+    // データ取得中はローディング画面を表示
+    return Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+    }
+    return Scaffold(
+      appBar: AppBar(
+        title: Image.asset(
+          'assets/images/cacalia.png',
         ),
         body: Container(
           color: const Color.fromRGBO(215, 230, 239, 1),
@@ -139,11 +144,19 @@ class _RecruitmentState extends State<Recruitment> {
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: Color(0xff115A84),
+
                       ),
                     ),
                   ),
+                  IconButton(
+                    onPressed: () {
+                      setState(toggleShowText);
+                    },
+                    icon: Image.asset('assets/images/sort.png'),
+                  ),
                 ],
               ),
+
               Container(
                 height: 1,
                 color: Colors.grey,
@@ -195,38 +208,22 @@ class _RecruitmentState extends State<Recruitment> {
                             margin: const EdgeInsets.only(top: 0, left: 28),
                             decoration: const BoxDecoration(
                               color: Color.fromRGBO(69, 76, 80, 1),
+
                             ),
                           ),
-                        ),
-                      ],
+                        );
+                      },
                     ),
-                    Expanded(
-                      child: ListView.builder(
-                        padding: const EdgeInsets.only(top: 20),
-                        itemCount: mycard,
-                        itemBuilder: (context, index) {
-                          return Transform.translate(
-                            offset: const Offset(0, 0),
-                            child: ClipRRect(
-                              child: InkWell(
-                                child: Tweet(userId: index, tweet: true),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
-        bottomNavigationBar: Footer(),
-      );
-    } else {
-      return Scaffold();
-    }
+      ),
+      bottomNavigationBar: Footer(),
+    );
+
   }
 
   void toggleShowText() {
