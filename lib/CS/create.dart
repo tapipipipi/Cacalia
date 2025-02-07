@@ -6,6 +6,7 @@ import 'package:uuid/uuid.dart';
 
 /// import 'package:firebase_auth/firebase_auth.dart';
 String friend = "friends"; // コレクション、ドキュメント指定用 /users/friends/friends
+String suggest = "suggestion"; // コレクション、ドキュメント指定用
 String profile = "profile";
 String users = "users"; // コレクション指定用 /users
 String ini = ""; // 本番用 profileの初期値
@@ -23,6 +24,7 @@ final mycollection = db // コレクション名、usersは固定にしてuser�
     .collection(users)
     .doc(uid);
 final myfriends = mycollection.collection(friend).doc(friend);
+final AIsuggest = mycollection.collection(suggest).doc(suggest);
 
 // final createuser = db.collection(users).doc("aVhf5tTSWNRAmFAaikon0hyl08C3");
 
@@ -82,7 +84,6 @@ Map<String, dynamic> profiles = <String, dynamic>{
 Map<String, dynamic> friends = <String, dynamic>{"friend_uid": []};
 Map<String, dynamic> tweets = <String, dynamic>{"tweets": []};
 
-
 /// ---------------------------------------
 
 /// コレクションprofile作成(サインインアップ後一度だけ呼び出される)
@@ -101,11 +102,15 @@ void setUser(String uid) {
   print(profiles);
 }
 
-/// サブコレクションfriends作成(サインインアップ後一度だけ呼び出される)
-void setFriend() {
+/// サブコレクション作成(サインインアップ後一度だけ呼び出される)
+void setColection() {
+  //friends
   myfriends
       .set(friends, SetOptions(merge: true))
       .onError((e, _) => print("Error writing document: $e")); // errMessage
+  //suggestion
+  AIsuggest.set({suggest: {}}, SetOptions(merge: true))
+      .onError((e, _) => print("Error writing document: $e"));
 }
 
 /// データ更新　プロフィール編集時に使用
@@ -122,6 +127,19 @@ updateFriend(String key, String val) {
     key: FieldValue.arrayUnion([val])
   }).then((value) => print("update sucessed"),
       onError: (e) => print("Error updating document $e"));
+}
+
+//名刺交換時のAI提案を格納
+updateAIsuggest(String uid, String val) async {
+  try {
+    await AIsuggest.update({
+      "suggestion.$uid": val, // suggestionのuidにvalを格納
+    });
+
+    print("Update succeeded");
+  } catch (e) {
+    print("Error updating document: $e");
+  }
 }
 
 ///　削除　使わんかも
@@ -166,7 +184,7 @@ Future<Map<String, dynamic>> getProfile(String uid) async {
     if (!doc.exists || doc.data() == null) {
       print(uid);
       setUser(uid); // userprofike作成
-      setFriend();  // freendlist作成
+      setColection(); // サブコレクション作成
       print("serUser()successed");
       throw Exception('Document does not exist or has no data');
     }
@@ -179,14 +197,14 @@ Future<Map<String, dynamic>> getProfile(String uid) async {
 
 //ユーザのUUIDを生成
 _generateUuids() {
-    String serviceUuid = uuid.v4();
-    String charactaristicuuid = uuid.v4();
-    print(serviceUuid);
-    print(charactaristicuuid);
-    updateProfile("serviceUuid", serviceUuid);
-    updateProfile("charactaristicuuid", charactaristicuuid);
-    print('UUIDを作成しました');
-  }
+  String serviceUuid = uuid.v4();
+  String charactaristicuuid = uuid.v4();
+  print(serviceUuid);
+  print(charactaristicuuid);
+  updateProfile("serviceUuid", serviceUuid);
+  updateProfile("charactaristicuuid", charactaristicuuid);
+  print('UUIDを作成しました');
+}
 
 /// フレンドのuid一覧を取得
 /// フィールドから値を取得

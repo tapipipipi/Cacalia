@@ -76,14 +76,14 @@ class _ExchangeState extends State<ExchangePage>
     "charactaristicuuid": profileList[myuid]["charactaristicuuid"]
   };
 
-  String generatedText = 'Loading...';
+  String generatedText = '＊おにぎり\n ＊コーンスープ\n ＊ハンバーグ';
 
   //画面に表示するテキスト
   // String displayText = "近くにデバイスがありません。";
 
-  //受け取ったデータ
+  //受け取ったデータ(初期値は例)
   Map<String, dynamic> receivedData = {
-    'uid': "Hxva1aGnNMcwg8s7esKDNmNll6u1",
+    'u_id': "Iy8mliZrgsRoe7MBu91uL4F6a0Q2",
     "name": "谷岡 義貴",
     "read_name": "Tanioka Yoshitaka",
     "gender": "男",
@@ -240,9 +240,9 @@ class _ExchangeState extends State<ExchangePage>
                   //振る処理
                   ShakeGesture(onShake: startScan, child: const Text("")),
                   // //デバッグ用
-                  // ElevatedButton(
-                  //     onPressed: _showProfilePopup,
-                  //     child: const Text("交換後画面表示")),
+                  ElevatedButton(
+                      onPressed: _showProfilePopup,
+                      child: const Text("交換後画面表示")),
                 ],
               ),
             ),
@@ -655,8 +655,9 @@ class _ExchangeState extends State<ExchangePage>
                   //ボタンを押した時の処理
                   onTapDown: (_) {
                     Timer(Duration(milliseconds: 100), () {
-                      if (decodereceived['u_id'] != null) {
-                        updateFriend('friend_uid', decodereceived['u_id']);
+                      if (receivedData['u_id'] != null) {
+                        updateAIsuggest(receivedData['u_id'], generatedText);
+                        updateFriend('friend_uid', receivedData['u_id']);
                       }
                       Navigator.pop(context);
                       context.go('/home');
