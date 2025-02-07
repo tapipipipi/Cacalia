@@ -6,27 +6,27 @@ import 'package:cacalia/component/footer.dart';
 import '../../../Auth/Authentication.dart';
 import '../../../CS/create.dart';
 import 'package:go_router/go_router.dart';
-
+ 
 class Ask extends StatefulWidget {
   const Ask({super.key});
-
+ 
   @override
   _AskState createState() => _AskState();
 }
-
+ 
 List<String> friends = []; // friend一覧格納
 Map<String, dynamic> profileList = {}; // fidに対応するプロフィール一覧を格納
 List<List<Object>> cardList = []; // card使用するデータをfriendの数だけ用意
 List<Object> addList = []; // cardList追加時に使用
-
+ 
 String fid = "";
 //uid取得
 String myuid = Authentication().getuid();
 int mycard = 0;
-
+ 
 class _AskState extends State<Ask> {
   bool isLoading = true;  // ローディング状態を管理する変数
-
+ 
   @override
   void initState() {
     super.initState();
@@ -34,26 +34,26 @@ class _AskState extends State<Ask> {
     getProfile(uid);
     fetchCardData(); // 非同期データを初期化時に取得
   }
-
+ 
   Future<void> fetchCardData() async {
     await getcard();
     setState(() {
       isLoading = false; // データ取得完了後にローディング終了
     }); // データ取得後にUIを更新
   }
-
+ 
   // cardListにフレンドごとの名前と読みを追加していく
   Future<void> getcard() async {
     print("getcard()");
     cardList = []; // リフレッシュ
     profileList = {}; // リフレッシュ
     friends = await getFriends();
-
+ 
     print("get cards.");
     for (int i = 0; i < friends.length; i++) {
       fid = friends[i];
       profileList[fid] = await getProfile(fid);
-
+ 
       // 毎回新しいリストを作成して追加(リフレッシュ)
       List<Object> addList = [
         profileList[fid]["name"],
@@ -61,10 +61,10 @@ class _AskState extends State<Ask> {
       ];
       cardList.add(addList);
     }
-
+ 
     // 最終的にできるcardlistの最後尾を代入
     mycard = cardList.length;
-
+ 
     // 自身のプロフィールを獲得しcardlistに追加
     profileList[myuid] = await getProfile(myuid);
     List<Object> addList = [
@@ -72,97 +72,94 @@ class _AskState extends State<Ask> {
       profileList[myuid]["read_name"],
     ];
     cardList.add(addList);
-
+ 
     // 状態を更新
     setState(() {});
   }
-
+ 
   final ScrollController _controller = ScrollController();
   bool isVisible = false; // 初期値
-
+ 
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
     // データ取得中はローディング画面を表示
-    return Scaffold(
-      body: Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
+      return Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
     }
     return Scaffold(
       appBar: AppBar(
         title: Image.asset(
           'assets/images/cacalia.png',
         ),
-
+ 
+        Container(
+          height: 1,
+          color: Colors.grey,
+          width: 250,
+        ),
+        SizedBox(
+          height: 53,
+          width: 350,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
               Container(
-                height: 1,
-                color: Colors.grey,
-                width: 250,
+                height: 25,
+                width: 300,
+                margin: const EdgeInsets.only(left: 15),
+                child: TextField(
+                  decoration: InputDecoration(
+                    hintText: '検索',
+                    hintStyle: const TextStyle(fontFamily: 'DotGothic16'),
+                    prefixIcon: const Icon(Icons.search),
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 16),
+                    filled: true,
+                    fillColor: const Color.fromARGB(255, 255, 255, 255),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: const BorderSide(
+                          color: Color.fromRGBO(161, 161, 161, 1)),
+                    ),
+                  ),
+                ),
               ),
-            SizedBox(
-              height: 53,
-              width: 350,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+            ],
+          ),
+        ),
+        Container(
+          width: 337,
+          height: 600,
+          alignment: Alignment.center,
+          child: Column(
+            children: [
+              Stack(
                 children: [
-                  Container(
-                    height: 25,
-                    width: 300,
-                    margin: const EdgeInsets.only(left: 15),
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: '検索',
-                        hintStyle: const TextStyle(fontFamily: 'DotGothic16'),
-                        prefixIcon: const Icon(Icons.search),
-                        contentPadding:
-                            const EdgeInsets.symmetric(horizontal: 16),
-                        filled: true,
-                        fillColor: const Color.fromARGB(255, 255, 255, 255),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: const BorderSide(
-                              color: Color.fromRGBO(161, 161, 161, 1)),
-                        ),
+                  Visibility(
+                    visible: isVisible,
+                    child: Container(
+                      height: 139,
+                      width: 285,
+                      margin: const EdgeInsets.only(top: 0, left: 28),
+                      decoration: const BoxDecoration(
+                        color: Color.fromRGBO(69, 76, 80, 1),
                       ),
                     ),
                   ),
                 ],
               ),
-            ),
-              Container(
-                width: 337,
-                height: 600,
-                alignment: Alignment.center,
-                child: Column(
-                  children: [
-                    Stack(
-                      children: [
-                        Visibility(
-                          visible: isVisible,
-                          child: Container(
-                            height: 139,
-                            width: 285,
-                            margin: const EdgeInsets.only(top: 0, left: 28),
-                            decoration: const BoxDecoration(
-                              color: Color.fromRGBO(69, 76, 80, 1),
-                            ),
-                          ),
-                        );
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            },
-            );
-    );
-    );
+            ], 
+          ),
+        ),
+      ),
       bottomNavigationBar: Footer(),
     );
   }
-
+ 
   void toggleShowText() {
     isVisible = !isVisible;
   }
