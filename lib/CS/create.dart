@@ -15,6 +15,7 @@ String users = "users"; // コレクション指定用 /users
 String ini = ""; // 本番用 profileの初期値
 String g_doc = ""; // テスト用　将来的にはuid
 String g_colle = ""; // テスト用
+String tweet = "tweets";
 
 //Uuidを生成
 var uuid = Uuid();
@@ -31,6 +32,7 @@ final myfriends = mycollection.collection(friend).doc(friend);
 final mytweets = mycollection.collection(tweet);
 
 final AIsuggest = mycollection.collection(suggest).doc(suggest);
+final mytweets = mycollection.collection(tweet).doc(tweet);
 
 
 // final createuser = db.collection(users).doc("aVhf5tTSWNRAmFAaikon0hyl08C3");
