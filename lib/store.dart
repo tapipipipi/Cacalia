@@ -120,7 +120,7 @@ class _MyFirestorePageState extends State<MyFirestorePage> {
             ElevatedButton(
               child: Text('getTweet'),
               onPressed: () async {
-                getTweets("Hxva1aGnNMcwg8s7esKDNmNll6u1");
+                // getTweets("Hxva1aGnNMcwg8s7esKDNmNll6u1");
               },
             ),
             // ElevatedButton(
@@ -129,6 +129,7 @@ class _MyFirestorePageState extends State<MyFirestorePage> {
             //     updateTweet(friendid, Timestamp.now());
             //   },
             // ),
+
             ElevatedButton(
               child: Text('mode pro'),
               onPressed: () async {

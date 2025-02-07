@@ -240,9 +240,9 @@ class _ExchangeState extends State<ExchangePage>
                   //振る処理
                   ShakeGesture(onShake: startScan, child: const Text("")),
                   // //デバッグ用
-                  ElevatedButton(
-                      onPressed: _showProfilePopup,
-                      child: const Text("交換後画面表示")),
+                  // ElevatedButton(
+                  //     onPressed: _showProfilePopup,
+                  //     child: const Text("交換後画面表示")),
                 ],
               ),
             ),
