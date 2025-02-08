@@ -76,39 +76,56 @@ class _TimelineState extends State<Timeline> {
     } else {
       for (int i = 0; i < friends.length; i++) {
         fid = friends[i];
+        print(fid);
         tweetList[fid] = await getT_ids(fid); // fid:{tid,tid,...}  ->　配列にならない問題
         print(tweetList);
 
         // ーーーーーーー毎回新しいリストを作成して追加(リフレッシュ)ーーーーーーーーーーーーーーーーーーーーーーーーーー
 
-        // 配列の場合文字列に変換(ホンマは配列にする)
+        // ☆------配列の場合文字列に変換(ホンマは配列にする)-------
+        // var arry = (tweetList[fid]["t_ids"] is List)
+        //     ? (tweetList[fid]["t_ids"] as List).join(",") // 文字列に変換
+        //     : tweetList[fid]["t_ids"];
+
+        // --------------------------------------------------
+
         var arry = (tweetList[fid]["t_ids"] is List)
-            ? (tweetList[fid]["t_ids"] as List).join(",") // 文字列に変換
-            : tweetList[fid]["t_ids"];
+            ? List<String>.from(tweetList[fid]["t_ids"] as List) // `List<String>` に変換
+            : [tweetList[fid]["t_ids"].toString()]; // 文字列をリストに変換
 
         if (!arry.isEmpty) {
           //　投稿があれば追加
           print("arry is not empty");
-          List<Object> addList = [fid, arry];
+          List<Object> addList = [fid, arry]; // ☆
 
           postList.add(addList);
-          posts++;
 
           print(postList);
 
           //-------------------------
-          String feild = postList[i][1] as String;
+          // String feild = postList[i][1] as String;// ☆
 
-          print(feild);
+          var by_u_postList = postList[i][1] as List<String>;
+          print(by_u_postList);
 
-          print("ok");
-          print(fid);
-          tweetList2 = await getTweet(fid, feild);
-          print(tweetList2);
-          List<Object> add2List = [tweetList2["name"], tweetList2["tweet"]];
-          print(add2List);
-          tweets.add(add2List);
+          print("by_u_postList is not empty");
+          for (int l = 0; l < by_u_postList.length; l++) {
+            if (by_u_postList[l] != "") {
+              // List<String> list = by_u_postList[l] as List<String>;
+
+              String feild = by_u_postList[l];
+              print(feild); // tid
+
+              tweetList2 = await getTweet(fid, feild);
+              print(tweetList2);
+              List<Object> add2List = [tweetList2["name"], tweetList2["tweet"]];
+              print(add2List);
+              tweets.add(add2List);
+              posts++;
+            }
+          }
         }
+
         //------------------------------------------
       }
     }

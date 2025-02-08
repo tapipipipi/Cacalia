@@ -245,7 +245,6 @@ Future<Map<String, dynamic>> getProfile(String uid) async {
 /// ドキュメントから取得
 
 Future<Map<String, dynamic>> getTweet(String uuid, String tid) async {
-  e_name =  await getProfileField(uuid , "name");
   try {
     print("gettweet");
 
