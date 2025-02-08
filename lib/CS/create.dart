@@ -10,7 +10,6 @@ import 'package:uuid/uuid.dart';
 String friend = "friends"; // コレクション、ドキュメント指定用 /users/friends/friends
 String tweet = "tweets";
 String suggest = "suggestion"; // コレクション、ドキュメント指定用
-String tweet = "tweets";
 String profile = "profile";
 String users = "users"; // コレクション指定用 /users
 String ini = ""; // 本番用 profileの初期値
@@ -30,7 +29,6 @@ final mycollection = db // コレクション名、usersは固定にしてuser�
 final myfriends = mycollection.collection(friend).doc(friend);
 final mytweets = mycollection.collection(tweet);
 final AIsuggest = mycollection.collection(suggest).doc(suggest);
-
 
 // final createuser = db.collection(users).doc("aVhf5tTSWNRAmFAaikon0hyl08C3");
 
@@ -110,10 +108,13 @@ void setUser(String uid) {
 }
 
 /// サブコレクションfriends作成(サインインアップ後一度だけ呼び出される)
-void setFriend() {
+void setColection() {
   myfriends
       .set(friends, SetOptions(merge: true))
       .onError((e, _) => print("Error writing document: $e")); // errMessage
+  //suggestion
+  AIsuggest.set({suggest: {}}, SetOptions(merge: true))
+      .onError((e, _) => print("Error writing document: $e"));
 }
 
 /// サブコレクションtweets作成(サインインアップ後一度だけ呼び出される)
@@ -164,7 +165,6 @@ updateTweet(String val) {
       onError: (e) => print("Error updating document $e"));
 }
 
-
 //名刺交換時のAI提案を格納
 updateAIsuggest(String uid, String val) async {
   try {
@@ -176,7 +176,6 @@ updateAIsuggest(String uid, String val) async {
   } catch (e) {
     print("Error updating document: $e");
   }
-
 }
 
 //投稿に呼び出される
@@ -227,10 +226,7 @@ Future<Map<String, dynamic>> getProfile(String uid) async {
       print(uid);
       setUser(uid); // userprofike作成
 
-      setFriend(); // freendlist作成
-
-
-      setColection(); // freendlist作成
+      setColection(); // コレクション作成
 
       setTweets();
       print("serUser()successed");
