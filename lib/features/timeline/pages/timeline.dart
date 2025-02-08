@@ -50,9 +50,9 @@ class _TimelineState extends State<Timeline> {
     // }
     itemC = posts;
     print(itemC);
-    if (friends.isEmpty) {
-      itemC = 1;
-    }
+    // if (friends.isEmpty) {
+    //   itemC = 1;
+    // }
     if (mounted) {
       // mountedがtrueかどうかを確認
       setState(() {
@@ -76,11 +76,12 @@ class _TimelineState extends State<Timeline> {
     } else {
       for (int i = 0; i < friends.length; i++) {
         fid = friends[i];
-        tweetList[fid] = await getT_ids(fid); // fid:{tid,tid,...}
-        //tweetList = await getT_ids(fid);
+        tweetList[fid] = await getT_ids(fid); // fid:{tid,tid,...}  ->　配列にならない問題
         print(tweetList);
 
-        // 毎回新しいリストを作成して追加(リフレッシュ)
+        // ーーーーーーー毎回新しいリストを作成して追加(リフレッシュ)ーーーーーーーーーーーーーーーーーーーーーーーーーー
+
+        // 配列の場合文字列に変換(ホンマは配列にする)
         var arry = (tweetList[fid]["t_ids"] is List)
             ? (tweetList[fid]["t_ids"] as List).join(",") // 文字列に変換
             : tweetList[fid]["t_ids"];

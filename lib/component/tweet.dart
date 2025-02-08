@@ -24,11 +24,13 @@ class Tweet extends StatelessWidget {
     //cardListでフレンドの名前と読み仮名を取得している
     print("tweet.dart");
     var def;
-    if (friends.isEmpty) {
-      def = userList;
-    } else {
-      def = tweets;
-    }
+    // if (friends.isEmpty) {
+    //   def = userList;
+    // } else {
+    //   def = tweets;
+    // }
+
+    def = tweets;
 
     return Stack(
       alignment: Alignment.center,
