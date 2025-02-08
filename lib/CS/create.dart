@@ -9,6 +9,7 @@ import 'package:uuid/uuid.dart';
 /// import 'package:firebase_auth/firebase_auth.dart';
 String friend = "friends"; // コレクション、ドキュメント指定用 /users/friends/friends
 String tweet = "tweets";
+String suggest = "suggestion"; // コレクション、ドキュメント指定用
 String profile = "profile";
 String users = "users"; // コレクション指定用 /users
 String ini = ""; // 本番用 profileの初期値
@@ -27,6 +28,8 @@ final mycollection = db // コレクション名、usersは固定にしてuser�
     .doc(uid);
 final myfriends = mycollection.collection(friend).doc(friend);
 final mytweets = mycollection.collection(tweet);
+final AIsuggest = mycollection.collection(suggest).doc(suggest);
+
 
 // final createuser = db.collection(users).doc("aVhf5tTSWNRAmFAaikon0hyl08C3");
 
@@ -158,6 +161,21 @@ updateTweet(String val) {
     "t_ids": FieldValue.arrayUnion([val])
   }).then((value) => print("update sucessed"),
       onError: (e) => print("Error updating document $e"));
+}
+
+
+//名刺交換時のAI提案を格納
+updateAIsuggest(String uid, String val) async {
+  try {
+    await AIsuggest.update({
+      "suggestion.$uid": val, // suggestionのuidにvalを格納
+    });
+
+    print("Update succeeded");
+  } catch (e) {
+    print("Error updating document: $e");
+  }
+
 }
 
 //投稿に呼び出される

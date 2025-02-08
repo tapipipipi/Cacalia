@@ -6,27 +6,27 @@ import 'package:cacalia/component/footer.dart';
 import '../../../Auth/Authentication.dart';
 import '../../../CS/create.dart';
 import 'package:go_router/go_router.dart';
-
+ 
 class Ask extends StatefulWidget {
   const Ask({super.key});
-
+ 
   @override
   _AskState createState() => _AskState();
 }
-
+ 
 List<String> friends = []; // friend一覧格納
 Map<String, dynamic> profileList = {}; // fidに対応するプロフィール一覧を格納
 List<List<Object>> cardList = []; // card使用するデータをfriendの数だけ用意
 List<Object> addList = []; // cardList追加時に使用
-
+ 
 String fid = "";
 //uid取得
 String myuid = Authentication().getuid();
 int mycard = 0;
-
+ 
 class _AskState extends State<Ask> {
   bool isLoading = true;  // ローディング状態を管理する変数
-
+ 
   @override
   void initState() {
     super.initState();
@@ -34,26 +34,26 @@ class _AskState extends State<Ask> {
     getProfile(uid);
     fetchCardData(); // 非同期データを初期化時に取得
   }
-
+ 
   Future<void> fetchCardData() async {
     await getcard();
     setState(() {
       isLoading = false; // データ取得完了後にローディング終了
     }); // データ取得後にUIを更新
   }
-
+ 
   // cardListにフレンドごとの名前と読みを追加していく
   Future<void> getcard() async {
     print("getcard()");
     cardList = []; // リフレッシュ
     profileList = {}; // リフレッシュ
     friends = await getFriends();
-
+ 
     print("get cards.");
     for (int i = 0; i < friends.length; i++) {
       fid = friends[i];
       profileList[fid] = await getProfile(fid);
-
+ 
       // 毎回新しいリストを作成して追加(リフレッシュ)
       List<Object> addList = [
         profileList[fid]["name"],
@@ -61,10 +61,10 @@ class _AskState extends State<Ask> {
       ];
       cardList.add(addList);
     }
-
+ 
     // 最終的にできるcardlistの最後尾を代入
     mycard = cardList.length;
-
+ 
     // 自身のプロフィールを獲得しcardlistに追加
     profileList[myuid] = await getProfile(myuid);
     List<Object> addList = [
@@ -72,23 +72,23 @@ class _AskState extends State<Ask> {
       profileList[myuid]["read_name"],
     ];
     cardList.add(addList);
-
+ 
     // 状態を更新
     setState(() {});
   }
-
+ 
   final ScrollController _controller = ScrollController();
   bool isVisible = false; // 初期値
-
+ 
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
-    // データ取得中はローディング画面を表示
-    return Scaffold(
-      body: Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
+      // データ取得中はローディング画面を表示
+      return Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
     }
     return Scaffold(
       appBar: AppBar(
@@ -96,11 +96,97 @@ class _AskState extends State<Ask> {
           'assets/images/cacalia.png',
         ),
 
-              Container(
-                height: 1,
-                color: Colors.grey,
-                width: 250,
-              ),
+        toolbarHeight: 80,
+        centerTitle: true,
+        backgroundColor: const Color.fromRGBO(215, 230, 239, 1),
+      ),
+      //自分のアイコンがうまく表示されない
+      // leading: Container(
+      //   height: 47,
+      //   padding: const EdgeInsets.only(left: 20), // アイコンとの間にスペースを追加
+      //   margin: const EdgeInsets.only(left: 45), // 左に空間を追加
+      //   child: ElevatedButton(
+      //     style: ElevatedButton.styleFrom(
+      //       backgroundColor: const Color.fromRGBO(17, 90, 132, 1),
+      //       shape: const CircleBorder(),
+      //       padding: EdgeInsets.zero,
+      //     ),
+      //     onPressed: () {
+      //       context.go('/exchange');
+      //     },
+      //     child: Image.asset(
+      //       'assets/images/exchangeBtn.png',  // 画像アイコンを指定
+      //       height: 40,  // アイコンの高さ
+      //       width: 40,   // アイコンの幅
+      //       fit: BoxFit.contain,  // 画像がつぶれないように調整
+      //     ),
+      //   ),
+      // ),
+
+      body: Container(
+        color: const Color.fromRGBO(215, 230, 239, 1),
+        width: double.infinity,
+        height: double.infinity,
+        child: Column(
+          children: [
+            // ここでRowを追加
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // 1つ目のTextをInkWellでラップ
+                InkWell(
+                  onTap: () {
+                    context.go('/ask');
+                  },
+                  child: Text(
+                    '質問', // ここに表示したい文字を入れる
+                    style: TextStyle(
+
+                      fontSize: 16,
+
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xff115A84), // 文字の色を設定
+                    ),
+                  ),
+                ),
+                SizedBox(width: 60), // テキスト間のスペース
+                InkWell(
+                  onTap: () {},
+                  child: Text(
+                    '投稿',
+                    style: TextStyle(
+
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xff115A84), // 文字の色を設定
+                    ),
+                  ),
+                ),
+                SizedBox(width: 60), // テキスト間のスペース
+                // 3つ目のTextをInkWellでラップ
+                InkWell(
+                  onTap: () {
+                    context.go('/recruitment');
+                  },
+                  child: Text(
+                    '募集', // ここに表示したい文字を入れる
+                    style: TextStyle(
+                      fontSize: 16,
+
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xff115A84), // 文字の色を設定
+                    ),
+                  ),
+                ),
+
+              ],
+            ),
+            // Rowの下に引く線
+            Container(
+              height: 1, // 線の太さ
+              color: Colors.grey, // 線の色
+              width: 250, // 幅を親コンテナに合わせる
+            ),
             SizedBox(
               height: 53,
               width: 350,
@@ -109,7 +195,9 @@ class _AskState extends State<Ask> {
                 children: [
                   Container(
                     height: 25,
+
                     width: 300,
+
                     margin: const EdgeInsets.only(left: 15),
                     child: TextField(
                       decoration: InputDecoration(
@@ -119,34 +207,62 @@ class _AskState extends State<Ask> {
                         contentPadding:
                             const EdgeInsets.symmetric(horizontal: 16),
                         filled: true,
+
                         fillColor: const Color.fromARGB(255, 255, 255, 255),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20),
+
                           borderSide: const BorderSide(
                               color: Color.fromRGBO(161, 161, 161, 1)),
                         ),
                       ),
                     ),
                   ),
+                  IconButton(
+                    onPressed: () {
+                      setState(toggleShowText);
+                    },
+                    icon: Image.asset('assets/images/sort.png'),
+                  ),
                 ],
               ),
             ),
-              Container(
-                width: 337,
-                height: 600,
-                alignment: Alignment.center,
-                child: Column(
-                  children: [
-                    Stack(
-                      children: [
-                        Visibility(
-                          visible: isVisible,
-                          child: Container(
-                            height: 139,
-                            width: 285,
-                            margin: const EdgeInsets.only(top: 0, left: 28),
-                            decoration: const BoxDecoration(
-                              color: Color.fromRGBO(69, 76, 80, 1),
+            Container(
+              width: 337,
+
+              height: 600,
+
+              alignment: Alignment.center,
+              child: Column(
+                children: [
+                  Stack(
+                    children: [
+                      //sortのダイアログ
+                      Visibility(
+                        visible: isVisible,
+                        child: Container(
+                          height: 139,
+                          width: 285,
+                          margin: const EdgeInsets.only(top: 0, left: 28),
+                          decoration: const BoxDecoration(
+                            color: Color.fromRGBO(69, 76, 80, 1),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      padding: const EdgeInsets.only(top: 20),
+
+                      itemCount: tweets.length, // フレンドの数だけ表示
+
+                      itemBuilder: (context, index) {
+                        return Transform.translate(
+                          offset: const Offset(0, 0),
+                          child: ClipRRect(
+                            child: InkWell(
+                              child: Tweet(userId: index, tweet: true),
                             ),
                           ),
                         );
@@ -161,8 +277,10 @@ class _AskState extends State<Ask> {
       ),
       bottomNavigationBar: Footer(),
     );
+
   }
 
+  //sort押した時のダイアログ？表示の操作
   void toggleShowText() {
     isVisible = !isVisible;
   }
