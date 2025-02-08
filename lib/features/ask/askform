@@ -83,7 +83,9 @@ class _AskState extends State<Ask> {
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
+
       // データ取得中はローディング画面を表示
+
       return Scaffold(
         body: Center(
           child: CircularProgressIndicator(),
@@ -95,6 +97,7 @@ class _AskState extends State<Ask> {
         title: Image.asset(
           'assets/images/cacalia.png',
         ),
+
 
         toolbarHeight: 80,
         centerTitle: true,
@@ -267,12 +270,14 @@ class _AskState extends State<Ask> {
                           ),
                         );
                       },
+
+
                     ),
                   ),
                 ],
               ),
-            ),
-          ],
+            ], 
+          ),
         ),
       ),
       bottomNavigationBar: Footer(),
@@ -280,7 +285,6 @@ class _AskState extends State<Ask> {
 
   }
 
-  //sort押した時のダイアログ？表示の操作
   void toggleShowText() {
     isVisible = !isVisible;
   }

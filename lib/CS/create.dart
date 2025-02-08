@@ -10,6 +10,7 @@ import 'package:uuid/uuid.dart';
 String friend = "friends"; // コレクション、ドキュメント指定用 /users/friends/friends
 String tweet = "tweets";
 String suggest = "suggestion"; // コレクション、ドキュメント指定用
+String tweet = "tweets";
 String profile = "profile";
 String users = "users"; // コレクション指定用 /users
 String ini = ""; // 本番用 profileの初期値
@@ -225,7 +226,12 @@ Future<Map<String, dynamic>> getProfile(String uid) async {
     if (!doc.exists || doc.data() == null) {
       print(uid);
       setUser(uid); // userprofike作成
+
       setFriend(); // freendlist作成
+
+
+      setColection(); // freendlist作成
+
       setTweets();
       print("serUser()successed");
       throw Exception('Document does not exist or has no data');

@@ -97,6 +97,7 @@ class _RecruitmentState extends State<Recruitment> {
           'assets/images/cacalia.png',
         ),
 
+
         toolbarHeight: 80,
         centerTitle: true,
         backgroundColor: const Color.fromRGBO(215, 230, 239, 1),
@@ -147,6 +148,7 @@ class _RecruitmentState extends State<Recruitment> {
 
                       fontWeight: FontWeight.bold,
                       color: Color(0xff115A84), // 文字の色を設定
+
                     ),
                   ),
                 ),
@@ -179,6 +181,7 @@ class _RecruitmentState extends State<Recruitment> {
                     ),
                   ),
                 ),
+
 
               ],
             ),
@@ -233,6 +236,7 @@ class _RecruitmentState extends State<Recruitment> {
 
               height: 600,
 
+
               alignment: Alignment.center,
               child: Column(
                 children: [
@@ -266,19 +270,18 @@ class _RecruitmentState extends State<Recruitment> {
                               child: Tweet(userId: index, tweet: true),
                             ),
                           ),
-                        );
-                      },
+                        ),
+                      ],
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: Footer(),
     );
-
   }
 
   //sort押した時のダイアログ？表示の操作
