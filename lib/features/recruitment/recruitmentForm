@@ -84,12 +84,12 @@ class _RecruitmentState extends State<Recruitment> {
   @override
   Widget build(BuildContext context) {
         if (isLoading) {
-    // データ取得中はローディング画面を表示
-    return Scaffold(
-      body: Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
+      // データ取得中はローディング画面を表示
+      return Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
     }
     return Scaffold(
       appBar: AppBar(
@@ -141,7 +141,7 @@ class _RecruitmentState extends State<Recruitment> {
                   child: Text(
                     '質問', // ここに表示したい文字を入れる
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: Color(0xff115A84), // 文字の色を設定
                     ),
@@ -153,7 +153,7 @@ class _RecruitmentState extends State<Recruitment> {
                   child: Text(
                     '投稿',
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: Color(0xff115A84), // 文字の色を設定
                     ),
@@ -168,7 +168,7 @@ class _RecruitmentState extends State<Recruitment> {
                   child: Text(
                     '募集', // ここに表示したい文字を入れる
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: Color(0xff115A84), // 文字の色を設定
                     ),
@@ -190,7 +190,7 @@ class _RecruitmentState extends State<Recruitment> {
                 children: [
                   Container(
                     height: 25,
-                    width: 240,
+                    width: 300,
                     margin: const EdgeInsets.only(left: 15),
                     child: TextField(
                       decoration: InputDecoration(
@@ -200,9 +200,9 @@ class _RecruitmentState extends State<Recruitment> {
                         contentPadding:
                             const EdgeInsets.symmetric(horizontal: 16),
                         filled: true,
-                        fillColor: const Color.fromRGBO(161, 161, 161, 1),
+                        fillColor: const Color.fromARGB(255, 255, 255, 255),
                         enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
+                          borderRadius: BorderRadius.circular(20),
                           borderSide: const BorderSide(
                               color: Color.fromRGBO(161, 161, 161, 1)),
                         ),
@@ -220,7 +220,7 @@ class _RecruitmentState extends State<Recruitment> {
             ),
             Container(
               width: 337,
-              height: 619,
+              height: 600,
               alignment: Alignment.center,
               child: Column(
                 children: [
@@ -243,7 +243,7 @@ class _RecruitmentState extends State<Recruitment> {
                   Expanded(
                     child: ListView.builder(
                       padding: const EdgeInsets.only(top: 20),
-                      itemCount: mycard, // フレンドの数だけ表示
+                      itemCount: tweets.length, // フレンドの数だけ表示
                       itemBuilder: (context, index) {
                         return Transform.translate(
                           offset: const Offset(0, 0),
@@ -267,6 +267,7 @@ class _RecruitmentState extends State<Recruitment> {
 
   }
 
+  //sort押した時のダイアログ？表示の操作
   void toggleShowText() {
     isVisible = !isVisible;
   }

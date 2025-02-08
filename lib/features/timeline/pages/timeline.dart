@@ -244,12 +244,12 @@ class _TimelineState extends State<Timeline> {
                       ),
                     ),
                   ),
-                  IconButton(
-                    onPressed: () {
-                      setState(toggleShowText);
-                    },
-                    icon: Image.asset('assets/images/sort.png'),
-                  ),
+                  // IconButton(
+                  //   onPressed: () {
+                  //     setState(toggleShowText);
+                  //   },
+                  //   icon: Image.asset('assets/images/sort.png'),
+                  // ),
                 ],
               ),
             ),

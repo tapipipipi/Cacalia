@@ -8,8 +8,8 @@ import 'package:uuid/uuid.dart';
 
 /// import 'package:firebase_auth/firebase_auth.dart';
 String friend = "friends"; // コレクション、ドキュメント指定用 /users/friends/friends
-String suggest = "suggestion"; // コレクション、ドキュメント指定用
 String tweet = "tweets";
+String suggest = "suggestion"; // コレクション、ドキュメント指定用
 String profile = "profile";
 String users = "users"; // コレクション指定用 /users
 String ini = ""; // 本番用 profileの初期値
@@ -27,11 +27,8 @@ final mycollection = db // コレクション名、usersは固定にしてuser�
     .collection(users)
     .doc(uid);
 final myfriends = mycollection.collection(friend).doc(friend);
-
 final mytweets = mycollection.collection(tweet);
-
 final AIsuggest = mycollection.collection(suggest).doc(suggest);
-
 
 // final createuser = db.collection(users).doc("aVhf5tTSWNRAmFAaikon0hyl08C3");
 
@@ -91,9 +88,7 @@ Map<String, dynamic> profiles = <String, dynamic>{
 
 // uid 格納していくスタイル
 Map<String, dynamic> friends = <String, dynamic>{"friend_uid": []};
-
 Map<String, dynamic> tweets = <String, dynamic>{"t_ids": []};
-
 
 /// ---------------------------------------
 
@@ -112,9 +107,8 @@ void setUser(String uid) {
       .onError((e, _) => print("Error writing document: $e")); // errMessage
 }
 
-/// サブコレクション作成(サインインアップ後一度だけ呼び出される)
+/// サブコレクションfriends作成(サインインアップ後一度だけ呼び出される)
 void setColection() {
-  //friends
   myfriends
       .set(friends, SetOptions(merge: true))
       .onError((e, _) => print("Error writing document: $e")); // errMessage
@@ -163,7 +157,6 @@ updateFriend(String key, String val) {
       onError: (e) => print("Error updating document $e"));
 }
 
-
 ///
 updateTweet(String val) {
   mytweets.doc(tweet).update({
@@ -183,7 +176,6 @@ updateAIsuggest(String uid, String val) async {
   } catch (e) {
     print("Error updating document: $e");
   }
-
 }
 
 //投稿に呼び出される
@@ -234,11 +226,9 @@ Future<Map<String, dynamic>> getProfile(String uid) async {
       print(uid);
       setUser(uid); // userprofike作成
 
-      setColection(); // freendlist作成
+      setColection(); // コレクション作成
+
       setTweets();
-
-      setColection(); // サブコレクション作成
-
       print("serUser()successed");
       throw Exception('Document does not exist or has no data');
     }
