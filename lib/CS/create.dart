@@ -16,6 +16,8 @@ String ini = ""; // 本番用 profileの初期値
 String g_doc = ""; // テスト用　将来的にはuid
 String g_colle = ""; // テスト用
 
+String e_name = "";
+
 //Uuidを生成
 var uuid = Uuid();
 
@@ -88,7 +90,9 @@ Map<String, dynamic> profiles = <String, dynamic>{
 
 // uid 格納していくスタイル
 Map<String, dynamic> friends = <String, dynamic>{"friend_uid": []};
-Map<String, dynamic> tweets = <String, dynamic>{"t_ids": []};
+Map<String, dynamic> tweets = <String, dynamic>{
+  "t_ids": []
+};
 
 /// ---------------------------------------
 
@@ -225,10 +229,8 @@ Future<Map<String, dynamic>> getProfile(String uid) async {
     if (!doc.exists || doc.data() == null) {
       print(uid);
       setUser(uid); // userprofike作成
-
-      setColection(); // コレクション作成
-
       setTweets();
+      setColection(); // コレクション作成
       print("serUser()successed");
       throw Exception('Document does not exist or has no data');
     }
@@ -243,20 +245,26 @@ Future<Map<String, dynamic>> getProfile(String uid) async {
 /// ドキュメントから取得
 
 Future<Map<String, dynamic>> getTweet(String uuid, String tid) async {
+  e_name =  await getProfileField(uuid , "name");
   try {
     print("gettweet");
+
     // Firestore ドキュメントを取得
     DocumentSnapshot<Map<String, dynamic>> doc =
         await db.collection(users).doc(uuid).collection(tweet).doc(tid).get();
 
     // ドキュメントが存在しない場合、ドキュメントを作成
     if (!doc.exists || doc.data() == null) {
-      throw Exception('Document does not exist or has no data');
+      throw Exception("no data");
     }
     return doc.data()!;
   } catch (e) {
     print('Error getting profile: $e'); // エラーをキャッチ
-    return <String, dynamic>{};
+    return <String, dynamic>{
+      // "name":e_name,
+      // "tweet": "from firebase : このユーザーは投稿がありません",
+      // "timestamp": ""
+    };
   }
 }
 
