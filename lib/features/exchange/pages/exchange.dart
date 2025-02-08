@@ -56,7 +56,7 @@ class _ExchangeState extends State<ExchangePage>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
-  bool setAI = false;
+  // bool setAI = false;
 
   Map<String, String> myprofiles = <String, String>{
     'u_id': profileList[myuid]["u_id"],
@@ -101,7 +101,7 @@ class _ExchangeState extends State<ExchangePage>
   };
 
   //デバイスに接続できるボタンの状態
-  bool _isfinded = false;
+  // bool _isfinded = false;
 
   //スキャンされたデバイス
   BluetoothDevice? selectdevaice;
@@ -144,7 +144,7 @@ class _ExchangeState extends State<ExchangePage>
     final now = DateTime.now();
     // 前回のシェイクから500ミリ秒以上経過している場合のみ処理を実行
     if (_lastShakeTime == null ||
-        now.difference(_lastShakeTime!) > const Duration(milliseconds: 500)) {
+        now.difference(_lastShakeTime!) > const Duration(milliseconds: 1000)) {
       _lastShakeTime = now;
       startScan();
     }
@@ -240,9 +240,8 @@ class _ExchangeState extends State<ExchangePage>
                   //振る処理
                   ShakeGesture(onShake: startScan, child: const Text("")),
                   // //デバッグ用
-                  // ElevatedButton(
-                  //     onPressed: _showProfilePopup,
-                  //     child: const Text("交換後画面表示")),
+                  ElevatedButton(
+                      onPressed: startScan, child: const Text("交換する")),
                 ],
               ),
             ),
@@ -301,11 +300,11 @@ class _ExchangeState extends State<ExchangePage>
       try {
         Uint8List senddata = _jsonToUint8List({'u_id': myuid});
 
-        //データが大きい場合を考慮し、offsetを使用して分割読み出しを行う
-        Uint8List partialData = senddata.sublist(offset);
+        // //データが大きい場合を考慮し、offsetを使用して分割読み出しを行う
+        // Uint8List partialData = senddata.sublist(offset);
 
         return ble_peripheral.ReadRequestResult(
-            value: partialData, status: 0 // GATT_SUCCESS
+            value: senddata, status: 0 // GATT_SUCCESS
             );
       } catch (e) {
         print("Error in ReadRequestCallback: $e");
@@ -423,11 +422,11 @@ class _ExchangeState extends State<ExchangePage>
 
     setState(() {
       //判定に必要な変数を初期化
-      _isfinded = false;
+      // _isfinded = false;
       _isScanning = true;
       isReceived.add(false);
       _isConnected = false;
-      setAI = false;
+      // setAI = false;
       // displayText = "スキャン中...";
     });
 
@@ -455,7 +454,7 @@ class _ExchangeState extends State<ExchangePage>
                 deviceUUID =
                     splitdata(r.advertisementData.serviceUuids.toString());
 
-                _isfinded = true;
+                // _isfinded = true;
 
                 selectdevaice = r.device;
               });
@@ -496,14 +495,14 @@ class _ExchangeState extends State<ExchangePage>
       await Future.delayed(const Duration(seconds: 1));
       services = await device.discoverServices();
       await readCharacteristic(); //ReadWrighメソッド
-      disconnectDevaice(device);
-      stopAdvertise();
+      await disconnectDevaice(device);
+      isReceived.add(true);
     } catch (e) {
       print('エラーでちゃった。。。:$e');
       _isConnected = false;
       stopAdvertise();
 
-    ///
+      ///
     }
   }
 
@@ -527,18 +526,18 @@ class _ExchangeState extends State<ExchangePage>
         print('きゃらくたりすてぃっく:$characteristic');
         //ペリフェラル側で設定したキャラクタリスティックの場合
         if (characteristic.serviceUuid.toString() == deviceUUID) {
-          // print('受け取りたいデータ$characteristic');
-          // // 通知を有効化
-          // characteristic.setNotifyValue(true);
-          // //値を読み込む
-          // final value = await characteristic.read();
-          // // 受信データを文字列に変換
-          // final received = utf8.decode(value);
-          // print("received:$received");
-          // decodereceived = Map<String, String>.from(jsonDecode(received));
-          // receivedData = await getProfile(decodereceived['u_id']!);
-          // print("Caractaristic:${characteristic.uuid}");
-          // print("Received: $receivedData");
+          print('受け取りたいデータ$characteristic');
+          // 通知を有効化
+          await characteristic.setNotifyValue(true);
+          //値を読み込む
+          final value = await characteristic.read();
+          // 受信データを文字列に変換
+          final received = utf8.decode(value);
+          print("received:$received");
+          decodereceived = Map<String, String>.from(jsonDecode(received));
+          receivedData = await getProfile(decodereceived['u_id']!);
+          print("Caractaristic:${characteristic.uuid}");
+          print("Received: $receivedData");
 
           //書き込み
           writeCaracteristic(characteristic);
@@ -677,6 +676,8 @@ class _ExchangeState extends State<ExchangePage>
 
   //交換相手の情報を表示するメソッド
   _showProfilePopup() async {
+    await stopAdvertise();
+
     //比較する項目を設定
     List<String> keys = ["events", "comment", "hoby", "background"];
 
@@ -715,7 +716,6 @@ class _ExchangeState extends State<ExchangePage>
 
     //非同期処理でのエラー対策
     if (!mounted) return;
-
 
     showDialog(
       context: context,
