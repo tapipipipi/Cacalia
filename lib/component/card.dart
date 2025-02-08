@@ -1,6 +1,7 @@
 import 'package:cacalia/features/home/pages/home.dart';
 import 'package:flutter/material.dart';
 import '../CS/create.dart';
+import 'package:cacalia/datas/designData.dart';
 
 class UserCard extends StatelessWidget {
   // 変数を宣言
@@ -23,7 +24,7 @@ class UserCard extends StatelessWidget {
     required this.state, // required 修飾子を付ける(非null制約を解除)
   });
 
-  final String bgImg = 'assets/images/default_avatar.png';
+  final String bgImg = cardImg.cardTheme1;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +43,7 @@ class UserCard extends StatelessWidget {
             alignment: const Alignment(-0.8, 0),
             decoration: const BoxDecoration(
                 image: DecorationImage(
-              image: AssetImage('assets/images/Rectangle_75.png'),
+              image: AssetImage(cardImg.cardTheme1),
               fit: BoxFit.cover,
             )),
             child: Column(

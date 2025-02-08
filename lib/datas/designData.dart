@@ -1,7 +1,5 @@
-// 設定できるフォントの定義
-import 'package:flutter/material.dart';
-
-class Fonts {
+// 設定できるフォントの定義 ------------------------------------------------------
+class fonts {
   static const String font0 = '';
   static const String font1 = 'ArchitectsDaughter';
   static const String font2 = 'Anton';
@@ -9,8 +7,33 @@ class Fonts {
   static const String font4 = 'PirataOne';
 }
 
-// 設定できる背景の定義
-// ignore: camel_case_types
+String setFont(String font) {
+  print('setFont処理開始');
+  print(font);
+  var selected = '0';
+  switch (font) {
+    case '0':
+      selected = fonts.font0;
+      break;
+    case '1':
+      selected = fonts.font1;
+      break;
+    case '2':
+      selected = fonts.font2;
+      break;
+    case '3':
+      selected = fonts.font3;
+      break;
+    case '4':
+      selected = fonts.font4;
+      break;
+  }
+  print('selected: ' + selected);
+  // ignore: void_checks
+  return selected;
+}
+
+// 設定できる背景の定義 ----------------------------------------------------------
 class bgImg {
   static const String design0 = 'assets/images/designs/design0.png';
   static const String design1 = 'assets/images/designs/design1.png';
@@ -18,6 +41,7 @@ class bgImg {
   static const String design3 = 'assets/images/designs/design3.png';
 }
 
+// 設定できる背景テーマ選択の表示
 String setBg(String bg) {
   print('setBg処理開始');
   print(bg);
@@ -41,4 +65,34 @@ String setBg(String bg) {
   return selected;
 }
 
+// 設定できる背景の定義 ----------------------------------------------------------
+class cardImg {
+  static const String cardTheme0 = 'assets/images/designCards/card0.png';
+  static const String cardTheme1 = 'assets/images/designCards/card1.png';
+  static const String cardTheme2 = 'assets/images/designCards/card2.png';
+  static const String cardTheme3 = 'assets/images/designCards/card3.png';
+}
+
 // 設定できる背景テーマ選択の表示
+String setCardTheme(String card) {
+  print('setCardTheme処理開始');
+  print(card);
+  var selected = '0';
+  switch (card) {
+    case '0':
+      selected = cardImg.cardTheme0;
+      break;
+    case '1':
+      selected = cardImg.cardTheme1;
+      break;
+    case '2':
+      selected = cardImg.cardTheme2;
+      break;
+    case '3':
+      selected = cardImg.cardTheme3;
+      break;
+  }
+  print('selected: ' + selected);
+  // ignore: void_checks
+  return selected;
+}

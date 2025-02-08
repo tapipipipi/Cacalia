@@ -135,15 +135,6 @@ class _ThemeEditorState extends State<ThemeEditor> {
           ),
           ElevatedButton(
             onPressed: () async {
-              print('--------------------[EditPen保存]--------------------');
-              print('\\\\\\\\\\\\\\');
-              print('\\\\\\\\\\\\\\');
-              print('\\\\\\\\\\\\\\');
-              print(selectBg);
-              print(selectFont);
-              print('\\\\\\\\\\\\\\');
-              print('\\\\\\\\\\\\\\');
-              print('\\\\\\\\\\\\\\');
               Navigator.of(context).pop({selectBg, selectFont});
             },
             style: ElevatedButton.styleFrom(
