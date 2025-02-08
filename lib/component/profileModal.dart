@@ -120,9 +120,9 @@ void Profilemodal(
         return Container(
           height: MediaQuery.of(context).size.height * 0.9, // 高さを動的に設定
           width: double.infinity,
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/images/designs/design1.png'),
+                image: AssetImage('${profileList['wigetteme']}'),
                 fit: BoxFit.cover,
               ),
               borderRadius: BorderRadius.only(

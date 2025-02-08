@@ -82,7 +82,7 @@ Map<String, dynamic> profiles = <String, dynamic>{
   "bairth": "1/1",
   "serviceUuid": "forble",
   "charactaristicuuid": "forble",
-  "wigetteme": "1", // テーマカラー
+  "wigetteme": "design0", // テーマカラー
   "chartheme": "1" // 字体
 };
 

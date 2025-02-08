@@ -1,5 +1,7 @@
 // テーマ編集
+import 'package:cacalia/CS/create.dart';
 import 'package:flutter/material.dart';
+import 'package:cacalia/datas/designData.dart';
 
 // モーダルの大枠
 // ignore: non_constant_identifier_names
@@ -33,6 +35,14 @@ class ThemeEditor extends StatefulWidget {
 }
 
 class _ThemeEditorState extends State<ThemeEditor> {
+  // 背景画像パスのリスト
+  final List<String> bgImgList = [
+    bgImg.design0,
+    bgImg.design1,
+    bgImg.design2,
+    bgImg.design3,
+  ];
+
   List<bool> _bgtheme = [true, false, false, false];
   List<bool> _fonttheme = [true, false, false, false, false];
   int selectBg = 0;
@@ -129,6 +139,12 @@ class _ThemeEditorState extends State<ThemeEditor> {
                     ),
                   ],
                 ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  updateProfile('wigetteme', bgImgList[selectBg]);
+                },
+                child: Text('変更'),
               ),
             ],
           ),

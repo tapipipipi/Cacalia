@@ -10,8 +10,8 @@ class Fonts {
 // 設定できる背景の定義
 // ignore: camel_case_types
 class bgImg {
-  static const String design0 = 'images/designs/design1.png';
-  static const String design1 = 'images/designs/design2.png';
-  static const String design2 = 'images/designs/design3.png';
-  static const String design3 = 'images/designs/design4.png';
+  static const String design0 = 'assets/images/designs/design1.png';
+  static const String design1 = 'assets/images/designs/design2.png';
+  static const String design2 = 'assets/images/designs/design3.png';
+  static const String design3 = 'assets/images/designs/design4.png';
 }
