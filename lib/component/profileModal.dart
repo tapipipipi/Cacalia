@@ -17,10 +17,9 @@ List<String> values = [];
 
 // ignore: non_constant_identifier_names
 void Profilemodal(
-  BuildContext context, Map<String, dynamic> profileList) async {
+    BuildContext context, Map<String, dynamic> profileList) async {
   bool isVisible = false; // 初期値
-    String fieldName = "suggestion";
-
+  String fieldName = "suggestion";
 
   print(profileList);
   List<String> values = []; // リフレッシュ
@@ -34,19 +33,19 @@ void Profilemodal(
   }
 
   // Firestore ドキュメントを取得
-    DocumentSnapshot<Map<String, dynamic>> doc = await AIsuggest.get();
+  DocumentSnapshot<Map<String, dynamic>> doc = await AIsuggest.get();
 
-    // ドキュメントデータを取得
-    Map<String, dynamic>? data = doc.data();
+  // ドキュメントデータを取得
+  Map<String, dynamic>? data = doc.data();
 
-    //AI提案を格納するフィールド
-    var suggestdata = data![fieldName];
+  //AI提案を格納するフィールド
+  var suggestdata = data![fieldName];
 
   String name = profileList["name"];
   String readname = profileList["read_name"];
 
   //AI提案表示
-   Future<void> AIAdvice() async {
+  Future<void> AIAdvice() async {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -122,7 +121,7 @@ void Profilemodal(
           width: double.infinity,
           decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('${profileList['wigetteme']}'),
+                image: AssetImage('${profileList['wigetteme']}'), //テーマ
                 fit: BoxFit.cover,
               ),
               borderRadius: BorderRadius.only(
@@ -160,26 +159,31 @@ void Profilemodal(
                                 color: Colors.white54,
                                 borderRadius: BorderRadius.circular(20.0),
                               ),
-                              child: Column(
-                                children: [
-                                  const SizedBox(height: 50),
-                                  Text(
-                                    name,
-                                    style: TextStyle(fontSize: 24),
-                                  ),
-                                  Text(
-                                    readname,
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                  const SizedBox(height: 10), // 余白
-                                  // ---------------プロフィールを一覧表示------------------
-                                  for (int i = 0; i < keys.length; i++)
-                                    Category(keys[i], values[i]),
-                                  const SizedBox(
-                                    height: 70,
-                                  ), // 余白(ボタンで隠れないように)
-                                  // ----------------------------------------------------------
-                                ],
+                              child: DefaultTextStyle(
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontFamily: '${profileList['chartheme']}'),
+                                child: Column(
+                                  children: [
+                                    const SizedBox(height: 50),
+                                    Text(
+                                      name,
+                                      style: TextStyle(fontSize: 24),
+                                    ),
+                                    Text(
+                                      readname,
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                    const SizedBox(height: 10), // 余白
+                                    // ---------------プロフィールを一覧表示------------------
+                                    for (int i = 0; i < keys.length; i++)
+                                      Category(keys[i], values[i]),
+                                    const SizedBox(
+                                      height: 70,
+                                    ), // 余白(ボタンで隠れないように)
+                                    // ----------------------------------------------------------
+                                  ],
+                                ),
                               ),
                             ),
                             // ユーザーアイコン

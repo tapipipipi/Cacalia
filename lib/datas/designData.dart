@@ -1,6 +1,6 @@
 // 設定できるフォントの定義
 class Fonts {
-  static const String font0 = '';
+  static const String font0 = 'Roboto';
   static const String font1 = 'ArchitectsDaughter';
   static const String font2 = 'Anton';
   static const String font3 = 'Lobster';

@@ -6,7 +6,6 @@ import 'package:cacalia/CS/create.dart';
 import 'package:flutter/material.dart';
 import 'package:cacalia/component/editButtons.dart';
 import '../../home/pages/home.dart';
-import 'package:cacalia/datas/designData.dart';
 
 // 自身のプロフィールを取得し表示させる
 List<String> keys = ["コメント", "イベント", "所属", "得意", "興味のあること", "趣味", "経歴"];
@@ -26,7 +25,7 @@ var targetFont = 0;
 class ProfEdit extends StatelessWidget {
   ProfEdit({super.key});
 
-  // 自身の名前と読み仮名
+  // 自身の名前、読み仮名、デザインテーマ
   String name = profileList[myuid]["name"];
   String readname = profileList[myuid]["read_name"];
   String design = profileList[myuid]["wigetteme"];

@@ -1,7 +1,10 @@
 // テーマ編集
 import 'package:cacalia/CS/create.dart';
+import 'package:cacalia/features/home/pages/home.dart';
+import 'package:cacalia/main.dart';
 import 'package:flutter/material.dart';
 import 'package:cacalia/datas/designData.dart';
+import 'package:provider/provider.dart';
 
 // モーダルの大枠
 // ignore: non_constant_identifier_names
@@ -43,6 +46,14 @@ class _ThemeEditorState extends State<ThemeEditor> {
     bgImg.design3,
   ];
 
+  final List<String> fontList = [
+    Fonts.font0,
+    Fonts.font1,
+    Fonts.font2,
+    Fonts.font3,
+    Fonts.font4
+  ];
+
   List<bool> _bgtheme = [true, false, false, false];
   List<bool> _fonttheme = [true, false, false, false, false];
   int selectBg = 0;
@@ -50,6 +61,9 @@ class _ThemeEditorState extends State<ThemeEditor> {
 
   @override
   Widget build(BuildContext context) {
+    //フォントを変えるため宣言
+    final themeNotifier = context.read<ThemeNotifier>();
+
     // ignore: deprecated_member_use
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.9, // 高さを動的に設定
@@ -143,6 +157,11 @@ class _ThemeEditorState extends State<ThemeEditor> {
               ElevatedButton(
                 onPressed: () {
                   updateProfile('wigetteme', bgImgList[selectBg]);
+                  updateProfile('chartheme', fontList[selectFont]);
+                  //アプリ全体のフォント変える
+                  // themeNotifier.changeTheme(
+                  //   fontList[selectFont]
+                  // );
                 },
                 child: Text('変更'),
               ),
