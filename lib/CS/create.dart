@@ -8,6 +8,7 @@ import 'package:uuid/uuid.dart';
 
 /// import 'package:firebase_auth/firebase_auth.dart';
 String friend = "friends"; // コレクション、ドキュメント指定用 /users/friends/friends
+String tweet = "tweets";
 String suggest = "suggestion"; // コレクション、ドキュメント指定用
 String tweet = "tweets";
 String profile = "profile";
@@ -27,9 +28,7 @@ final mycollection = db // コレクション名、usersは固定にしてuser�
     .collection(users)
     .doc(uid);
 final myfriends = mycollection.collection(friend).doc(friend);
-
 final mytweets = mycollection.collection(tweet);
-
 final AIsuggest = mycollection.collection(suggest).doc(suggest);
 
 
@@ -91,9 +90,7 @@ Map<String, dynamic> profiles = <String, dynamic>{
 
 // uid 格納していくスタイル
 Map<String, dynamic> friends = <String, dynamic>{"friend_uid": []};
-
 Map<String, dynamic> tweets = <String, dynamic>{"t_ids": []};
-
 
 /// ---------------------------------------
 
@@ -112,15 +109,11 @@ void setUser(String uid) {
       .onError((e, _) => print("Error writing document: $e")); // errMessage
 }
 
-/// サブコレクション作成(サインインアップ後一度だけ呼び出される)
-void setColection() {
-  //friends
+/// サブコレクションfriends作成(サインインアップ後一度だけ呼び出される)
+void setFriend() {
   myfriends
       .set(friends, SetOptions(merge: true))
       .onError((e, _) => print("Error writing document: $e")); // errMessage
-  //suggestion
-  AIsuggest.set({suggest: {}}, SetOptions(merge: true))
-      .onError((e, _) => print("Error writing document: $e"));
 }
 
 /// サブコレクションtweets作成(サインインアップ後一度だけ呼び出される)
@@ -163,7 +156,6 @@ updateFriend(String key, String val) {
       onError: (e) => print("Error updating document $e"));
 }
 
-
 ///
 updateTweet(String val) {
   mytweets.doc(tweet).update({
@@ -171,6 +163,7 @@ updateTweet(String val) {
   }).then((value) => print("update sucessed"),
       onError: (e) => print("Error updating document $e"));
 }
+
 
 //名刺交換時のAI提案を格納
 updateAIsuggest(String uid, String val) async {
@@ -234,11 +227,12 @@ Future<Map<String, dynamic>> getProfile(String uid) async {
       print(uid);
       setUser(uid); // userprofike作成
 
+      setFriend(); // freendlist作成
+
+
       setColection(); // freendlist作成
+
       setTweets();
-
-      setColection(); // サブコレクション作成
-
       print("serUser()successed");
       throw Exception('Document does not exist or has no data');
     }
