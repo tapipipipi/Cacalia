@@ -1,4 +1,4 @@
-import 'package:cacalia/features/home/pages/home.dart';
+// import 'package:cacalia/features/home/pages/home.dart';
 import 'package:flutter/material.dart';
 import '../features/timeline/pages/timeline.dart';
 
@@ -9,7 +9,7 @@ class Tweet extends StatelessWidget {
 
   // テストデータ(ユーザー)
   static const userList = [
-    ['', 'ユーザーの投稿が表示されます', ''],
+    ['', 'ここにはユーザーの投稿が表示されます', ''],
   ];
 
   // super.keyと引数の指定
@@ -24,12 +24,11 @@ class Tweet extends StatelessWidget {
     //cardListでフレンドの名前と読み仮名を取得している
     print("tweet.dart");
     var def;
-    if (tweets.isEmpty) {
+    if (friends.isEmpty) {
       def = userList;
     } else {
       def = tweets;
     }
-    
 
     return Stack(
       alignment: Alignment.center,

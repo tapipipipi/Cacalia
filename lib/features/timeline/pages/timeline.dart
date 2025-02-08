@@ -50,6 +50,9 @@ class _TimelineState extends State<Timeline> {
     // }
     itemC = posts;
     print(itemC);
+    if (friends.isEmpty) {
+      itemC = 1;
+    }
     if (mounted) {
       // mountedがtrueかどうかを確認
       setState(() {
