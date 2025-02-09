@@ -1,6 +1,7 @@
 // 掲示板画面
 import 'package:cacalia/component/tweet.dart';
 import 'package:cacalia/store.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:cacalia/component/footer.dart';
 import '../../../Auth/Authentication.dart';
@@ -43,16 +44,9 @@ class _TimelineState extends State<Timeline> {
 
   Future<void> fetchCardData() async {
     await gettweet();
-    // if (posts == 0) {
-    //   itemC = 1;
-    // } else {
-    //   itemC = posts;
-    // }
+
     itemC = posts;
-    print(itemC);
-    // if (friends.isEmpty) {
-    //   itemC = 1;
-    // }
+
     if (mounted) {
       // mountedがtrueかどうかを確認
       setState(() {
@@ -90,7 +84,8 @@ class _TimelineState extends State<Timeline> {
         // --------------------------------------------------
 
         var arry = (tweetList[fid]["t_ids"] is List)
-            ? List<String>.from(tweetList[fid]["t_ids"] as List) // `List<String>` に変換
+            ? List<String>.from(
+                tweetList[fid]["t_ids"] as List) // `List<String>` に変換
             : [tweetList[fid]["t_ids"].toString()]; // 文字列をリストに変換
 
         if (!arry.isEmpty) {
@@ -117,8 +112,13 @@ class _TimelineState extends State<Timeline> {
               print(feild); // tid
 
               tweetList2 = await getTweet(fid, feild);
-              print(tweetList2);
-              List<Object> add2List = [tweetList2["name"], tweetList2["tweet"]];
+              print(
+                  tweetList2); // {name: ECC太郎, tweet: 投稿１, timestamp: Timestamp(seconds=1738689220, nanoseconds=823000000)}
+              List<Object> add2List = [
+                tweetList2["name"],
+                tweetList2["tweet"],
+                tweetList2["timestamp"]
+              ];
               print(add2List);
               tweets.add(add2List);
               posts++;
@@ -130,8 +130,15 @@ class _TimelineState extends State<Timeline> {
       }
     }
 
-    // print(postList); //ok [[], [],  ... , []]
     print(tweets);
+
+    // tweets.sort((a, b) => (b[2] as DateTime).compareTo(a[2] as DateTime));
+    tweets.sort((a, b) => (b[2] as Timestamp).toDate().compareTo((a[2] as Timestamp).toDate()));
+
+    print(tweets);
+
+    // 並び替えます
+
     // 状態を更新
     setState(() {});
   }
