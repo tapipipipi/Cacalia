@@ -83,21 +83,21 @@ class _ExchangeState extends State<ExchangePage>
 
   //受け取ったデータ(初期値は例)
   Map<String, dynamic> receivedData = {
-    'uid': "Iy8mliZrgsRoe7MBu91uL4F6a0Q2",
-    "name": "ECC 太郎",
-    "read_name": "Tanioka Yoshitaka",
-    "gender": "男",
-    "age": '2004',
-    "comment": "ドラムが好きです",
-    "events": "HACK U",
-    "belong": "ECCコンピュータ専門学校",
-    "skill": "0",
-    "interest": "0",
-    "hoby": "カラオケ",
-    "background": "基本情報技術者試験取得、Hack U NAGOYA優秀賞",
-    "bairth": "12/26",
-    "serviceUuid": "forBLE",
-    "charactaristicuuid": "forBLE"
+    // 'uid': "Iy8mliZrgsRoe7MBu91uL4F6a0Q2",
+    // "name": "ECC 太郎",
+    // "read_name": "Tanioka Yoshitaka",
+    // "gender": "男",
+    // "age": '2004',
+    // "comment": "ドラムが好きです",
+    // "events": "HACK U",
+    // "belong": "ECCコンピュータ専門学校",
+    // "skill": "0",
+    // "interest": "0",
+    // "hoby": "カラオケ",
+    // "background": "基本情報技術者試験取得、Hack U NAGOYA優秀賞",
+    // "bairth": "12/26",
+    // "serviceUuid": "forBLE",
+    // "charactaristicuuid": "forBLE"
   };
 
   //デバイスに接続できるボタンの状態
@@ -140,7 +140,7 @@ class _ExchangeState extends State<ExchangePage>
 
   DateTime? _lastShakeTime;
 
-  void handleShake() {
+  void handleShake() async {
     final now = DateTime.now();
     // 前回のシェイクから500ミリ秒以上経過している場合のみ処理を実行
     if (_lastShakeTime == null ||
@@ -238,10 +238,10 @@ class _ExchangeState extends State<ExchangePage>
                     ),
                   ),
                   //振る処理
-                  ShakeGesture(onShake: startScan, child: const Text("")),
+                  ShakeGesture(onShake: handleShake, child: const Text("")),
                   // //デバッグ用
-                  ElevatedButton(
-                      onPressed: startScan, child: const Text("交換する")),
+                  // ElevatedButton(
+                  //     onPressed: startScan, child: const Text("交換する")),
                 ],
               ),
             ),
@@ -326,17 +326,17 @@ class _ExchangeState extends State<ExchangePage>
       }
 
       try {
-        // setState(() {
-        //受け取ったデータをデコード
-        String received = utf8.decode(value);
-        print("Received raw data: $received");
+        setState(() async{
+          //受け取ったデータをデコード
+          String received = utf8.decode(value);
+          print("Received raw data: $received");
 
-        // JSON形式に変換して取得
-        decodereceived = Map<String, String>.from(jsonDecode(received));
-        // receivedData = getProfile(decodereceived['u_id']!);
-        print("Decoded JSON: $receivedData");
-        isReceived.add(true);
-        // });
+          // JSON形式に変換して取得
+          decodereceived = Map<String, String>.from(jsonDecode(received));
+          receivedData = await getProfile(decodereceived['u_id']!);
+          print("Decoded JSON: $receivedData");
+          isReceived.add(true);
+        });
 
         return ble_peripheral.WriteRequestResult(status: 0); // GATT_SUCCESS
       } catch (e) {
@@ -486,7 +486,7 @@ class _ExchangeState extends State<ExchangePage>
 
   //見つかったデバイスに接続するメソッド
   void connectDevaice(BluetoothDevice device) async {
-    try {
+    // try {
       //見つかったデバイスに接続
       await device.connect(timeout: const Duration(seconds: 5));
       print('${device.advName}に接続しました');
@@ -497,13 +497,13 @@ class _ExchangeState extends State<ExchangePage>
       await readCharacteristic(); //ReadWrighメソッド
       await disconnectDevaice(device);
       isReceived.add(true);
-    } catch (e) {
-      print('エラーでちゃった。。。:$e');
-      _isConnected = false;
-      stopAdvertise();
+    // } catch (e) {
+    //   print('エラーでちゃった。。。:$e');
+    //   _isConnected = false;
+    //   stopAdvertise();
 
-      ///
-    }
+    //   ///
+    // }
   }
 
   //接続を解除するメソッド
@@ -512,7 +512,7 @@ class _ExchangeState extends State<ExchangePage>
     print('接続解除');
     setState(() {
       _isConnected = false;
-      isReceived.add(false);
+      // isReceived.add(false);
     });
   }
 
@@ -527,10 +527,11 @@ class _ExchangeState extends State<ExchangePage>
         //ペリフェラル側で設定したキャラクタリスティックの場合
         if (characteristic.serviceUuid.toString() == deviceUUID) {
           print('受け取りたいデータ$characteristic');
-          // 通知を有効化
-          await characteristic.setNotifyValue(true);
+          
           //値を読み込む
           final value = await characteristic.read();
+          // 通知を有効化
+          await characteristic.setNotifyValue(true);
           // 受信データを文字列に変換
           final received = utf8.decode(value);
           print("received:$received");
@@ -547,7 +548,7 @@ class _ExchangeState extends State<ExchangePage>
           //   _isConnected = true;
           // });
 
-          // disconnectDevaice(selectdevaice!);
+          disconnectDevaice(selectdevaice!);
           // stopAdvertise();
           break;
         }
