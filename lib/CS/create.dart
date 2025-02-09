@@ -82,8 +82,9 @@ Map<String, dynamic> profiles = <String, dynamic>{
   "bairth": "1/1",
   "serviceUuid": "forble",
   "charactaristicuuid": "forble",
-  "wigetteme": "design0", // テーマカラー
-  "chartheme": "Roboto" // 字体
+  "wigetteme": "assets/images/designs/design1.png", // テーマカラー
+  "chartheme": "Roboto", // 字体
+  "cardtheme" : "assets/images/designCards/card0.png" //名刺
 };
 
 // uid 格納していくスタイル
@@ -144,7 +145,7 @@ void postTweet(String tweet) {
 /// データ更新　プロフィール編集時に使用
 /// update( {更新したいカラム : 値} )
 /// 今回transactionを使用しない(あったほうがオシャレやけど)
-void updateProfile(String key, String val) {
+updateProfile(String key, String val) {
   mycollection.update({key: val}).then((value) => print("update sucessed"),
       onError: (e) => print("Error updating document $e"));
 }

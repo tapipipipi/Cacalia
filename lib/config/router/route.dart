@@ -46,7 +46,7 @@ final router = GoRouter(
     ),
     GoRoute(
       path: '/profEdit',
-      builder: (context, state) => ProfEdit(),
+      builder: (context, state) => Profedit(),
     ),
     GoRoute(
       path: '/cardEdit',

@@ -4,7 +4,9 @@ import 'package:cacalia/features/home/pages/home.dart';
 import 'package:cacalia/main.dart';
 import 'package:flutter/material.dart';
 import 'package:cacalia/datas/designData.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:cacalia/features/profEdit/pages/profEdit.dart';
 
 // モーダルの大枠
 // ignore: non_constant_identifier_names
@@ -41,24 +43,9 @@ class ThemeEditor extends StatefulWidget {
 }
 
 class _ThemeEditorState extends State<ThemeEditor> {
-  // 背景画像パスのリスト
-  final List<String> bgImgList = [
-    bgImg.design0,
-    bgImg.design1,
-    bgImg.design2,
-    bgImg.design3,
-  ];
-
-  final List<String> fontList = [
-    Fonts.font0,
-    Fonts.font1,
-    Fonts.font2,
-    Fonts.font3,
-    Fonts.font4
-  ];
-
   List<bool> _bgtheme = [true, false, false, false];
   List<bool> _fonttheme = [true, false, false, false, false];
+  ProfEdit themechange = ProfEdit();
 
   @override
   Widget build(BuildContext context) {
@@ -104,10 +91,10 @@ class _ThemeEditorState extends State<ThemeEditor> {
                   },
                   isSelected: _bgtheme,
                   children: <Widget>[
-                    Image.asset('assets/images/designCircles/circle01.png'),
-                    Image.asset('assets/images/designCircles/circle02.png'),
-                    Image.asset('assets/images/designCircles/circle03.png'),
-                    Image.asset('assets/images/designCircles/circle04.png'),
+                    Image.asset('assets/images/designCircles/circle0.png'),
+                    Image.asset('assets/images/designCircles/circle1.png'),
+                    Image.asset('assets/images/designCircles/circle2.png'),
+                    Image.asset('assets/images/designCircles/circle3.png'),
                   ],
                 ),
               ),
@@ -155,22 +142,18 @@ class _ThemeEditorState extends State<ThemeEditor> {
                   ],
                 ),
               ),
-              ElevatedButton(
-                onPressed: () {
-                  updateProfile('wigetteme', bgImgList[selectBg]);
-                  updateProfile('chartheme', fontList[selectFont]);
-                  //アプリ全体のフォント変える
-                  // themeNotifier.changeTheme(
-                  //   fontList[selectFont]
-                  // );
-                },
-                child: Text('変更'),
-              ),
             ],
           ),
           ElevatedButton(
             onPressed: () async {
-              Navigator.of(context).pop({selectBg, selectFont});
+              themechange.updatetheme(selectBg.toString(),
+                  selectFont.toString(), selectBg.toString());
+              // Navigator.of(context).pop({selectBg, selectFont});
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Profedit()), // 現在のページを再ロード
+              );
             },
             style: ElevatedButton.styleFrom(
               shape: RoundedRectangleBorder(

@@ -67,6 +67,7 @@ class _HomeState extends State<Home> {
       List<Object> addList = [
         profileList[fid]["name"],
         profileList[fid]["read_name"],
+        profileList[fid]["cardtheme"]
       ];
       cardList.add(addList);
     }
@@ -79,6 +80,7 @@ class _HomeState extends State<Home> {
     List<Object> addList = [
       profileList[myuid]["name"],
       profileList[myuid]["read_name"],
+      profileList[myuid]["cardtheme"]
     ];
     cardList.add(addList);
 

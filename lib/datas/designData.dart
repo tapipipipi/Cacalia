@@ -1,9 +1,6 @@
 // 設定できるフォントの定義
 class Fonts {
   static const String font0 = 'Roboto';
-// 設定できるフォントの定義 ------------------------------------------------------
-class fonts {
-  static const String font0 = '';
   static const String font1 = 'ArchitectsDaughter';
   static const String font2 = 'Anton';
   static const String font3 = 'Lobster';
@@ -16,19 +13,19 @@ String setFont(String font) {
   var selected = '0';
   switch (font) {
     case '0':
-      selected = fonts.font0;
+      selected = Fonts.font0;
       break;
     case '1':
-      selected = fonts.font1;
+      selected = Fonts.font1;
       break;
     case '2':
-      selected = fonts.font2;
+      selected = Fonts.font2;
       break;
     case '3':
-      selected = fonts.font3;
+      selected = Fonts.font3;
       break;
     case '4':
-      selected = fonts.font4;
+      selected = Fonts.font4;
       break;
   }
   print('selected: ' + selected);
@@ -38,10 +35,6 @@ String setFont(String font) {
 
 // 設定できる背景の定義 ----------------------------------------------------------
 class bgImg {
-  static const String design0 = 'assets/images/designs/design1.png';
-  static const String design1 = 'assets/images/designs/design2.png';
-  static const String design2 = 'assets/images/designs/design3.png';
-  static const String design3 = 'assets/images/designs/design4.png';
   static const String design0 = 'assets/images/designs/design0.png';
   static const String design1 = 'assets/images/designs/design1.png';
   static const String design2 = 'assets/images/designs/design2.png';

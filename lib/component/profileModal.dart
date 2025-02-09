@@ -124,7 +124,7 @@ void Profilemodal(
           width: double.infinity,
           decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage(setBg(targetBg)),
+                image: AssetImage('${profileList['wigetteme']}'),
                 fit: BoxFit.cover,
               ),
               borderRadius: BorderRadius.only(
@@ -153,7 +153,7 @@ void Profilemodal(
                           'about me',
                           style: TextStyle(
                             fontSize: 40,
-                            fontFamily: setFont(targetFont),
+                            fontFamily: '${profileList['chartheme']}',
                           ),
                         ),
                         Stack(

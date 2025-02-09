@@ -7,6 +7,7 @@ import 'package:cacalia/component/editModal.dart';
 import 'package:flutter/material.dart';
 import 'package:cacalia/component/editButtons.dart';
 import '../../home/pages/home.dart';
+import 'package:cacalia/datas/designData.dart';
 
 // 自身のプロフィールを取得し表示させる
 List<String> keys = ["コメント", "イベント", "所属", "得意", "興味のあること", "趣味", "経歴"];
@@ -20,8 +21,15 @@ List<String> feildnames = [
   "background"
 ];
 
-class ProfEdit extends StatelessWidget {
-  ProfEdit({super.key});
+class Profedit extends StatefulWidget {
+  const Profedit({super.key});
+
+  @override
+  State<Profedit> createState() => ProfEdit();
+}
+
+class ProfEdit extends State<Profedit> {
+  late Future<void>? _profileFuture; //Futureの変数を作成
   var targetBg = '0';
   var targetFont = '0';
 
@@ -29,12 +37,42 @@ class ProfEdit extends StatelessWidget {
   String name = profileList[myuid]["name"];
   String readname = profileList[myuid]["read_name"];
   String design = profileList[myuid]["wigetteme"];
+  String font = profileList[myuid]["chartheme"];
 
   // 各フィールド用のコントローラーリストを作成
   final List<TextEditingController> controllers =
       List.generate(feildnames.length, (index) => TextEditingController());
 
   List<String> values = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _refreshProfile(); // 初回読み込み
+  }
+
+  // Futureを更新してUIをリフレッシュ
+  void _refreshProfile() {
+    setState(() {
+      _profileFuture = null; // Futureを更新
+    });
+
+    Future.delayed(Duration(milliseconds: 100), () {
+      setState(() {
+        _profileFuture = setprofileList(); // 新しい Future を再設定
+      });
+    });
+  }
+
+  //テーマを適応して画面更新
+  Future<void> updatetheme(
+      String wigetteme, String chartheme, String cardtheme) async {
+    await updateProfile('wigetteme', setBg(wigetteme.toString()));
+    await updateProfile('chartheme', setFont(chartheme.toString()));
+    await updateProfile('cardtheme', setCardTheme(cardtheme.toString()));
+
+    _refreshProfile();
+  }
 
   Future<void> setprofileList() async {
     // 自身の該当するプロフィールを取得しvaluesに格納
@@ -66,154 +104,161 @@ class ProfEdit extends StatelessWidget {
     }
 
 // 自身のプロフィールを取得するため、描画する前に通信する処理
-    return FutureBuilder(
-        future: setprofileList(),
+    return Scaffold(
+      body: FutureBuilder<void>(
+        future: _profileFuture,
         builder: (context, snapshot) {
+          if (_profileFuture == null) {
+            return Center(child: CircularProgressIndicator()); // 再読み込み中のインジケーター
+          }
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('エラーが発生しました: ${snapshot.error}'));
           } else {
             // 非同期処理が完了したら描画
-
             return Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage('${setBg(targetBg)}'),
+                  image: AssetImage(design),
                   fit: BoxFit.cover,
                 ),
               ),
-              child: Scaffold(
-                backgroundColor: Colors.transparent,
-                body: Stack(
-                  alignment: Alignment.center,
-                  // 編集の共有のボタンのコンポネントを重ねるためにStack
-                  children: [
-                    Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Container(
-                              margin: EdgeInsets.only(top: 20),
-                              child: Text(
-                                'about me',
-                                style: TextStyle(
-                                    fontSize: 40,
-                                    fontFamily: setFont(targetFont)),
-                              ),
-                            ),
-                            EditPen(bgStyle: targetBg, fontStyle: targetFont),
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Stack(
-                              children: [
-                                Container(
-                                  width: 350,
-                                  height: 700,
-                                  margin: const EdgeInsets.only(top: 70),
-                                  padding: const EdgeInsets.only(bottom: 10),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white54,
-                                    borderRadius: BorderRadius.circular(20.0),
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      const SizedBox(height: 50),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            name,
-                                            style: TextStyle(fontSize: 24),
-                                          ),
-                                          EditPen(
-                                              bgStyle: targetBg,
-                                              fontStyle: targetFont),
-                                        ],
-                                      ),
-                                      Text(
-                                        readname,
-                                        style: TextStyle(fontSize: 16),
-                                      ),
-                                      const SizedBox(height: 10), // 余白
-                                      Expanded(
-                                          child: SingleChildScrollView(
-                                        child: Column(
-                                          //----------------------------------------
-                                          children: [
-                                            for (int i = 0;
-                                                i < feildnames.length;
-                                                i++)
-                                              Category(keys[i], values[i],
-                                                  controllers[i]),
-                                          ],
-                                          //----------------------------------------
-                                        ),
-                                      )),
-                                    ],
-                                  ),
+              child: DefaultTextStyle(
+                style: TextStyle(color: Colors.black, fontFamily: font),
+                child: Scaffold(
+                  backgroundColor: Colors.transparent,
+                  body: Stack(
+                    alignment: Alignment.center,
+                    // 編集の共有のボタンのコンポネントを重ねるためにStack
+                    children: [
+                      Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Container(
+                                margin: EdgeInsets.only(top: 20),
+                                child: Text(
+                                  'about me',
+                                  style:
+                                      TextStyle(fontSize: 40, fontFamily: font),
                                 ),
-                                // ユーザーアイコン
-                                Positioned(
-                                  left: 125,
-                                  top: 10,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      print('フォルダ開いて画像選択させてくれい');
-                                    },
-                                    child: Stack(
+                              ),
+                              EditPen(bgStyle: targetBg, fontStyle: targetFont),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Stack(
+                                children: [
+                                  Container(
+                                    width: 350,
+                                    height: 700,
+                                    margin: const EdgeInsets.only(top: 70),
+                                    padding: const EdgeInsets.only(bottom: 10),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white54,
+                                      borderRadius: BorderRadius.circular(20.0),
+                                    ),
+                                    child: Column(
                                       children: [
-                                        Container(
-                                          width: 103,
-                                          height: 103,
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: Colors.blue,
-                                            border: Border.all(
-                                              color: Colors.white,
-                                              width: 8,
+                                        const SizedBox(height: 50),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              name,
+                                              style: TextStyle(fontSize: 24),
                                             ),
-                                            image: const DecorationImage(
-                                                image: AssetImage(
-                                                    'assets/images/default_avatar.png')),
-                                          ),
+                                            EditPen(
+                                                bgStyle: targetBg,
+                                                fontStyle: targetFont),
+                                          ],
                                         ),
-                                        Container(
-                                          width: 103,
-                                          height: 103,
-                                          decoration: const BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: Colors.black45,
-                                          ),
-                                          child: Icon(
-                                            Icons.camera_alt,
-                                            size: 30,
-                                            color: Colors.grey[800],
-                                          ),
+                                        Text(
+                                          readname,
+                                          style: TextStyle(fontSize: 16),
                                         ),
+                                        const SizedBox(height: 10), // 余白
+                                        Expanded(
+                                            child: SingleChildScrollView(
+                                          child: Column(
+                                            //----------------------------------------
+                                            children: [
+                                              for (int i = 0;
+                                                  i < feildnames.length;
+                                                  i++)
+                                                Category(keys[i], values[i],
+                                                    controllers[i]),
+                                            ],
+                                            //----------------------------------------
+                                          ),
+                                        )),
                                       ],
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    //****************************************************************** */
-                    EditButtons(editType: true, onSave: saveValues),
-                  ],
+                                  // ユーザーアイコン
+                                  Positioned(
+                                    left: 125,
+                                    top: 10,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        print('フォルダ開いて画像選択させてくれい');
+                                      },
+                                      child: Stack(
+                                        children: [
+                                          Container(
+                                            width: 103,
+                                            height: 103,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Colors.blue,
+                                              border: Border.all(
+                                                color: Colors.white,
+                                                width: 8,
+                                              ),
+                                              image: const DecorationImage(
+                                                  image: AssetImage(
+                                                      'assets/images/default_avatar.png')),
+                                            ),
+                                          ),
+                                          Container(
+                                            width: 103,
+                                            height: 103,
+                                            decoration: const BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Colors.black45,
+                                            ),
+                                            child: Icon(
+                                              Icons.camera_alt,
+                                              size: 30,
+                                              color: Colors.grey[800],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      //****************************************************************** */
+                      EditButtons(editType: true, onSave: saveValues),
+                    ],
+                  ),
                 ),
               ),
             );
           }
-        });
+        },
+      ),
+    );
   }
 }
 
