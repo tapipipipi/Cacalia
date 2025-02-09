@@ -1,6 +1,7 @@
 // 掲示板画面
 import 'package:cacalia/component/tweet.dart';
 import 'package:cacalia/store.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:cacalia/component/footer.dart';
 import '../../../Auth/Authentication.dart';
@@ -29,12 +30,11 @@ Map<String, dynamic> cont = {};
 String fid = "";
 //uid取得
 String myuid = Authentication().getuid();
-int posts = 0;
+int posts = 0; // postの数
+int itemC = 0; // tweet.dartで表示する枚数を指定
 
 class _TimelineState extends State<Timeline> {
-
   bool isLoading = true; // ローディング状態を管理する変数
-
 
   @override
   void initState() {
@@ -44,6 +44,9 @@ class _TimelineState extends State<Timeline> {
 
   Future<void> fetchCardData() async {
     await gettweet();
+
+    itemC = posts;
+
     if (mounted) {
       // mountedがtrueかどうかを確認
       setState(() {
@@ -58,46 +61,84 @@ class _TimelineState extends State<Timeline> {
     tweetList = {}; // リフレッシュ
     postList = []; // リフレッシュ]
     tweets = [];
+    posts = 0;
 
     friends = await getFriends();
 
-    for (int i = 0; i < friends.length; i++) {
-      fid = friends[i];
-      tweetList[fid] = await getT_ids(fid); // fid:{tid,tid,...}
-      //tweetList = await getT_ids(fid);
-      print(tweetList);
+    if (friends.isEmpty) {
+      print("null");
+    } else {
+      for (int i = 0; i < friends.length; i++) {
+        fid = friends[i];
+        print(fid);
+        tweetList[fid] = await getT_ids(fid); // fid:{tid,tid,...}  ->　配列にならない問題
+        print(tweetList);
 
-      // 毎回新しいリストを作成して追加(リフレッシュ)
+        // ーーーーーーー毎回新しいリストを作成して追加(リフレッシュ)ーーーーーーーーーーーーーーーーーーーーーーーーーー
 
-      List<Object> addList = [
-        fid,
-        (tweetList[fid]["t_ids"] is List)
-            ? (tweetList[fid]["t_ids"] as List).join(",") // 文字列に変換
-            : tweetList[fid]["t_ids"] // 文字列ならそのまま
-      ];
-      postList.add(addList);
-      posts++;
+        // ☆------配列の場合文字列に変換(ホンマは配列にする)-------
+        // var arry = (tweetList[fid]["t_ids"] is List)
+        //     ? (tweetList[fid]["t_ids"] as List).join(",") // 文字列に変換
+        //     : tweetList[fid]["t_ids"];
 
-      print(postList);
+        // --------------------------------------------------
 
-      //-------------------------
-      String feild = postList[i][1] as String;
+        var arry = (tweetList[fid]["t_ids"] is List)
+            ? List<String>.from(
+                tweetList[fid]["t_ids"] as List) // `List<String>` に変換
+            : [tweetList[fid]["t_ids"].toString()]; // 文字列をリストに変換
 
-      print(feild);
+        if (!arry.isEmpty) {
+          //　投稿があれば追加
+          print("arry is not empty");
+          List<Object> addList = [fid, arry]; // ☆
 
-      print("ok");
-      print(fid);
-      tweetList2 = await getTweet(fid, feild);
-      print(tweetList2);
-      List<Object> add2List = [tweetList2["name"], tweetList2["tweet"]];
-      print(add2List);
-      tweets.add(add2List);
+          postList.add(addList);
 
-      //------------------------------------------
+          print(postList);
+
+          //-------------------------
+          // String feild = postList[i][1] as String;// ☆
+
+          var by_u_postList = postList[i][1] as List<String>;
+          print(by_u_postList);
+
+          print("by_u_postList is not empty");
+          for (int l = 0; l < by_u_postList.length; l++) {
+            if (by_u_postList[l] != "") {
+              // List<String> list = by_u_postList[l] as List<String>;
+
+              String feild = by_u_postList[l];
+              print(feild); // tid
+
+              tweetList2 = await getTweet(fid, feild);
+              print(
+                  tweetList2); // {name: ECC太郎, tweet: 投稿１, timestamp: Timestamp(seconds=1738689220, nanoseconds=823000000)}
+              List<Object> add2List = [
+                tweetList2["name"],
+                tweetList2["tweet"],
+                tweetList2["timestamp"]
+              ];
+              print(add2List);
+              tweets.add(add2List);
+              posts++;
+            }
+          }
+        }
+
+        //------------------------------------------
+      }
     }
 
-    // print(postList); //ok [[], [],  ... , []]
     print(tweets);
+
+    // tweets.sort((a, b) => (b[2] as DateTime).compareTo(a[2] as DateTime));
+    tweets.sort((a, b) => (b[2] as Timestamp).toDate().compareTo((a[2] as Timestamp).toDate()));
+
+    print(tweets);
+
+    // 並び替えます
+
     // 状態を更新
     setState(() {});
   }
@@ -107,7 +148,6 @@ class _TimelineState extends State<Timeline> {
 
   @override
   Widget build(BuildContext context) {
-
     if (isLoading) {
       // データ取得中はローディング画面を表示
       return Scaffold(
@@ -121,7 +161,6 @@ class _TimelineState extends State<Timeline> {
         title: Image.asset(
           'assets/images/cacalia.png',
         ),
-
         toolbarHeight: 80,
         centerTitle: true,
         backgroundColor: const Color.fromRGBO(215, 230, 239, 1),
@@ -167,7 +206,6 @@ class _TimelineState extends State<Timeline> {
                   child: Text(
                     '質問', // ここに表示したい文字を入れる
                     style: TextStyle(
-
                       fontSize: 16,
 
                       fontWeight: FontWeight.bold,
@@ -181,7 +219,6 @@ class _TimelineState extends State<Timeline> {
                   child: Text(
                     '投稿',
                     style: TextStyle(
-
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: Color(0xff115A84), // 文字の色を設定
@@ -204,7 +241,6 @@ class _TimelineState extends State<Timeline> {
                     ),
                   ),
                 ),
-
               ],
             ),
             // Rowの下に引く線
@@ -221,9 +257,7 @@ class _TimelineState extends State<Timeline> {
                 children: [
                   Container(
                     height: 25,
-
                     width: 300,
-
                     margin: const EdgeInsets.only(left: 15),
                     child: TextField(
                       decoration: InputDecoration(
@@ -233,11 +267,9 @@ class _TimelineState extends State<Timeline> {
                         contentPadding:
                             const EdgeInsets.symmetric(horizontal: 16),
                         filled: true,
-
                         fillColor: const Color.fromARGB(255, 255, 255, 255),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20),
-
                           borderSide: const BorderSide(
                               color: Color.fromRGBO(161, 161, 161, 1)),
                         ),
@@ -255,9 +287,7 @@ class _TimelineState extends State<Timeline> {
             ),
             Container(
               width: 337,
-
               height: 600,
-
               alignment: Alignment.center,
               child: Column(
                 children: [
@@ -281,7 +311,7 @@ class _TimelineState extends State<Timeline> {
                     child: ListView.builder(
                       padding: const EdgeInsets.only(top: 20),
 
-                      itemCount: tweets.length, // フレンドの数だけ表示
+                      itemCount: itemC, // フレンドの数だけ表示
 
                       itemBuilder: (context, index) {
                         return Transform.translate(
@@ -303,7 +333,6 @@ class _TimelineState extends State<Timeline> {
       ),
       bottomNavigationBar: Footer(),
     );
-
   }
 
   //sort押した時のダイアログ？表示の操作

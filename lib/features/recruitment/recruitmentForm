@@ -15,65 +15,103 @@ class Recruitment extends StatefulWidget {
 }
 
 List<String> friends = []; // friend一覧格納
-Map<String, dynamic> profileList = {}; // fidに対応するプロフィール一覧を格納
-List<List<Object>> cardList = []; // card使用するデータをfriendの数だけ用意
-List<Object> addList = []; // cardList追加時に使用
+Map<String, dynamic> tweetList = {}; // fidに対応するツイート一覧を格納
+Map<String, dynamic> tweetList2 = {}; // fidに対応するツイート一覧を格納
+List<List<Object>> postList = []; // 並べ替えたい
+List<List<Object>> tweets = [];
+
+Map<String, dynamic> cont = {};
+
+// Map<String, dynamic> testob = {};
+// Map<String, dynamic> testadd = {};
+// List<Object> addList = []; // cardList追加時に使用
 
 String fid = "";
 //uid取得
 String myuid = Authentication().getuid();
-int mycard = 0;
+int posts = 0; // postの数
+int itemC = 0; // tweet.dartで表示する枚数を指定
 
 class _RecruitmentState extends State<Recruitment> {
 
-  bool isLoading = true;  // ローディング状態を管理する変数
+  bool isLoading = true; // ローディング状態を管理する変数
 
   @override
   void initState() {
     super.initState();
-    print(uid);
-    getProfile(uid);
     fetchCardData(); // 非同期データを初期化時に取得
   }
 
   Future<void> fetchCardData() async {
-    await getcard();
-    setState(() {
-      isLoading = false; // データ取得完了後にローディング終了
-    }); // データ取得後にUIを更新
+    await gettweet();
+    // if (posts == 0) {
+    //   itemC = 1;
+    // } else {
+    //   itemC = posts;
+    // }
+    itemC = posts;
+    print(itemC);
+    if (mounted) {
+      // mountedがtrueかどうかを確認
+      setState(() {
+        isLoading = false; // データ取得完了後にローディング終了
+      }); // データ取得後にUIを更新
+    }
   }
 
-  // cardListにフレンドごとの名前と読みを追加していく
-  Future<void> getcard() async {
-    print("getcard()");
-    cardList = []; // リフレッシュ
-    profileList = {}; // リフレッシュ
+  // postListにフレンドごとのtweetを追加していく
+  Future<void> gettweet() async {
+    print("gettweet()");
+    tweetList = {}; // リフレッシュ
+    postList = []; // リフレッシュ]
+    tweets = [];
+    posts = 0;
+
     friends = await getFriends();
 
-    print("get cards.");
-    for (int i = 0; i < friends.length; i++) {
-      fid = friends[i];
-      profileList[fid] = await getProfile(fid);
+    if (friends.isEmpty) {
+      print("null");
+    } else {
+      for (int i = 0; i < friends.length; i++) {
+        fid = friends[i];
+        tweetList[fid] = await getT_ids(fid); // fid:{tid,tid,...}
+        //tweetList = await getT_ids(fid);
+        print(tweetList);
 
-      // 毎回新しいリストを作成して追加(リフレッシュ)
-      List<Object> addList = [
-        profileList[fid]["name"],
-        profileList[fid]["read_name"],
-      ];
-      cardList.add(addList);
+        // 毎回新しいリストを作成して追加(リフレッシュ)
+        var arry = (tweetList[fid]["t_ids"] is List)
+            ? (tweetList[fid]["t_ids"] as List).join(",") // 文字列に変換
+            : tweetList[fid]["t_ids"];
+
+        if (!arry.isEmpty) {
+          //　投稿があれば追加
+          print("arry is not empty");
+          List<Object> addList = [fid, arry];
+
+          postList.add(addList);
+          posts++;
+
+          print(postList);
+
+          //-------------------------
+          String feild = postList[i][1] as String;
+
+          print(feild);
+
+          print("ok");
+          print(fid);
+          tweetList2 = await getTweet(fid, feild);
+          print(tweetList2);
+          List<Object> add2List = [tweetList2["name"], tweetList2["tweet"]];
+          print(add2List);
+          tweets.add(add2List);
+        }
+        //------------------------------------------
+      }
     }
 
-    // 最終的にできるcardlistの最後尾を代入
-    mycard = cardList.length;
-
-    // 自身のプロフィールを獲得しcardlistに追加
-    profileList[myuid] = await getProfile(myuid);
-    List<Object> addList = [
-      profileList[myuid]["name"],
-      profileList[myuid]["read_name"],
-    ];
-    cardList.add(addList);
-
+    // print(postList); //ok [[], [],  ... , []]
+    print(tweets);
     // 状態を更新
     setState(() {});
   }
@@ -83,7 +121,7 @@ class _RecruitmentState extends State<Recruitment> {
 
   @override
   Widget build(BuildContext context) {
-        if (isLoading) {
+    if (isLoading) {
       // データ取得中はローディング画面を表示
       return Scaffold(
         body: Center(
@@ -142,6 +180,7 @@ class _RecruitmentState extends State<Recruitment> {
                     '質問', // ここに表示したい文字を入れる
                     style: TextStyle(
                       fontSize: 16,
+
                       fontWeight: FontWeight.bold,
                       color: Color(0xff115A84), // 文字の色を設定
                     ),
@@ -169,6 +208,7 @@ class _RecruitmentState extends State<Recruitment> {
                     '募集', // ここに表示したい文字を入れる
                     style: TextStyle(
                       fontSize: 16,
+
                       fontWeight: FontWeight.bold,
                       color: Color(0xff115A84), // 文字の色を設定
                     ),
@@ -209,12 +249,12 @@ class _RecruitmentState extends State<Recruitment> {
                       ),
                     ),
                   ),
-                  IconButton(
-                    onPressed: () {
-                      setState(toggleShowText);
-                    },
-                    icon: Image.asset('assets/images/sort.png'),
-                  ),
+                  // IconButton(
+                  //   onPressed: () {
+                  //     setState(toggleShowText);
+                  //   },
+                  //   icon: Image.asset('assets/images/sort.png'),
+                  // ),
                 ],
               ),
             ),
@@ -243,7 +283,9 @@ class _RecruitmentState extends State<Recruitment> {
                   Expanded(
                     child: ListView.builder(
                       padding: const EdgeInsets.only(top: 20),
-                      itemCount: tweets.length, // フレンドの数だけ表示
+
+                      itemCount: itemC, // フレンドの数だけ表示
+
                       itemBuilder: (context, index) {
                         return Transform.translate(
                           offset: const Offset(0, 0),
@@ -264,7 +306,6 @@ class _RecruitmentState extends State<Recruitment> {
       ),
       bottomNavigationBar: Footer(),
     );
-
   }
 
   //sort押した時のダイアログ？表示の操作

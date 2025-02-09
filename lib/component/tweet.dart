@@ -1,4 +1,4 @@
-import 'package:cacalia/features/home/pages/home.dart';
+// import 'package:cacalia/features/home/pages/home.dart';
 import 'package:flutter/material.dart';
 import '../features/timeline/pages/timeline.dart';
 
@@ -9,11 +9,7 @@ class Tweet extends StatelessWidget {
 
   // テストデータ(ユーザー)
   static const userList = [
-    [0, '文元 沙弥', 'Humimoto Saya'],
-    [1, '谷岡 義貴', 'Tanioka Yoshitaka'],
-    [2, '深尾 悠', 'Hukao Yu'],
-    [3, '財前 颯', 'Zaizen Hayate'],
-    [4, '馬場 周友', 'Banba Syuyu'],
+    ['', 'ここにはユーザーの投稿が表示されます', ''],
   ];
 
   // super.keyと引数の指定
@@ -27,6 +23,18 @@ class Tweet extends StatelessWidget {
   Widget build(BuildContext context) {
     //cardListでフレンドの名前と読み仮名を取得している
     print("tweet.dart");
+    var def;
+  
+    // if (friends.isEmpty) {
+    //   def = userList;
+    // } else {
+    //   def = tweets;
+    // }
+
+    
+
+    def = tweets;
+
 
     return Stack(
       alignment: Alignment.center,
@@ -63,7 +71,7 @@ class Tweet extends StatelessWidget {
                         Icon(Icons.person), // アイコンを追加
                         const SizedBox(width: 8), // アイコンとテキストの間にスペースを追加
                         Text(
-                          tweets[userId][0] as String,
+                          def[userId][0] as String,
                           style: const TextStyle(fontSize: 14),
                         ),
                       ],
@@ -72,7 +80,7 @@ class Tweet extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(left: 16), // 内容の左側にマージンを追加
                     child: Text(
-                      tweets[userId][1] as String,
+                      def[userId][1] as String,
                       style: const TextStyle(fontSize: 17),
                     ),
                   ),
