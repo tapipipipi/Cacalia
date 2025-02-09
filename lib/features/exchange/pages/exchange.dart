@@ -83,8 +83,8 @@ class _ExchangeState extends State<ExchangePage>
 
   //受け取ったデータ(初期値は例)
   Map<String, dynamic> receivedData = {
-    'u_id': "Iy8mliZrgsRoe7MBu91uL4F6a0Q2",
-    "name": "谷岡 義貴",
+    'uid': "Iy8mliZrgsRoe7MBu91uL4F6a0Q2",
+    "name": "ECC 太郎",
     "read_name": "Tanioka Yoshitaka",
     "gender": "男",
     "age": '2004',
