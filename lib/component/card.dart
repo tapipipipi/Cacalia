@@ -40,12 +40,13 @@ class UserCard extends StatelessWidget {
           child: Container(
             height: 159,
             width: 270,
-            alignment: const Alignment(-0.8, 0),
+            alignment: Alignment(-0.8, 0),
             decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
                 image: DecorationImage(
-              image: AssetImage('${setCardTheme(bgImg)}'),
-              fit: BoxFit.cover,
-            )),
+                  image: AssetImage('assets/images/designCards/card0.png'),
+                  fit: BoxFit.cover, // 画像を適切にフィットさせる
+                )),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start, // 左揃え
               children: [
@@ -72,12 +73,14 @@ class UserCard extends StatelessWidget {
                 height: 159,
                 width: 60,
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Colors.transparent, Colors.grey.shade400],
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                  ),
-                ),
+                    gradient: LinearGradient(
+                      colors: [Colors.transparent, Colors.grey.shade400],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                    ),
+                    borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(10),
+                        bottomRight: Radius.circular(10))),
                 child: const Column(
                   children: [
                     Padding(padding: EdgeInsets.only(top: 10)),
