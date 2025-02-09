@@ -83,7 +83,11 @@ class EditButtons extends StatelessWidget {
 }
 
 class EditPen extends Container {
-  EditPen({super.key});
+  String bgStyle = '';
+  String fontStyle = '';
+
+  // コンストラクタで引数を受け取る
+  EditPen({required this.bgStyle, required this.fontStyle, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -91,6 +95,16 @@ class EditPen extends Container {
       onPressed: () => {
         EditModal(context),
         showAboutDialog(context: context),
+        Navigator.pop(context, {bgStyle, fontStyle}),
+        print('--------------------[EditPen保存]--------------------'),
+        print('\\\\\\\\\\\\\\'),
+        print('\\\\\\\\\\\\\\'),
+        print('\\\\\\\\\\\\\\'),
+        print(bgStyle),
+        print(fontStyle),
+        print('\\\\\\\\\\\\\\'),
+        print('\\\\\\\\\\\\\\'),
+        print('\\\\\\\\\\\\\\'),
       },
       icon: Icon(
         Icons.edit_square,

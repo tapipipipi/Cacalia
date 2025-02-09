@@ -78,7 +78,8 @@ flutter:
     - assets/images/
     - assets/images/designs/
     - assets/images/designCircles/
-    # - assets/images/default_avatar.png
+    - assets/images/designCards/
+        # - assets/images/default_avatar.png
     # - assets/images/home_icon.png
     # - assets/images/CacaliaLoginHeader.png
     # - assets/images/CacaliaSignin.png

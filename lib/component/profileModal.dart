@@ -1,6 +1,7 @@
 import 'package:cacalia/CS/create.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:cacalia/datas/designData.dart';
 
 // フレンドのプロフィールを取得し表示させる
 List<String> keys = ["コメント", "イベント", "所属", "得意", "興味のあること", "趣味", "経歴"];
@@ -18,7 +19,7 @@ List<String> values = [];
 // ignore: non_constant_identifier_names
 void Profilemodal(
     BuildContext context, Map<String, dynamic> profileList) async {
-  bool isVisible = false; // 初期値
+  bool isVisible = true; // 初期値
   String fieldName = "suggestion";
 
   print(profileList);
@@ -43,6 +44,8 @@ void Profilemodal(
 
   String name = profileList["name"];
   String readname = profileList["read_name"];
+  String targetBg = '0';
+  String targetFont = '0';
 
   //AI提案表示
   Future<void> AIAdvice() async {
@@ -121,7 +124,7 @@ void Profilemodal(
           width: double.infinity,
           decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('${profileList['wigetteme']}'), //テーマ
+                image: AssetImage(setBg(targetBg)),
                 fit: BoxFit.cover,
               ),
               borderRadius: BorderRadius.only(
@@ -146,9 +149,12 @@ void Profilemodal(
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
-                        const Text(
+                        Text(
                           'about me',
-                          style: TextStyle(fontSize: 40),
+                          style: TextStyle(
+                            fontSize: 40,
+                            fontFamily: setFont(targetFont),
+                          ),
                         ),
                         Stack(
                           children: [

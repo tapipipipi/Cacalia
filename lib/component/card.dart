@@ -1,5 +1,7 @@
 import 'package:cacalia/features/home/pages/home.dart';
 import 'package:flutter/material.dart';
+import '../CS/create.dart';
+import 'package:cacalia/datas/designData.dart';
 
 class UserCard extends StatelessWidget {
   // 変数を宣言
@@ -22,7 +24,7 @@ class UserCard extends StatelessWidget {
     required this.state, // required 修飾子を付ける(非null制約を解除)
   });
 
-  final String bgImg = 'assets/images/default_avatar.png';
+  final String bgImg = '1'; // 背景テーマを設定する変数
 
   @override
   Widget build(BuildContext context) {
@@ -38,12 +40,13 @@ class UserCard extends StatelessWidget {
           child: Container(
             height: 159,
             width: 270,
-            alignment: const Alignment(-0.8, 0),
-            decoration: const BoxDecoration(
+            alignment: Alignment(-0.8, 0),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
                 image: DecorationImage(
-              image: AssetImage('assets/images/Rectangle_75.png'),
-              fit: BoxFit.cover,
-            )),
+                  image: AssetImage(setCardTheme(bgImg)),
+                  fit: BoxFit.cover, // 画像を適切にフィットさせる
+                )),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start, // 左揃え
               children: [
@@ -70,12 +73,14 @@ class UserCard extends StatelessWidget {
                 height: 159,
                 width: 60,
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Colors.transparent, Colors.grey.shade400],
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                  ),
-                ),
+                    gradient: LinearGradient(
+                      colors: [Colors.transparent, Colors.grey.shade400],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                    ),
+                    borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(10),
+                        bottomRight: Radius.circular(10))),
                 child: const Column(
                   children: [
                     Padding(padding: EdgeInsets.only(top: 10)),

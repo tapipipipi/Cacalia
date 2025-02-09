@@ -1,5 +1,6 @@
 // プロフィール編集画面
 import 'package:cacalia/CS/create.dart';
+import 'package:cacalia/component/editModal.dart';
 // ignore_for_file: unnecessary_string_interpolations
 
 // import 'package:cacalia/component/editModal.dart';
@@ -19,11 +20,10 @@ List<String> feildnames = [
   "background"
 ];
 
-var targetBg = 0;
-var targetFont = 0;
-
 class ProfEdit extends StatelessWidget {
   ProfEdit({super.key});
+  var targetBg = '0';
+  var targetFont = '0';
 
   // 自身の名前、読み仮名、デザインテーマ
   String name = profileList[myuid]["name"];
@@ -79,14 +79,7 @@ class ProfEdit extends StatelessWidget {
             return Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage(design),
-                  //   switch (targetBg) {
-                  //   0 => bgImg.design0,
-                  //   1 => bgImg.design1,
-                  //   2 => bgImg.design2,
-                  //   3 => bgImg.design3,
-                  //   int() => throw UnimplementedError(),
-                  // }
+                  image: AssetImage('${setBg(targetBg)}'),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -107,20 +100,11 @@ class ProfEdit extends StatelessWidget {
                               child: Text(
                                 'about me',
                                 style: TextStyle(
-                                  fontSize: 40,
-                                  // fontFamily: switch (targetFont) {
-                                  //   0 => Fonts.font0,
-                                  //   1 => Fonts.font1,
-                                  //   2 => Fonts.font2,
-                                  //   3 => Fonts.font3,
-                                  //   4 => Fonts.font4,
-                                  //   // TODO: Handle this case.
-                                  //   int() => throw UnimplementedError(),
-                                  // }
-                                ),
+                                    fontSize: 40,
+                                    fontFamily: setFont(targetFont)),
                               ),
                             ),
-                            EditPen(),
+                            EditPen(bgStyle: targetBg, fontStyle: targetFont),
                           ],
                         ),
                         Column(
@@ -147,7 +131,9 @@ class ProfEdit extends StatelessWidget {
                                             name,
                                             style: TextStyle(fontSize: 24),
                                           ),
-                                          EditPen(),
+                                          EditPen(
+                                              bgStyle: targetBg,
+                                              fontStyle: targetFont),
                                         ],
                                       ),
                                       Text(
