@@ -1,3 +1,4 @@
+import 'package:cacalia/main.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../Auth/Authentication.dart';
@@ -22,9 +23,6 @@ class _LoginPageState extends State<LoginPage> {
   String _pass = '123qwecc';
   String def = "2230360@ecc.ac.com";
   String pas = "123qwecc";
-
-
-  
 
   @override
   Widget build(BuildContext context) {

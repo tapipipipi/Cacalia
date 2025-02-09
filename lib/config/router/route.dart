@@ -1,5 +1,4 @@
 import 'package:cacalia/features/ask/askform';
-import 'package:cacalia/features/ask/askform';
 import 'package:cacalia/features/recruitment/recruitmentForm';
 import 'package:cacalia/features/setting/pages/setting.dart';
 import 'package:cacalia/features/timeline/pages/timeline.dart';
@@ -47,7 +46,7 @@ final router = GoRouter(
     ),
     GoRoute(
       path: '/profEdit',
-      builder: (context, state) => ProfEdit(),
+      builder: (context, state) => Profedit(),
     ),
     GoRoute(
       path: '/cardEdit',

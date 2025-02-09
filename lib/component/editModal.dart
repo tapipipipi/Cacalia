@@ -1,5 +1,12 @@
 // テーマ編集
+import 'package:cacalia/CS/create.dart';
+import 'package:cacalia/features/home/pages/home.dart';
+import 'package:cacalia/main.dart';
 import 'package:flutter/material.dart';
+import 'package:cacalia/datas/designData.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:cacalia/features/profEdit/pages/profEdit.dart';
 
 // モーダルの大枠
 // ignore: non_constant_identifier_names
@@ -38,9 +45,13 @@ class ThemeEditor extends StatefulWidget {
 class _ThemeEditorState extends State<ThemeEditor> {
   List<bool> _bgtheme = [true, false, false, false];
   List<bool> _fonttheme = [true, false, false, false, false];
+  ProfEdit themechange = ProfEdit();
 
   @override
   Widget build(BuildContext context) {
+    //フォントを変えるため宣言
+    final themeNotifier = context.read<ThemeNotifier>();
+
     // ignore: deprecated_member_use
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.9, // 高さを動的に設定
@@ -80,10 +91,10 @@ class _ThemeEditorState extends State<ThemeEditor> {
                   },
                   isSelected: _bgtheme,
                   children: <Widget>[
-                    Image.asset('assets/images/designCircles/circle01.png'),
-                    Image.asset('assets/images/designCircles/circle02.png'),
-                    Image.asset('assets/images/designCircles/circle03.png'),
-                    Image.asset('assets/images/designCircles/circle04.png'),
+                    Image.asset('assets/images/designCircles/circle0.png'),
+                    Image.asset('assets/images/designCircles/circle1.png'),
+                    Image.asset('assets/images/designCircles/circle2.png'),
+                    Image.asset('assets/images/designCircles/circle3.png'),
                   ],
                 ),
               ),
@@ -135,7 +146,14 @@ class _ThemeEditorState extends State<ThemeEditor> {
           ),
           ElevatedButton(
             onPressed: () async {
-              Navigator.of(context).pop({selectBg, selectFont});
+              themechange.updatetheme(selectBg.toString(),
+                  selectFont.toString(), selectBg.toString());
+              // Navigator.of(context).pop({selectBg, selectFont});
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Profedit()), // 現在のページを再ロード
+              );
             },
             style: ElevatedButton.styleFrom(
               shape: RoundedRectangleBorder(

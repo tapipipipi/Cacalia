@@ -1,6 +1,6 @@
-// 設定できるフォントの定義 ------------------------------------------------------
-class fonts {
-  static const String font0 = '';
+// 設定できるフォントの定義
+class Fonts {
+  static const String font0 = 'Roboto';
   static const String font1 = 'ArchitectsDaughter';
   static const String font2 = 'Anton';
   static const String font3 = 'Lobster';
@@ -13,19 +13,19 @@ String setFont(String font) {
   var selected = '0';
   switch (font) {
     case '0':
-      selected = fonts.font0;
+      selected = Fonts.font0;
       break;
     case '1':
-      selected = fonts.font1;
+      selected = Fonts.font1;
       break;
     case '2':
-      selected = fonts.font2;
+      selected = Fonts.font2;
       break;
     case '3':
-      selected = fonts.font3;
+      selected = Fonts.font3;
       break;
     case '4':
-      selected = fonts.font4;
+      selected = Fonts.font4;
       break;
   }
   print('selected: ' + selected);

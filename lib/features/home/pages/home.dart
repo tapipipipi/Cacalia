@@ -1,8 +1,11 @@
+import 'package:cacalia/main.dart';
 import 'package:cacalia/store.dart';
 import 'package:flutter/material.dart';
 import 'package:cacalia/component/card.dart';
 import 'package:cacalia/component/footer.dart';
 import 'package:cacalia/component/profileModal.dart';
+import 'package:cacalia/main.dart';
+import 'package:provider/provider.dart';
 import '../../../Auth/Authentication.dart';
 import '../../../CS/create.dart';
 import 'package:go_router/go_router.dart';
@@ -29,6 +32,8 @@ int posts = 0;
 
 class _HomeState extends State<Home> {
   bool isLoading = true; // ローディング状態を管理する変数
+
+  // final themechange = ThemeNotifier();
 
   @override
   void initState() {
@@ -62,6 +67,7 @@ class _HomeState extends State<Home> {
       List<Object> addList = [
         profileList[fid]["name"],
         profileList[fid]["read_name"],
+        profileList[fid]["cardtheme"]
       ];
       cardList.add(addList);
     }
@@ -74,6 +80,7 @@ class _HomeState extends State<Home> {
     List<Object> addList = [
       profileList[myuid]["name"],
       profileList[myuid]["read_name"],
+      profileList[myuid]["cardtheme"]
     ];
     cardList.add(addList);
 
@@ -86,6 +93,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    // final themeNotifier = context.read<ThemeNotifier>();
     if (isLoading) {
       // データ取得中はローディング画面を表示
       return Scaffold(
