@@ -81,7 +81,6 @@ class ProfEdit extends StatelessWidget {
             return Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  // image: AssetImage('${bgImg.design1}'),
                   image: AssetImage('${setBg(targetBg)}'),
                   fit: BoxFit.cover,
                 ),
@@ -103,18 +102,8 @@ class ProfEdit extends StatelessWidget {
                               child: Text(
                                 'about me',
                                 style: TextStyle(
-                                  fontSize: 40,
-
-                                  // fontFamily: switch (targetFont) {
-                                  //   0 => Fonts.font0,
-                                  //   1 => Fonts.font1,
-                                  //   2 => Fonts.font2,
-                                  //   3 => Fonts.font3,
-                                  //   4 => Fonts.font4,
-                                  //   // TODO: Handle this case.
-                                  //   int() => throw UnimplementedError(),
-                                  // }
-                                ),
+                                    fontSize: 40,
+                                    fontFamily: setFont(targetFont)),
                               ),
                             ),
                             EditPen(bgStyle: targetBg, fontStyle: targetFont),

@@ -1,5 +1,6 @@
 import 'package:cacalia/CS/create.dart';
 import 'package:flutter/material.dart';
+import 'package:cacalia/datas/designData.dart';
 
 // フレンドのプロフィールを取得し表示させる
 List<String> keys = ["コメント", "イベント", "所属", "得意", "興味のあること", "趣味", "経歴"];
@@ -32,6 +33,8 @@ void Profilemodal(
 
   String name = profileList["name"];
   String readname = profileList["read_name"];
+  String targetBg = '0';
+  String targetFont = '0';
 
   showModalBottomSheet(
     context: context,
@@ -42,9 +45,9 @@ void Profilemodal(
         return Container(
           height: MediaQuery.of(context).size.height * 0.9, // 高さを動的に設定
           width: double.infinity,
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/images/designs/design1.png'),
+                image: AssetImage(setBg(targetBg)),
                 fit: BoxFit.cover,
               ),
               borderRadius: BorderRadius.only(
@@ -69,9 +72,12 @@ void Profilemodal(
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
-                        const Text(
+                        Text(
                           'about me',
-                          style: TextStyle(fontSize: 40),
+                          style: TextStyle(
+                            fontSize: 40,
+                            fontFamily: setFont(targetFont),
+                          ),
                         ),
                         Stack(
                           children: [

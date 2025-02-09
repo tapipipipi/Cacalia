@@ -24,7 +24,7 @@ class UserCard extends StatelessWidget {
     required this.state, // required 修飾子を付ける(非null制約を解除)
   });
 
-  final String bgImg = cardImg.cardTheme1;
+  final String bgImg = '0'; // 背景テーマを設定する変数
 
   @override
   Widget build(BuildContext context) {
@@ -41,9 +41,9 @@ class UserCard extends StatelessWidget {
             height: 159,
             width: 270,
             alignment: const Alignment(-0.8, 0),
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
                 image: DecorationImage(
-              image: AssetImage(cardImg.cardTheme1),
+              image: AssetImage('${setCardTheme(bgImg)}'),
               fit: BoxFit.cover,
             )),
             child: Column(
