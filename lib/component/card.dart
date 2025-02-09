@@ -24,7 +24,7 @@ class UserCard extends StatelessWidget {
     required this.state, // required 修飾子を付ける(非null制約を解除)
   });
 
-  final String bgImg = '0'; // 背景テーマを設定する変数
+  final String bgImg = '1'; // 背景テーマを設定する変数
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +44,7 @@ class UserCard extends StatelessWidget {
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
                 image: DecorationImage(
-                  image: AssetImage('assets/images/designCards/card0.png'),
+                  image: AssetImage(setCardTheme(bgImg)),
                   fit: BoxFit.cover, // 画像を適切にフィットさせる
                 )),
             child: Column(
