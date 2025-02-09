@@ -89,8 +89,6 @@ class EditPen extends Container {
   // コンストラクタで引数を受け取る
   EditPen({required this.bgStyle, required this.fontStyle, super.key});
 
-  EditPen({super.key});
-
   @override
   Widget build(BuildContext context) {
     return IconButton(
