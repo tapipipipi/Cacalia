@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:cacalia/features/home/pages/home.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 // import 'package:get/get.dart';
@@ -21,6 +22,7 @@ import 'package:ble_peripheral/ble_peripheral.dart' as ble_peripheral;
 import 'package:uuid/uuid.dart';
 //APIキーを隠すライブラリ
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:spring_button/spring_button.dart';
 
 class ExchangePage extends StatefulWidget {
   const ExchangePage({super.key});
@@ -54,7 +56,7 @@ class _ExchangeState extends State<ExchangePage>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
-  bool setAI = false;
+  // bool setAI = false;
 
   Map<String, String> myprofiles = <String, String>{
     'u_id': profileList[myuid]["u_id"],
@@ -74,16 +76,32 @@ class _ExchangeState extends State<ExchangePage>
     "charactaristicuuid": profileList[myuid]["charactaristicuuid"]
   };
 
-  String generatedText = 'Loading...';
+  String generatedText = '＊おにぎり\n ＊コーンスープ\n ＊ハンバーグ';
 
   //画面に表示するテキスト
   // String displayText = "近くにデバイスがありません。";
 
-  //受け取ったデータ
-  Map<String, dynamic> receivedData = {};
+  //受け取ったデータ(初期値は例)
+  Map<String, dynamic> receivedData = {
+    'u_id': "Iy8mliZrgsRoe7MBu91uL4F6a0Q2",
+    "name": "谷岡 義貴",
+    "read_name": "Tanioka Yoshitaka",
+    "gender": "男",
+    "age": '2004',
+    "comment": "ドラムが好きです",
+    "events": "HACK U",
+    "belong": "ECCコンピュータ専門学校",
+    "skill": "0",
+    "interest": "0",
+    "hoby": "カラオケ",
+    "background": "基本情報技術者試験取得、Hack U NAGOYA優秀賞",
+    "bairth": "12/26",
+    "serviceUuid": "forBLE",
+    "charactaristicuuid": "forBLE"
+  };
 
   //デバイスに接続できるボタンの状態
-  bool _isfinded = false;
+  // bool _isfinded = false;
 
   //スキャンされたデバイス
   BluetoothDevice? selectdevaice;
@@ -126,7 +144,7 @@ class _ExchangeState extends State<ExchangePage>
     final now = DateTime.now();
     // 前回のシェイクから500ミリ秒以上経過している場合のみ処理を実行
     if (_lastShakeTime == null ||
-        now.difference(_lastShakeTime!) > const Duration(milliseconds: 500)) {
+        now.difference(_lastShakeTime!) > const Duration(milliseconds: 1000)) {
       _lastShakeTime = now;
       startScan();
     }
@@ -190,30 +208,6 @@ class _ExchangeState extends State<ExchangePage>
     print('UUIDを作成しました');
   }
 
-  Future<void> generateText() async {
-    final model = GenerativeModel(
-      model: 'gemini-1.5-flash-latest',
-      apiKey: 'AIzaSyDvlwupnHlUINeIAt5yBGP1KASRGNqlwVA',
-    );
-
-    const prompt =
-        'I`ll send 2 sentences. compare and find common points. then create any topic and say like this ["Topic u generated"という話題でお話してみませんか？] no need other explain. 1.I hate u 2.I dont like u';
-    final content = [Content.text(prompt)];
-
-    try {
-      final response = await model.generateContent(content);
-      print(response.text); // Log response to debug
-      setState(() {
-        generatedText = response.text ?? 'No response text';
-      });
-    } catch (e) {
-      print("Error: $e");
-      setState(() {
-        generatedText = '生成エラー: $e';
-      });
-    }
-  }
-
   @override
   void dispose() {
     _controller.dispose();
@@ -243,7 +237,11 @@ class _ExchangeState extends State<ExchangePage>
                       color: Colors.white,
                     ),
                   ),
+                  //振る処理
                   ShakeGesture(onShake: startScan, child: const Text("")),
+                  // //デバッグ用
+                  ElevatedButton(
+                      onPressed: startScan, child: const Text("交換する")),
                 ],
               ),
             ),
@@ -279,78 +277,6 @@ class _ExchangeState extends State<ExchangePage>
     );
   }
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     body: Container(
-  //       decoration: const BoxDecoration(
-  //         gradient: LinearGradient(
-  //           begin: Alignment.topCenter,
-  //           end: Alignment.bottomCenter,
-  //           colors: [
-  //             Color(0xFF0B1930), // 深い青
-  //             Color(0xFF1B3366), // ミッドナイトブルー
-  //             Color(0xFF2C4999), // 青紫
-  //           ],
-  //         ),
-  //       ),
-  //       child: Stack(
-  //         children: [
-  //           // 星のエフェクト
-  //           Positioned.fill(
-  //             child: CustomPaint(
-  //               painter: StarsPainter(),
-  //             ),
-  //           ),
-  //           // メインコンテンツ
-  //           Center(
-  //             child: Column(
-  //               mainAxisAlignment: MainAxisAlignment.center,
-  //               children: [
-  //                 AnimatedBuilder(
-  //                   animation: _controller,
-  //                   builder: (context, child) {
-  //                     return Transform.rotate(
-  //                       angle: _controller.value * 2.0 * 3.14159,
-  //                       child: Icon(
-  //                         Icons.bluetooth_searching,
-  //                         size: 100,
-  //                         color: _isConnected
-  //                             ? Colors.green
-  //                             : Colors.white, // 色を白に変更
-  //                       ),
-  //                     );
-  //                   },
-  //                 ),
-  //                 ShakeGesture(
-  //                   onShake: handleShake,
-  //                   child: Text(''),
-  //                 ),
-  //               ],
-  //             ),
-  //           ),
-  //           // ホームアイコンを追加
-  //           Positioned(
-  //             top: 60,
-  //             left: 16,
-  //             child: GestureDetector(
-  //               onTap: () {
-  //                 context.go('/home'); // GoRouterを使用してホーム画面に遷移
-  //               },
-  //               child: const Icon(
-  //                 // Image.assetをIconに変更
-  //                 Icons.home,
-  //                 size: 64,
-  //                 color: Colors.white,
-  //               ),
-  //             ),
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
-
   // JSONデータをUint8Listに変換
   Uint8List _jsonToUint8List(Map<String, dynamic> uidData) {
     return Uint8List.fromList(utf8.encode(jsonEncode(uidData)));
@@ -374,11 +300,11 @@ class _ExchangeState extends State<ExchangePage>
       try {
         Uint8List senddata = _jsonToUint8List({'u_id': myuid});
 
-        //データが大きい場合を考慮し、offsetを使用して分割読み出しを行う
-        Uint8List partialData = senddata.sublist(offset);
+        // //データが大きい場合を考慮し、offsetを使用して分割読み出しを行う
+        // Uint8List partialData = senddata.sublist(offset);
 
         return ble_peripheral.ReadRequestResult(
-            value: partialData, status: 0 // GATT_SUCCESS
+            value: senddata, status: 0 // GATT_SUCCESS
             );
       } catch (e) {
         print("Error in ReadRequestCallback: $e");
@@ -400,21 +326,21 @@ class _ExchangeState extends State<ExchangePage>
       }
 
       try {
-        setState(() async {
-          //受け取ったデータをデコード
-          String received = utf8.decode(value);
-          print("Received raw data: $received");
+        // setState(() {
+        //受け取ったデータをデコード
+        String received = utf8.decode(value);
+        print("Received raw data: $received");
 
-          // JSON形式に変換して取得
-          decodereceived = Map<String, String>.from(jsonDecode(received));
-          receivedData = await getProfile(decodereceived['u_id']!);
-          print("Decoded JSON: $receivedData");
-          isReceived.add(true);
-        });
+        // JSON形式に変換して取得
+        decodereceived = Map<String, String>.from(jsonDecode(received));
+        // receivedData = getProfile(decodereceived['u_id']!);
+        print("Decoded JSON: $receivedData");
+        isReceived.add(true);
+        // });
 
         return ble_peripheral.WriteRequestResult(status: 0); // GATT_SUCCESS
       } catch (e) {
-        print("Error: $e");
+        print("WriteRequestResultError: $e");
 
         return ble_peripheral.WriteRequestResult(status: 1); //GATT_FAILURE
       }
@@ -496,42 +422,47 @@ class _ExchangeState extends State<ExchangePage>
 
     setState(() {
       //判定に必要な変数を初期化
-      _isfinded = false;
+      // _isfinded = false;
       _isScanning = true;
       isReceived.add(false);
       _isConnected = false;
-      setAI = false;
+      // setAI = false;
       // displayText = "スキャン中...";
     });
 
     //接続可能な端末をスキャンする
     await FlutterBluePlus.startScan(
-        withNames: ['Cacalia'], timeout: const Duration(seconds: 3)); //３秒間
+        withNames: ['Cacalia'],
+        timeout: const Duration(seconds: 3),
+        androidScanMode: AndroidScanMode.lowPower); //３秒間
     try {
       //結果を受け取る
       FlutterBluePlus.scanResults.listen((results) {
         for (ScanResult r in results) {
-          print(
-              //接続可能なデバイスを表示
-              '${r.advertisementData.serviceUuids}: "${r.device.advName}" found!');
+          if (r.rssi > -60) {
+            // 例: -60dBm 以上のデバイスのみ表示
+            print(
+                //接続可能なデバイスを表示
+                '${r.advertisementData.serviceUuids}: "${r.device.advName}" found!');
 
-          //任意のデバイスが見つかった場合
-          if (r.device.advName.toString().contains("Cacalia")) {
-            print("デバイス情報$r");
+            //任意のデバイスが見つかった場合
+            if (r.device.advName.toString().contains("Cacalia")) {
+              print("デバイス情報$r");
 
-            setState(() {
-              //端末のUUIDを取得
-              deviceUUID =
-                  splitdata(r.advertisementData.serviceUuids.toString());
+              setState(() {
+                //端末のUUIDを取得
+                deviceUUID =
+                    splitdata(r.advertisementData.serviceUuids.toString());
 
-              _isfinded = true;
+                // _isfinded = true;
 
-              selectdevaice = r.device;
-            });
-            //スキャン終了
-            FlutterBluePlus.stopScan();
-            connectDevaice(selectdevaice!);
-            break;
+                selectdevaice = r.device;
+              });
+              //スキャン終了
+              FlutterBluePlus.stopScan();
+              connectDevaice(selectdevaice!);
+              break;
+            }
           }
         }
       });
@@ -564,7 +495,8 @@ class _ExchangeState extends State<ExchangePage>
       await Future.delayed(const Duration(seconds: 1));
       services = await device.discoverServices();
       await readCharacteristic(); //ReadWrighメソッド
-      disconnectDevaice(device);
+      await disconnectDevaice(device);
+      isReceived.add(true);
     } catch (e) {
       print('エラーでちゃった。。。:$e');
       _isConnected = false;
@@ -594,8 +526,9 @@ class _ExchangeState extends State<ExchangePage>
         print('きゃらくたりすてぃっく:$characteristic');
         //ペリフェラル側で設定したキャラクタリスティックの場合
         if (characteristic.serviceUuid.toString() == deviceUUID) {
+          print('受け取りたいデータ$characteristic');
           // 通知を有効化
-          characteristic.setNotifyValue(true);
+          await characteristic.setNotifyValue(true);
           //値を読み込む
           final value = await characteristic.read();
           // 受信データを文字列に変換
@@ -606,19 +539,16 @@ class _ExchangeState extends State<ExchangePage>
           print("Caractaristic:${characteristic.uuid}");
           print("Received: $receivedData");
 
-          setState(() {
-            isReceived.add(true);
-            _isConnected = true;
-          });
-
-          ///
-
-          //_showProfilePopup();
-
+          //書き込み
           writeCaracteristic(characteristic);
 
-          disconnectDevaice(selectdevaice!);
-          stopAdvertise();
+          // setState(() {
+          //   isReceived.add(true);
+          //   _isConnected = true;
+          // });
+
+          // disconnectDevaice(selectdevaice!);
+          // stopAdvertise();
           break;
         }
       }
@@ -634,8 +564,120 @@ class _ExchangeState extends State<ExchangePage>
   }
   //ここまで
 
-  //AI提案をするメソッド
+  //AI提案を表示するメソッド
+  Future<void> _showProfileDialog() async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        //ダイアログ表示
+        return Dialog(
+          //背景色指定
+          backgroundColor: const Color(0xFF242B2E),
+          shape: RoundedRectangleBorder(
+            //ダイアログの角を丸くする
+            borderRadius: BorderRadius.all(Radius.circular(13)),
+            side: BorderSide(color: Color(0xFFD9D9D9), width: 3.0),
+          ),
+          child: Column(
+            //ダイアログを最小の大きさに変更する
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              //上のバー
+              Container(
+                height: 20,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFD9D9D9),
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(15),
+                      topRight: Radius.circular(15)),
+                ),
+                child: const Row(
+                  //Mac風のボタンっぽいやつ
+                  children: [
+                    SizedBox(width: 10),
+                    CircleAvatar(radius: 5, backgroundColor: Color(0xFFFF5F57)),
+                    SizedBox(width: 8),
+                    CircleAvatar(radius: 5, backgroundColor: Color(0xFFFEBB2E)),
+                    SizedBox(width: 8),
+                    CircleAvatar(radius: 5, backgroundColor: Color(0xFF28C840)),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                '> こんな話題で話してみませんか？',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontFamily: 'DotGothic16',
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 20),
+              Text(
+                '$generatedText\n',
+                style: const TextStyle(
+                    fontSize: 18,
+                    color: Color(0XFF39E329),
+                    fontFamily: 'DotGothic16'),
+              ),
+              SizedBox(
+                height: 60,
+                //ボタンにアニメーション追加
+                child: SpringButton(
+                  SpringButtonType.WithOpacity,
+                  scaleCoefficient: 0.90,
+                  duration: 500,
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: Container(
+                      width: 120,
+                      height: 30,
+                      decoration: const BoxDecoration(
+                        color: Color(0xFF115A84),
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          'ホームへ',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            fontFamily: 'DotGothic16',
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  //ボタンを押した時の処理
+                  onTapDown: (_) {
+                    Timer(Duration(milliseconds: 100), () {
+                      if (receivedData['u_id'] != null) {
+                        updateAIsuggest(receivedData['u_id'], generatedText);
+                        updateFriend('friend_uid', receivedData['u_id']);
+                      }
+                      Navigator.pop(context);
+                      context.go('/home');
+                    });
+                  },
+                  onLongPress: null,
+                  onLongPressEnd: null,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  //交換相手の情報を表示するメソッド
   _showProfilePopup() async {
+    await stopAdvertise();
+
     //比較する項目を設定
     List<String> keys = ["events", "comment", "hoby", "background"];
 
@@ -670,67 +712,174 @@ class _ExchangeState extends State<ExchangePage>
       });
     }
 
+    receivedData = await getProfile(decodereceived['u_id']!);
+
+    //非同期処理でのエラー対策
+    if (!mounted) return;
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
+        //ダイアログ表示
+        return Dialog(
+          //背景色指定
+          backgroundColor: const Color(0xFF242B2E),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
+            //ダイアログの角を丸くする
+            borderRadius: BorderRadius.all(Radius.circular(13)),
+            side: BorderSide(color: Color(0xFFD9D9D9), width: 3.0),
           ),
-          content: SizedBox(
-            width: MediaQuery.of(context).size.width * 0.8,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const CircleAvatar(
-                  radius: 40,
-                  backgroundImage:
-                      AssetImage('assets/images/default_avatar.png'),
+          child: Column(
+            //ダイアログを最小の大きさに変更する
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              //上のバー
+              Container(
+                height: 20,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFD9D9D9),
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(15),
+                      topRight: Radius.circular(15)),
                 ),
-                const SizedBox(height: 16),
-                Text(
-                  'ユーザ：${receivedData['name']}\n',
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                child: const Row(
+                  //Mac風のボタンっぽいやつ
+                  children: [
+                    SizedBox(width: 10),
+                    CircleAvatar(radius: 5, backgroundColor: Color(0xFFFF5F57)),
+                    SizedBox(width: 8),
+                    CircleAvatar(radius: 5, backgroundColor: Color(0xFFFEBB2E)),
+                    SizedBox(width: 8),
+                    CircleAvatar(radius: 5, backgroundColor: Color(0xFF28C840)),
+                  ],
                 ),
-                const Text(
-                  'コメント',
-                  textAlign: TextAlign.center,
+              ),
+              Container(
+                //位置調整
+                padding: const EdgeInsets.only(top: 30, left: 30),
+                alignment: Alignment.topLeft,
+                child: const Text(
+                  'Connected with...',
                   style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      color: Colors.white,
+                      fontFamily: 'DotGothic16'),
+                ),
+              ),
+              const SizedBox(height: 15),
+              //アカウント名と画像
+              Row(
+                children: [
+                  //幅調整
+                  const Padding(padding: EdgeInsets.only(left: 30)),
+                  //円形でプロフィール画像を表示
+                  const CircleAvatar(
+                    radius: 30,
+                    backgroundImage:
+                        AssetImage('assets/images/default_avatar.png'),
                   ),
+                  //間隔開け
+                  const SizedBox(width: 16),
+                  //その他のRowの領域を全て使用
+                  Expanded(
+                    child: Padding(
+                      //テキストの位置調整
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: Text(
+                        receivedData['name'],
+                        style: const TextStyle(
+                            fontSize: 25,
+                            color: Colors.white,
+                            fontFamily: 'DotGothic16'),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+              const SizedBox(height: 15),
+              //カード
+              Container(
+                width: 270,
+                height: 159,
+                alignment: const Alignment(-0.8, 0),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10)),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start, // 左揃え
+                  children: [
+                    const Padding(padding: EdgeInsets.only(top: 15, left: 30)),
+                    // 読み仮名
+                    Text(
+                      receivedData['read_name'] as String,
+                      style: const TextStyle(
+                          fontSize: 14, fontFamily: 'DotGothic16'),
+                    ),
+                    // 名前
+                    Text(
+                      receivedData['name'] as String,
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontFamily: 'DotGothic16',
+                      ),
+                    )
+                  ],
                 ),
-                Text(
-                  '${receivedData['comment']}\n',
-                  style: const TextStyle(fontSize: 16),
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                '追加しますか?',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.white,
+                  fontFamily: 'DotGothic16',
                 ),
-                const Text(
-                  'この話題で話してみませんか？',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+              ),
+              const SizedBox(height: 10),
+              //追加ボタン
+              SizedBox(
+                height: 60,
+                //ボタンにアニメーション追加
+                child: SpringButton(
+                  SpringButtonType.WithOpacity,
+                  scaleCoefficient: 0.75,
+                  duration: 500,
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: Container(
+                      width: 120,
+                      height: 30,
+                      decoration: const BoxDecoration(
+                        color: Color(0xFF115A84),
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          '追加する',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            fontFamily: 'DotGothic16',
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
+                  //ボタンを押した時の処理
+                  onTapDown: (_) {
+                    Timer(Duration(milliseconds: 100), () {
+                      Navigator.pop(context);
+                      _showProfileDialog(); //AI提案表示
+                    });
+                  },
+                  onLongPress: null,
+                  onLongPressEnd: null,
                 ),
-                Text(
-                  '$generatedText\n',
-                  style: const TextStyle(fontSize: 16),
-                ),
-                TextButton(
-                    onPressed: () {
-                      updateFriend('friend_uid', decodereceived['u_id']);
-                      context.go('/home');
-                      print('ホームに移動');
-                    },
-                    child: const Text(
-                      'フレンドに追加',
-                      style: TextStyle(fontSize: 16),
-                    ))
-              ],
-            ),
+              ),
+            ],
           ),
         );
       },

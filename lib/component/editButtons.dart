@@ -1,9 +1,7 @@
 //編集画面で使うボタン
-import 'package:cacalia/CS/create.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:cacalia/component/editModal.dart';
-import '../features/cardEdit/pages/cardEdit.dart';
 
 class EditButtons extends StatelessWidget {
   //プロフィールと名刺の編集を入れ替えるボタン部分に使う変数
@@ -90,6 +88,8 @@ class EditPen extends Container {
 
   // コンストラクタで引数を受け取る
   EditPen({required this.bgStyle, required this.fontStyle, super.key});
+
+  EditPen({super.key});
 
   @override
   Widget build(BuildContext context) {
