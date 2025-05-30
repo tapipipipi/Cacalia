@@ -12,4 +12,5 @@
 使用ツール：GeminiAPI、Firebase、Figma、 GitHub
 開発環境：Visual Studio Code 
 
-### 資料　[Cacalia.pdf](https://github.com/user-attachments/files/20518387/Cacalia.pdf)
+## 資料　
+[Cacalia.pdf](https://github.com/user-attachments/files/20518387/Cacalia.pdf)
