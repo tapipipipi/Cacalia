@@ -1,16 +1,16 @@
-# cacalia
+## Cacalia
 
-A new Flutter project.
+## 概要
 
-## Getting Started
+学習中のエンジニア向けに、交流できるスマホアプリを作成。
+スマホを振るだけで簡単に名刺を交換できるようになっており、交換時にお互いのプロフィールを参照してAIが話せる話題を提案してくれます。
+交流プラットフォームもあり、投稿のほかにハッカソン等の募集、質問等もできます。
 
-This project is a starting point for a Flutter application.
+## 環境
 
-A few resources to get you started if this is your first Flutter project:
+使用言語：Flutter(dart)
+使用ツール：GeminiAPI、Firebase、Figma、 GitHub
+開発環境：Visual Studio Code 
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
